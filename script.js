@@ -709,20 +709,6 @@ if (logoEl && bloodFlash) {
 })();
 
 /* ============================================================
-   СОЦКНОПКИ — копирование ника
-   ============================================================ */
-document.querySelectorAll('.social[data-copy]').forEach(function (el) {
-  el.addEventListener('click', function (e) {
-    e.preventDefault();
-    const nick = el.getAttribute('data-copy') || 'sialens_xd';
-    copyToClipboard(nick).then(function (ok) {
-      showToast(ok ? 'скопировано // @' + nick : 'не получилось :(');
-      haptic([10, 30, 10]);
-    });
-  });
-});
-
-/* ============================================================
    МУЗЫКАЛЬНЫЙ ПЛЕЕР — твои треки
    ============================================================ */
 
@@ -825,17 +811,13 @@ const PLAYLIST = [
     if (document.hidden && isPlaying) pause();
   });
 
-  // ---- авто-запуск при первом клике/тапе (иначе браузер не даст) ----
-  let autoStarted = false;
-  function tryAutoStart() {
-    if (autoStarted) return;
-    autoStarted = true;
+    // ---- функция запуска снаружи (для экрана входа) ----
+  window.startMusicPlayer = function () {
+    if (isPlaying) return;
     if (!PLAYLIST.length) return;
-    loadTrack(0);
+    if (!audio.src) loadTrack(0);
     play();
-  }
-  window.addEventListener('click', tryAutoStart, { once: true });
-  window.addEventListener('touchstart', tryAutoStart, { once: true, passive: true });
+  };
 
   // инициализация
   updateTitle();
@@ -898,4 +880,44 @@ const PLAYLIST = [
       }
     }
   });
+})();
+
+/* ============================================================
+   ЭКРАН ВХОДА — тап → музыка → сайт
+   ============================================================ */
+(function initEntryScreen() {
+  const entry = document.getElementById('entry-screen');
+  if (!entry) return;
+
+  let entered = false;
+
+  function enter() {
+    if (entered) return;
+    entered = true;
+
+    entry.classList.add('hide');
+
+    // запускаем музыку (если плеер уже инициализирован)
+    if (typeof window.startMusicPlayer === 'function') {
+      window.startMusicPlayer();
+    }
+
+    // звук + вибрация
+    if (typeof beep === 'function') beep(1200, 0.1, 'square', 0.07);
+    if (typeof haptic === 'function') haptic([15, 40, 15, 40, 100]);
+
+    // убираем элемент из DOM после анимации
+    setTimeout(function () {
+      if (entry.parentNode) entry.parentNode.removeChild(entry);
+    }, 900);
+  }
+
+  entry.addEventListener('click', enter);
+  entry.addEventListener('touchstart', enter, { passive: true });
+
+  // подстраховка: если скрипт долго не выполнился и юзер жмёт — всё равно входим
+  entry.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') enter();
+  });
+  entry.setAttribute('tabindex', '0');
 })();

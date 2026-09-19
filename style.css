@@ -1270,3 +1270,94 @@ body {
 @media (max-width: 380px) {
   .player-btn.small { display: none; }
 }
+
+/* ============================================================
+   ЭКРАН ВХОДА
+   ============================================================ */
+.entry-screen {
+  position: fixed;
+  inset: 0;
+  background: #050202;
+  z-index: 99997;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  /* появляется после того, как boot-screen уйдёт (2.4s) */
+  animation: entry-wait 0.5s ease 2.4s forwards;
+}
+@keyframes entry-wait {
+  to { opacity: 1; pointer-events: auto; }
+}
+.entry-screen.hide {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.7s ease;
+}
+
+.entry-inner {
+  max-width: 500px;
+  padding: 0 20px;
+}
+
+.entry-logo {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: clamp(48px, 12vw, 96px);
+  letter-spacing: 8px;
+  color: var(--text);
+  text-shadow: 0 0 40px rgba(230, 0, 0, 0.6);
+  margin-bottom: 18px;
+  animation: entry-glow 2s ease-in-out infinite;
+}
+.entry-logo .dot { color: var(--red); }
+@keyframes entry-glow {
+  0%, 100% { text-shadow: 0 0 40px rgba(230, 0, 0, 0.5); }
+  50%      { text-shadow: 0 0 70px rgba(255, 42, 42, 0.95); }
+}
+
+.entry-line {
+  color: var(--red);
+  font-size: 13px;
+  letter-spacing: 3px;
+  margin-bottom: 46px;
+  opacity: 0.8;
+}
+
+.entry-prompt {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: clamp(16px, 2.2vw, 22px);
+  letter-spacing: 4px;
+  color: var(--red-bright);
+  text-transform: uppercase;
+  padding: 16px 24px;
+  border: 1px solid var(--red);
+  background: rgba(230, 0, 0, 0.06);
+  box-shadow: 0 0 40px rgba(230, 0, 0, 0.35);
+  animation: entry-pulse 1.8s ease-in-out infinite;
+}
+@keyframes entry-pulse {
+  0%, 100% { box-shadow: 0 0 30px rgba(230, 0, 0, 0.3); border-color: var(--red); }
+  50%      { box-shadow: 0 0 60px rgba(230, 0, 0, 0.7); border-color: var(--red-bright); }
+}
+
+.entry-hint {
+  color: var(--dim);
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-top: 20px;
+  opacity: 0.7;
+}
+
+/* на мобиле — чуть компактнее */
+@media (max-width: 480px) {
+  .entry-logo { letter-spacing: 6px; }
+  .entry-line { margin-bottom: 32px; }
+  .entry-prompt { padding: 14px 18px; letter-spacing: 3px; }
+}
