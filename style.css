@@ -772,27 +772,34 @@ body.blood-mode #bg-canvas { opacity: 1; filter: brightness(1.4) saturate(1.5); 
 }
 
 @media (max-width: 768px) {
-  .wallpaper { padding: 40px 16px 80px; }
+  .wallpaper { padding: 190px 16px 80px; }
   .wallpaper-logo { font-size: clamp(48px, 15vw, 96px); }
   .wallpaper-subtitle { font-size: 15px; letter-spacing: 4px; }
   .wallpaper-line { font-size: 11px; }
   .wallpaper-hint { display: none; }
 
-  .desktop-icons {
-    top: auto; bottom: 70px; left: 0; right: 0;
-    width: auto; flex-direction: row;
-    overflow-x: auto;
-    padding: 8px 12px;
+    .desktop-icons {
+    top: 14px;
+    left: 12px;
+    right: 12px;
+    bottom: auto;
+    width: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 6px;
-    justify-content: flex-start;
-    background: rgba(6, 3, 3, 0.85);
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    scrollbar-width: none;
+    padding: 0;
+    background: transparent;
+    border: none;
+    overflow: visible;
   }
-  .desktop-icons::-webkit-scrollbar { display: none; }
-  .desktop-icon { flex-shrink: 0; padding: 8px 10px; min-width: 78px; }
-  .icon-glyph { font-size: 22px; }
+  .desktop-icon {
+    min-width: 0;
+    padding: 14px 6px;
+    background: rgba(6, 3, 3, 0.65);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(6px);
+  }
+  .icon-glyph { font-size: 26px; }
   .icon-label { font-size: 10px; letter-spacing: 1px; }
 
   .window {

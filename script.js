@@ -1,5 +1,5 @@
 /* ============================================================
-   SIALENS — script.js v2.0 (DESKTOP EDITION)
+   SIALENS — script.js v2.0 (DESKTOP EDITION) да, йоу
    ============================================================ */
 
 // ---------- АУДИО ----------
@@ -49,7 +49,7 @@ if (soundBtn) {
   soundBtn.addEventListener('click', function () {
     soundEnabled = !soundEnabled;
     soundBtn.classList.toggle('on', soundEnabled);
-    soundBtn.textContent = soundEnabled ? '◉ SND' : '○ MUTE';
+    soundBtn.textContent = soundEnabled ? '◉ Звуки' : '○ Звуки';
     if (soundEnabled) { initAudio(); beep(900, 0.08, 'square', 0.05); haptic(12); }
   });
 }
@@ -342,65 +342,119 @@ function triggerBloodMode() {
     termBody.scrollTop = termBody.scrollHeight;
   }
   function printLines(arr, cls) { arr.forEach(function (t) { line(t, cls); }); }
+  function delay(fn, ms) { setTimeout(fn, ms); }
 
   const commands = {
     help: function () {
       printLines([
-        '> доступные команды:',
-        '  help         — список команд',
-        '  whoami       — кто я',
-        '  games        — во что играю',
-        '  music        — что слушаю',
-        '  contact      — как связаться',
-        '  stats        — характеристики',
-        '  archive      — открыть архив',
-        '  open <app>   — открыть окно (about/interests/stuff/archive/chaos/contact)',
-        '  chaos        — blood mode',
-        '  clear        — очистить'
+        '> команды:',
+        '  help      — ну ты понял',
+        '  chaos     — активировать хаос',
+        '  sudo      — рискни ;)',
+        '  sleep     — сон, я хз',
+        '  hack      — взломать пентагон',
+        '  coffee    — сварить кофе',
+        '  matrix    — а ты готов?',
+        '  ping      — ping',
+        '  whoami    — кто ты',
+        '  ls        — список файлов',
+        '  cats      — мяу',
+        '  clear     — очистить тут все',
+        '  ...и ещё есть пара, но их сам ищи ;)'
       ]);
     },
+
+    chaos: function () {
+      line('> ЗАПУСК ПРОТОКОЛА ХАОСА...', 'err');
+      delay(function () { line('> 3...', 'err'); }, 200);
+      delay(function () { line('> 2...', 'err'); }, 500);
+      delay(function () { line('> 1...', 'err'); }, 800);
+      delay(function () {
+        line('> хаос активирован, как страшноооо', 'err');
+        if (typeof triggerBloodMode === 'function' && !document.body.classList.contains('blood-mode')) {
+          triggerBloodMode();
+        }
+      }, 1100);
+    },
+
+    sudo: function () {
+      printLines([
+        'User is not in the sudoers file.',
+        'This incident has been reported 🩸'
+      ], 'err');
+    },
+
+    sleep: function () {
+      printLines([
+        '> попытка уснуть...',
+        '> ...',
+        '> ошибка: много хочешь',
+        '> иди попей магний',
+        '> это типо метафора(?) на мою бессоницу, я хз'
+      ], 'err');
+    },
+
+    hack: function () {
+      line('> взлом пентагона...', '');
+      delay(function () { line('> обход firewall... 12%', ''); }, 300);
+      delay(function () { line('> обход firewall... 47%', ''); }, 700);
+      delay(function () { line('> обход firewall... 91%', ''); }, 1100);
+      delay(function () { line('> 99%...', ''); }, 1500);
+      delay(function () {
+        line('> ошибка: куда тебе, иди уроки делай', 'err');
+        beep(200, 0.2, 'sawtooth', 0.08);
+      }, 1900);
+    },
+
+    coffee: function () {
+      line('> варю кофе...', '');
+      delay(function () { line('> ...', ''); }, 500);
+      delay(function () { line('> ошибка 418: я чайник (что это блять значит????)', 'err'); }, 1000);
+    },
+
+    matrix: function () {
+      line('> waking up...', '');
+      delay(function () { line('> follow the white rabbit', ''); }, 400);
+      delay(function () { line('> red pill or blue pill?', ''); }, 900);
+    },
+
+    ping: function () {
+      printLines([
+        'PING sialens.ru (пусть домен и другой): 56 data bytes',
+        '64 bytes from localhost: time=0.42 ms',
+        '64 bytes from localhost: time=0.13 ms',
+        '64 bytes from localhost: time=0.21 ms',
+        '--- статистика ---',
+        '3 packets transmitted, 3 received, 0% loss',
+        '// это фейк инфа кста👀'
+      ]);
+    },
+
     whoami: function () {
       printLines([
-        'Sialens · 14 лет · 9 класс',
-        'человек-эмоция · python · ultrakill',
-        'принцип: chaos = order'
+        '> ты — случайный прохожий, который забрёл сюда',
+        '> и, видимо, тебе СОВСЕМ нечем заняться раз ты в терминале',
+        '> уважаю.'
       ]);
     },
-    games: function () {
-      printLines([
-        '> шутеры:    Ultrakill, DOOM Eternal, DUSK',
-        '> песочницы: Minecraft, Terraria',
-        '> рогалики:  Hades, Dead Cells, Risk of Rain 2'
-      ]);
-    },
-    music: function () { printLines(['> плейлист пока пополняется...'], 'dim'); },
-    contact: function () {
-      printLines([
-        '> tiktok: @sialens_xd',
-        '> telegram: @sialens_xd',
-        '> тапни ник в окне "связь" — скопируется'
-      ]);
-    },
-    stats: function () {
-      printLines(['> возраст: 14','> класс: 9','> стек: Python','> режим: chaos','> бессонница: постоянная']);
-    },
-    archive: function () {
-      if (typeof window.openApp === 'function') {
-        window.openApp('archive');
-        line('> открываю архив...', 'ok');
-      }
-    },
-    chaos: function () {
-      line('> АКТИВИРУЮ ХАОС...', 'err');
-      if (typeof triggerBloodMode === 'function') {
-        if (!document.body.classList.contains('blood-mode')) triggerBloodMode();
-        else line('  blood mode уже активен', 'dim');
-      }
-    },
+
     ls: function () {
-      printLines(['about  interests  stuff  archive  chaos  contact'], 'dim');
+      printLines([
+        'голые_фурри.png         insomnia.log       дик_пик.png',
+        'memories/          bots/              homework(пусто)',
+        'sleep.exe         (не отвечает)'
+      ], 'dim');
     },
-    sudo: function () { printLines(['sialens is not in the sudoers file.','This incident has been reported. 🩸'], 'err'); },
+
+    cats: function () {
+      printLines([
+        '  /\\_/\\   ',
+        ' ( o.o )  ',
+        '  > ^ <   ',
+        '> мяу.'
+      ], '');
+    },
+
     clear: function () { termBody.innerHTML = ''; }
   };
 
@@ -408,24 +462,16 @@ function triggerBloodMode() {
     const input = raw.trim();
     if (!input) return;
     line(PROMPT + ' ' + input, 'cmd');
-    const parts = input.split(/\s+/);
-    const cmd = parts[0].toLowerCase();
-    const rest = parts.slice(1).join(' ');
+    const cmd = input.split(/\s+/)[0].toLowerCase();
 
-    if (cmd === 'echo') { line(rest || ''); return; }
-    if (cmd === 'open') {
-      if (typeof window.openApp === 'function' && APPS_KEYS.indexOf(rest) >= 0) {
-        window.openApp(rest); line('> открываю ' + rest, 'ok');
-      } else {
-        line('> неизвестное окно. доступно: about, interests, stuff, archive, chaos, contact', 'err');
-      }
-      return;
+    if (commands[cmd]) {
+      commands[cmd]();
+      beep(900, 0.05, 'square', 0.05);
+    } else {
+      line("> нет такой команды: '" + cmd + "'. напиши 'help', ну или не пиши.", 'err');
+      beep(200, 0.1, 'sawtooth', 0.06);
     }
-    if (commands[cmd]) { commands[cmd](); beep(900, 0.05, 'square', 0.05); }
-    else { line("команда не найдена: '" + cmd + "'. напиши 'help'.", 'err'); beep(200, 0.1, 'sawtooth', 0.06); }
   }
-
-  const APPS_KEYS = ['about', 'interests', 'stuff', 'archive', 'chaos', 'contact'];
 
   function openTerm() {
     termEl.classList.add('open'); termOpen.classList.add('open');
@@ -573,9 +619,9 @@ function triggerBloodMode() {
 // МУЗЫКАЛЬНЫЙ ПЛЕЕР
 // ============================================================
 const PLAYLIST = [
-  { src: 'audio/track1.mp3', title: 'первый трек' },
-  { src: 'audio/track2.mp3', title: 'второй трек' },
-  { src: 'audio/track3.mp3', title: 'третий трек' }
+  { src: 'audio/track1.mp3', title: 'Main Theme' },
+  { src: 'audio/track2.mp3', title: 'Glory' },
+  { src: 'audio/track3.mp3', title: 'War Without Reason' }
 ];
 
 (function initMusicPlayer() {
@@ -674,7 +720,7 @@ const PLAYLIST = [
   const WORDS = {
     chaos:     { toast: '// CHAOS UNLOCKED //',   blood: true },
     ultrakill: { toast: '// V1 APPROVES //',      blood: true },
-    sialens:   { toast: '// ДОБРО ПОЖАЛОВАТЬ //', blood: false }
+    sialens:   { toast: '// ДОБРО ПОЖАЛОВАТЬ, КЛОН //', blood: false }
   };
   const MAX = 20;
   let buffer = '';
