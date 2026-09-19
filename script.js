@@ -153,7 +153,7 @@ function triggerBloodMode() {
     beep(120, 0.4, 'sawtooth', 0.08);
     setTimeout(function () { beep(80, 0.5, 'sawtooth', 0.08); }, 150);
     haptic([30, 60, 30, 60, 200]);
-    showToast('// blood mode activated //');
+    showToast('// так называемая пасхалка //');
     clearTimeout(bloodEndTimer);
     bloodEndTimer = setTimeout(function () {
       bloodActive = false;
