@@ -816,13 +816,59 @@ body.blood-mode #bg-canvas { opacity: 1; filter: brightness(1.4) saturate(1.5); 
   .taskbar-insomnia { display: none; }
   #sound-toggle { font-size: 9px; padding: 3px 6px; }
 
-  .player { bottom: 60px; left: 12px; right: 12px; padding: 6px 8px; gap: 6px; }
-  .player-info { flex: 1; min-width: 0; }
-  .player-title { font-size: 10px; max-width: none; }
-  .player-status { font-size: 8px; }
-  .player-btn { width: 30px; height: 30px; font-size: 12px; }
-  .player-btn.small { width: 26px; height: 26px; font-size: 11px; }
-  .player-vol { width: 44px; flex-shrink: 0; }
+    .player {
+    position: fixed;
+    bottom: 60px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: none;
+    padding: 6px 8px;
+    gap: 6px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+  }
+  .player-info {
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .player-title {
+    font-size: 10px;
+    letter-spacing: 1px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .player-status {
+    font-size: 8px;
+  }
+  .player-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .player-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+    flex-shrink: 0;
+    padding: 0;
+  }
+  .player-btn.small {
+    display: flex;   /* ← ключевая строка */
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+    opacity: 1;
+    padding: 0;
+  }
+  .player-vol {
+    display: none;   /* громкость на мобиле не нужна — там своя */
+  }
   .term-toggle { bottom: 62px; right: 12px; width: 44px; height: 44px; font-size: 14px; }
   .term { bottom: 118px; right: 12px; left: 12px; width: auto; max-height: 50vh; font-size: 12px; }
 
