@@ -723,179 +723,124 @@ document.querySelectorAll('.social[data-copy]').forEach(function (el) {
 });
 
 /* ============================================================
-   МУЗЫКАЛЬНЫЙ ПЛЕЕР — синтез через Web Audio
+   МУЗЫКАЛЬНЫЙ ПЛЕЕР — твои треки
    ============================================================ */
+
+// СПИСОК ТРЕКОВ — допиши/замени своими
+// Формат: { src: 'путь к файлу', title: 'название' }
+const PLAYLIST = [
+  { src: 'audio/track1.mp3', title: 'Main Theme' },
+  { src: 'audio/track2.mp3', title: 'Glory' },
+  { src: 'audio/track3.mp3', title: 'War Without Reason' }
+];
+
 (function initMusicPlayer() {
-  const btn       = document.getElementById('player-play');
-  const statusEl  = document.getElementById('player-status');
-  const volSlider = document.getElementById('player-vol');
-  if (!btn || !volSlider) return;
+  const btnPlay  = document.getElementById('player-play');
+  const btnPrev  = document.getElementById('player-prev');
+  const btnNext  = document.getElementById('player-next');
+  const titleEl  = document.getElementById('player-title');
+  const statusEl = document.getElementById('player-status');
+  const volSlider= document.getElementById('player-vol');
+  if (!btnPlay) return;
 
-  let musicGain = null;
-  let musicPlaying = false;
-  let schedulerId = null;
-  let nextNoteTime = 0;
-  let currentStep = 0;
+  let currentIndex = 0;
+  let isPlaying = false;
 
-  const BPM = 90;
-  const STEP_DUR = 60 / BPM / 4; // 16-я нота
+  const audio = new Audio();
+  audio.preload = 'metadata';
+  audio.loop = false;
+  audio.volume = (volSlider ? volSlider.value : 60) / 100;
 
-  const BASS_NOTES = [110.00, 87.31, 130.81, 98.00]; // Am F C G
-  const ARP_NOTES = [
-    [220.00, 261.63, 329.63, 440.00], // Am
-    [174.61, 220.00, 261.63, 349.23], // F
-    [261.63, 329.63, 392.00, 523.25], // C
-    [196.00, 246.94, 293.66, 392.00]  // G
-  ];
+  function updateTitle() {
+    const t = PLAYLIST[currentIndex];
+    if (titleEl) titleEl.textContent = t ? t.title : 'НЕТ ТРЕКОВ';
+  }
 
-  function ensureCtx() {
-    if (!audioCtx) initAudio();
-    if (!audioCtx) return false;
-    if (!musicGain) {
-      musicGain = audioCtx.createGain();
-      musicGain.gain.value = (volSlider.value / 100) * 0.5;
-      musicGain.connect(audioCtx.destination);
+  function loadTrack(i) {
+    if (!PLAYLIST.length) return;
+    currentIndex = (i + PLAYLIST.length) % PLAYLIST.length;
+    audio.src = PLAYLIST[currentIndex].src;
+    updateTitle();
+  }
+
+  function setPlayingUI(playing) {
+    isPlaying = playing;
+    btnPlay.textContent = playing ? '❚❚' : '▶';
+    btnPlay.classList.toggle('playing', playing);
+    if (statusEl) statusEl.textContent = playing ? 'играет' : 'пауза';
+  }
+
+  function play() {
+    const p = audio.play();
+    if (p && p.catch) {
+      p.then(function () {
+        setPlayingUI(true);
+      }).catch(function () {
+        setPlayingUI(false);
+        if (statusEl) statusEl.textContent = 'файл не найден';
+      });
     }
-    return true;
   }
 
-  function noiseBuffer(seconds) {
-    const len = Math.floor(audioCtx.sampleRate * seconds);
-    const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-    return buf;
+  function pause() {
+    audio.pause();
+    setPlayingUI(false);
   }
 
-  function kick(t) {
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.frequency.setValueAtTime(150, t);
-    o.frequency.exponentialRampToValueAtTime(40, t + 0.12);
-    g.gain.setValueAtTime(0.9, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
-    o.connect(g); g.connect(musicGain);
-    o.start(t); o.stop(t + 0.4);
+  function next() {
+    loadTrack(currentIndex + 1);
+    if (isPlaying) play();
   }
 
-  function snare(t) {
-    const src = audioCtx.createBufferSource();
-    src.buffer = noiseBuffer(0.2);
-    const f = audioCtx.createBiquadFilter();
-    f.type = 'highpass'; f.frequency.value = 1000;
-    const g = audioCtx.createGain();
-    g.gain.setValueAtTime(0.35, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
-    src.connect(f); f.connect(g); g.connect(musicGain);
-    src.start(t); src.stop(t + 0.2);
-  }
-
-  function hihat(t, vol) {
-    const src = audioCtx.createBufferSource();
-    src.buffer = noiseBuffer(0.05);
-    const f = audioCtx.createBiquadFilter();
-    f.type = 'highpass'; f.frequency.value = 7500;
-    const g = audioCtx.createGain();
-    g.gain.setValueAtTime(vol, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
-    src.connect(f); f.connect(g); g.connect(musicGain);
-    src.start(t); src.stop(t + 0.06);
-  }
-
-  function bass(freq, t) {
-    const o = audioCtx.createOscillator();
-    o.type = 'sawtooth';
-    o.frequency.value = freq;
-    const f = audioCtx.createBiquadFilter();
-    f.type = 'lowpass';
-    f.frequency.setValueAtTime(900, t);
-    f.frequency.exponentialRampToValueAtTime(220, t + 0.6);
-    f.Q.value = 4;
-    const g = audioCtx.createGain();
-    g.gain.setValueAtTime(0.001, t);
-    g.gain.exponentialRampToValueAtTime(0.26, t + 0.02);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 1.9);
-    o.connect(f); f.connect(g); g.connect(musicGain);
-    o.start(t); o.stop(t + 2);
-  }
-
-  function arp(freq, t) {
-    const o = audioCtx.createOscillator();
-    o.type = 'triangle';
-    o.frequency.value = freq;
-    const g = audioCtx.createGain();
-    g.gain.setValueAtTime(0.001, t);
-    g.gain.exponentialRampToValueAtTime(0.06, t + 0.005);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-    o.connect(g); g.connect(musicGain);
-    o.start(t); o.stop(t + 0.22);
-  }
-
-  function scheduler() {
-    if (!musicPlaying) return;
-    while (nextNoteTime < audioCtx.currentTime + 0.12) {
-      const step = currentStep % 64;
-      const bar  = Math.floor(step / 16);
-      const beat = Math.floor((step % 16) / 4);
-      const sub  = step % 4;
-
-      if (sub === 0 && (beat === 0 || beat === 2)) kick(nextNoteTime);
-      if (sub === 0 && (beat === 1 || beat === 3)) snare(nextNoteTime);
-      if (sub % 2 === 0) hihat(nextNoteTime, sub === 0 ? 0.13 : 0.07);
-      if (step % 16 === 0) bass(BASS_NOTES[bar], nextNoteTime);
-      arp(ARP_NOTES[bar][sub], nextNoteTime);
-
-      nextNoteTime += STEP_DUR;
-      currentStep++;
+  function prev() {
+    if (audio.currentTime > 3) {
+      audio.currentTime = 0;
+      return;
     }
-    schedulerId = setTimeout(scheduler, 25);
+    loadTrack(currentIndex - 1);
+    if (isPlaying) play();
   }
 
-  function start() {
-    if (!ensureCtx()) return;
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    musicPlaying = true;
-    nextNoteTime = audioCtx.currentTime + 0.05;
-    currentStep = 0;
-    scheduler();
-    btn.textContent = '❚❚';
-    btn.classList.add('playing');
-    if (statusEl) statusEl.textContent = 'playing';
-    beep(900, 0.06, 'square', 0.05);
-  }
-
-  function stop() {
-    musicPlaying = false;
-    if (schedulerId) { clearTimeout(schedulerId); schedulerId = null; }
-    btn.textContent = '▶';
-    btn.classList.remove('playing');
-    if (statusEl) statusEl.textContent = 'остановлено';
-    beep(400, 0.08, 'square', 0.05);
-  }
-
-  btn.addEventListener('click', function () {
-    if (musicPlaying) stop(); else start();
+  btnPlay.addEventListener('click', function () {
+    if (isPlaying) pause(); else play();
+    beep(isPlaying ? 900 : 500, 0.06, 'square', 0.05);
     haptic(10);
   });
+  if (btnNext) btnNext.addEventListener('click', function () { next(); beep(1000, 0.05, 'square', 0.05); haptic(8); });
+  if (btnPrev) btnPrev.addEventListener('click', function () { prev(); beep(600, 0.05, 'square', 0.05); haptic(8); });
 
-  volSlider.addEventListener('input', function () {
-    if (musicGain) {
-      musicGain.gain.setTargetAtTime((volSlider.value / 100) * 0.5, audioCtx.currentTime, 0.05);
-    }
+  if (volSlider) {
+    volSlider.addEventListener('input', function () {
+      audio.volume = volSlider.value / 100;
+    });
+  }
+
+  // авто переход на следующий трек
+  audio.addEventListener('ended', function () {
+    next();
   });
 
-  // Авто-запуск при первом клике/тапе (иначе браузер не даст)
+  // пауза когда вкладка неактивна
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden && isPlaying) pause();
+  });
+
+  // ---- авто-запуск при первом клике/тапе (иначе браузер не даст) ----
   let autoStarted = false;
   function tryAutoStart() {
     if (autoStarted) return;
     autoStarted = true;
-    start();
-    setTimeout(function () {
-      if (musicPlaying && statusEl) statusEl.textContent = 'auto-play';
-    }, 100);
+    if (!PLAYLIST.length) return;
+    loadTrack(0);
+    play();
   }
   window.addEventListener('click', tryAutoStart, { once: true });
   window.addEventListener('touchstart', tryAutoStart, { once: true, passive: true });
+
+  // инициализация
+  updateTitle();
+  loadTrack(0);
+  setPlayingUI(false);
 })();
 
 /* ============================================================

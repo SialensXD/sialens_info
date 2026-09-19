@@ -208,11 +208,17 @@
 <!-- МУЗЫКАЛЬНЫЙ ПЛЕЕР -->
 <div class="player" id="player">
   <div class="player-info">
-    <div class="player-title">SIALENS // THEME</div>
-    <div class="player-status" id="player-status">остановлено</div>
+    <div class="player-title" id="player-title">SIALENS // MUSIC</div>
+    <div class="player-status" id="player-status">пауза</div>
   </div>
-  <button class="player-btn" id="player-play" aria-label="играть">▶</button>
-  <input type="range" class="player-vol" id="player-vol" min="0" max="100" value="40" aria-label="громкость">
+
+  <div class="player-controls">
+    <button class="player-btn small" id="player-prev" aria-label="назад">⏮</button>
+    <button class="player-btn" id="player-play" aria-label="играть">▶</button>
+    <button class="player-btn small" id="player-next" aria-label="вперёд">⏭</button>
+  </div>
+
+  <input type="range" class="player-vol" id="player-vol" min="0" max="100" value="60" aria-label="громкость">
 </div>
 
 <!-- НАВЕРХ -->
