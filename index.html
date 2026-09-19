@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIALENS // chaos = order</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<header class="nav">
+  <div class="logo" data-sound-hover>SIALENS<span class="dot">.</span></div>
+  <nav>
+    <a href="#about" data-sound-hover>обо мне</a>
+    <a href="#interests" data-sound-hover>интересы</a>
+    <a href="#chaos" data-sound-hover>хаос</a>
+    <a href="#contact" data-sound-hover>связь</a>
+  </nav>
+  <button id="sound-toggle" title="звук вкл/выкл" data-sound-hover>◉ SND</button>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section id="hero" class="hero">
+    <div class="hero-inner">
+      <div class="tag">// пользователь найден</div>
+      <h1 class="glitch" data-text="SIALENS">SIALENS</h1>
+      <p class="subtitle">человек-эмоция &nbsp;·&nbsp; chaos = order</p>
+      <p class="hero-line">14 лет · 9 класс · python · ultrakill · бессонница</p>
+      <a href="#about" class="scroll-hint" data-sound-hover>▼ прокрути</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section reveal">
+    <h2><span class="num">01</span> обо мне</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>Привет, я <strong>Sialens</strong>. Мне 14, учусь в 9 классе. Пишу на <strong>Python</strong> — в основном ботов, иногда сайты. Люблю игры, музыку и код.</p>
+        <p>Живу по принципу <em>«хаос = порядок»</em>. Часто брежу, часто делаю что-то необдуманное. Эмоции сильнее меня — так и живу.</p>
+        <p>Соблюдаю <strong>ЗОЖ</strong>, но вместе с мега-эмоциями страдаю от бессонницы. Бессонница → проблемы с памятью. Классика.</p>
+      </div>
+      <div class="about-card">
+        <div class="stat"><span>возраст</span><b>14</b></div>
+        <div class="stat"><span>класс</span><b>9</b></div>
+        <div class="stat"><span>стек</span><b>Python</b></div>
+        <div class="stat"><span>режим</span><b>chaos</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERESTS -->
+  <section id="interests" class="section reveal">
+    <h2><span class="num">02</span> интересы</h2>
+    <div class="cards">
+      <div class="card" data-sound-hover>
+        <div class="card-icon">▣</div>
+        <h3>КОД</h3>
+        <p>Пишу ботов на Python, иногда сайты. Автоматизация — это кайф.</p>
+      </div>
+      <div class="card" data-sound-hover>
+        <div class="card-icon">▶</div>
+        <h3>ИГРЫ</h3>
+        <p>Шутеры (Ultrakill), песочницы, рогалики. Всё, где есть скорость и хаос.</p>
+      </div>
+      <div class="card" data-sound-hover>
+        <div class="card-icon">♪</div>
+        <h3>МУЗЫКА</h3>
+        <p>Слушаю почти всегда. Без музыки мозг не работает.</p>
+      </div>
+      <div class="card" data-sound-hover>
+        <div class="card-icon">✚</div>
+        <h3>ЗОЖ</h3>
+        <p>Спорт, режим — ну, пытаюсь. Бессонница иногда побеждает.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAOS -->
+  <section id="chaos" class="section reveal">
+    <h2><span class="num">03</span> хаос</h2>
+    <div class="chaos-box">
+      <p class="chaos-line">«порядок — это просто хорошо организованный хаос»</p>
+      <p>Я — человек-эмоция. Могу за минуту переключиться с полного спокойствия на что угодно. Делаю необдуманные вещи, потом думаю. Иногда получается круто.</p>
+      <p class="dim">// статус системы: <span class="blink">нестабильно</span></p>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section reveal">
+    <h2><span class="num">04</span> связь</h2>
+    <div class="contact-box">
+      <p>Основное место обитания — TikTok. Везде я под ником <strong>@sialens_xd</strong>.</p>
+      <a class="contact-link" href="https://tiktok.com/@sialens_xd" target="_blank" rel="noopener" data-sound-click>
+        <span class="at">@</span>sialens_xd <span class="arrow">→</span>
+      </a>
+      <p class="dim small">есть не во всех соцсетях, но ник везде одинаковый</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div>SIALENS © <span id="year"></span></div>
+  <div class="dim">chaos = order // v1.0</div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
