@@ -13,7 +13,10 @@
 <body>
 
 <canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="scanlines"></div>
+<div class="vignette"></div>
 
+<!-- BOOT -->
 <div class="boot-screen">
   <div class="boot-inner">
     <div class="boot-logo">SIALENS<span class="dot">.</span></div>
@@ -22,7 +25,8 @@
     <div class="boot-status">loading&nbsp;<span class="blink">_</span></div>
   </div>
 </div>
-<!-- ЭКРАН ВХОДА -->
+
+<!-- ENTRY -->
 <div class="entry-screen" id="entry-screen">
   <div class="entry-inner">
     <div class="entry-logo">SIALENS<span class="dot">.</span></div>
@@ -31,54 +35,63 @@
     <div class="entry-hint">запустится музыка</div>
   </div>
 </div>
-<div class="scanlines"></div>
-<div class="vignette"></div>
-<div class="blood-flash" id="blood-flash">ХАОС АКТИВИРОВАН</div>
-<div class="toast" id="toast"></div>
 
-<header class="nav">
-  <div class="logo" id="logo" data-sound-hover>SIALENS<span class="dot">.</span></div>
-  <nav class="desktop-nav">
-    <a href="#about" data-sound-hover>обо мне</a>
-    <a href="#interests" data-sound-hover>интересы</a>
-    <a href="#stuff" data-sound-hover>игры / музыка</a>
-    <a href="#chaos" data-sound-hover>хаос</a>
-    <a href="#contact" data-sound-hover>связь</a>
-  </nav>
-  <div class="nav-right">
-    <button id="sound-toggle" title="звук вкл/выкл" data-sound-hover>◉ SND</button>
-    <button class="burger" id="burger" aria-label="меню">
-      <span></span><span></span><span></span>
-    </button>
+<!-- DESKTOP -->
+<div class="desktop" id="desktop">
+
+  <div class="wallpaper">
+    <div class="wallpaper-tag">// пользователь найден</div>
+    <div class="wallpaper-logo glitch" data-text="SIALENS">SIALENS</div>
+    <div class="wallpaper-subtitle">хаос = порядок</div>
+    <div class="wallpaper-line">14 лет · 9 класс · python · ultrakill · бессонница</div>
+    <div class="wallpaper-hint">// открой любое окно слева</div>
   </div>
-</header>
 
-<div class="mobile-menu" id="mobile-menu">
-  <nav>
-    <a href="#about">обо мне</a>
-    <a href="#interests">интересы</a>
-    <a href="#stuff">игры / музыка</a>
-    <a href="#chaos">хаос</a>
-    <a href="#contact">связь</a>
-  </nav>
+  <div class="desktop-icons" id="desktop-icons">
+    <div class="desktop-icon" data-app="about" tabindex="0">
+      <div class="icon-glyph">⬢</div>
+      <div class="icon-label">обо мне</div>
+    </div>
+    <div class="desktop-icon" data-app="interests" tabindex="0">
+      <div class="icon-glyph">✦</div>
+      <div class="icon-label">интересы</div>
+    </div>
+    <div class="desktop-icon" data-app="stuff" tabindex="0">
+      <div class="icon-glyph">▶</div>
+      <div class="icon-label">игры / музыка</div>
+    </div>
+    <div class="desktop-icon" data-app="archive" tabindex="0">
+      <div class="icon-glyph">▤</div>
+      <div class="icon-label">архив</div>
+    </div>
+    <div class="desktop-icon" data-app="chaos" tabindex="0">
+      <div class="icon-glyph">☯</div>
+      <div class="icon-label">хаос</div>
+    </div>
+    <div class="desktop-icon" data-app="contact" tabindex="0">
+      <div class="icon-glyph">✉</div>
+      <div class="icon-label">связь</div>
+    </div>
+  </div>
+
+  <div class="windows" id="windows"></div>
+
+  <div class="taskbar">
+    <div class="taskbar-logo">SIALENS<span class="dot">.</span></div>
+    <div class="taskbar-windows" id="taskbar-windows"></div>
+    <div class="taskbar-right">
+      <button id="sound-toggle" title="звук" data-sound-hover>◉ SND</button>
+      <span class="taskbar-clock" id="taskbar-clock">--:--:--</span>
+      <span class="taskbar-insomnia" id="taskbar-insomnia">—</span>
+    </div>
+  </div>
+
 </div>
 
-<main>
-
-  <!-- HERO -->
-  <section id="hero" class="hero">
-    <div class="hero-inner">
-      <div class="tag">// пользователь найден</div>
-      <h1 class="glitch" data-text="SIALENS">SIALENS</h1>
-      <p class="subtitle">хаос = порядок</p>
-      <p class="hero-line">14 лет · 9 класс · python · ultrakill · бессонница</p>
-      <a href="#about" class="scroll-hint" data-sound-hover>▼ прокрути</a>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about" class="section reveal">
-    <h2><span class="num">01</span> обо мне</h2>
+<!-- APP TEMPLATES -->
+<template id="tpl-about">
+  <div class="app-body">
+    <div class="app-tag">// раздел 01</div>
     <div class="about-grid">
       <div class="about-text">
         <p>Привет, я <strong>Sialens</strong>. Мне 14, учусь в 9 классе. Пишу на <strong>Python</strong> — в основном ботов, иногда сайты. Люблю игры, музыку и код.</p>
@@ -92,38 +105,40 @@
         <div class="stat"><span>режим</span><b>chaos</b></div>
       </div>
     </div>
-  </section>
+  </div>
+</template>
 
-  <!-- INTERESTS -->
-  <section id="interests" class="section reveal">
-    <h2><span class="num">02</span> интересы</h2>
+<template id="tpl-interests">
+  <div class="app-body">
+    <div class="app-tag">// раздел 02</div>
     <div class="cards">
-      <div class="card" data-sound-hover>
+      <div class="card">
         <div class="card-icon">▣</div>
         <h3>КОД</h3>
         <p>Пишу ботов на Python, иногда сайты. Автоматизация — это кайф.</p>
       </div>
-      <div class="card" data-sound-hover>
+      <div class="card">
         <div class="card-icon">▶</div>
         <h3>ИГРЫ</h3>
         <p>Шутеры (Ultrakill), песочницы, рогалики. Всё, где есть скорость и хаос.</p>
       </div>
-      <div class="card" data-sound-hover>
+      <div class="card">
         <div class="card-icon">♪</div>
         <h3>МУЗЫКА</h3>
         <p>Слушаю почти всегда. Без музыки мозг не работает.</p>
       </div>
-      <div class="card" data-sound-hover>
+      <div class="card">
         <div class="card-icon">✚</div>
         <h3>ЗОЖ</h3>
         <p>Спорт, режим — ну, пытаюсь. Бессонница иногда побеждает.</p>
       </div>
     </div>
-  </section>
+  </div>
+</template>
 
-  <!-- STUFF: GAMES / MUSIC -->
-  <section id="stuff" class="section reveal">
-    <h2><span class="num">03</span> игры / музыка</h2>
+<template id="tpl-stuff">
+  <div class="app-body">
+    <div class="app-tag">// раздел 03</div>
     <div class="stuff-grid">
       <div class="stuff-col">
         <h3 class="stuff-title"><span class="ico">▣</span> во что играю</h3>
@@ -132,38 +147,70 @@
           <li><span class="tagline">песочницы</span><span class="val">Minecraft, Terraria</span></li>
           <li><span class="tagline">рогалики</span><span class="val">Hades, Dead Cells, Risk of Rain 2</span></li>
         </ul>
-        <!-- ↑ допиши свои игры сюда, формат: <li><span class="tagline">категория</span><span class="val">список</span></li> -->
       </div>
       <div class="stuff-col">
         <h3 class="stuff-title"><span class="ico">♪</span> что слушаю</h3>
         <ul class="stuff-list">
-          <li><span class="tagline">тут пока пусто</span><span class="val">допишу позже</span></li>
+          <li><span class="tagline">пока пусто</span><span class="val">допишу позже</span></li>
         </ul>
-        <p class="dim small mt">// впиши своих исполнителей сюда</p>
-        <!-- ↑ замени строку выше на <li><span class="tagline">жанр/настроение</span><span class="val">исполнители</span></li> -->
       </div>
     </div>
-  </section>
+  </div>
+</template>
 
-  <!-- CHAOS -->
-  <section id="chaos" class="section reveal">
-    <h2><span class="num">04</span> хаос</h2>
+<template id="tpl-archive">
+  <div class="app-body">
+    <div class="app-tag">// раздел 04 · лог системы</div>
+    <p class="archive-intro">Список того, что было раньше. Память подводит, а лог — нет.</p>
+
+    <!-- ↓ РЕДАКТИРУЙ ЭТО ПОД СЕБЯ ↓ -->
+    <ul class="archive-list">
+      <li class="archive-item">
+        <span class="archive-year">2023</span>
+        <span class="archive-event">первый бот в Telegram — ping-pong на 50 строк</span>
+      </li>
+      <li class="archive-item">
+        <span class="archive-year">2023</span>
+        <span class="archive-event">первый HTML-сайт, заброшен через 3 дня</span>
+      </li>
+      <li class="archive-item">
+        <span class="archive-year">2024</span>
+        <span class="archive-event">серьёзно взялся за Python</span>
+      </li>
+      <li class="archive-item">
+        <span class="archive-year">2024</span>
+        <span class="archive-event">Ultrakill — понял, что такое хаос</span>
+      </li>
+      <li class="archive-item archive-current">
+        <span class="archive-year">2025</span>
+        <span class="archive-event">этот сайт — первая версия</span>
+      </li>
+    </ul>
+    <!-- ↑ допиши / перепиши свои события ↑ -->
+  </div>
+</template>
+
+<template id="tpl-chaos">
+  <div class="app-body">
+    <div class="app-tag">// раздел 05</div>
     <div class="chaos-box">
       <p class="chaos-line">«порядок — это просто хорошо организованный хаос»</p>
       <p>Я — человек-эмоция. Могу за минуту переключиться с полного спокойствия на что угодно. Делаю необдуманные вещи, потом думаю. Иногда получается круто.</p>
       <p class="dim">// статус системы: <span class="blink">нестабильно</span></p>
+      <p class="dim small">// попробуй набрать "chaos" на клавиатуре</p>
     </div>
-  </section>
+  </div>
+</template>
 
-      <!-- CONTACT -->
-  <section id="contact" class="section reveal">
-    <h2><span class="num">05</span> связь</h2>
+<template id="tpl-contact">
+  <div class="app-body">
+    <div class="app-tag">// раздел 06</div>
     <div class="contact-box">
       <p>Везде я под ником <strong>@sialens_xd</strong>. Есть не во всех соцсетях, но ник один.</p>
       <a class="contact-link" href="#" data-copy="sialens_xd" id="copy-nick">
         <span class="at">@</span>sialens_xd <span class="arrow">→</span>
       </a>
-      <p class="dim small mt">// тапни — скопируется в буфер</p>
+      <p class="dim small">// тапни — скопируется в буфер</p>
 
       <div class="socials">
         <a class="social social-tiktok" href="https://tiktok.com/@sialens_xd" target="_blank" rel="noopener" data-sound-hover>
@@ -175,30 +222,19 @@
           <span class="social-name">Telegram</span>
         </a>
       </div>
-      <p class="dim small mt">// тапни чтобы открыть</p>
     </div>
-  </section>
+  </div>
+</template>
 
-</main>
-
-<footer>
-  <div class="status-item">SIALENS © <span id="year"></span></div>
-  <div class="status-item"><span class="status-label">время:</span> <span id="status-clock">--:--:--</span></div>
-  <div class="status-item"><span class="status-label">бессонница:</span> <span id="status-insomnia">—</span></div>
-  <div class="status-item dim">chaos = order // v1.2</div>
-</footer>
-
-<!-- КНОПКА ТЕРМИНАЛА -->
+<!-- TERMINAL -->
 <button id="term-toggle" class="term-toggle" aria-label="терминал">>_</button>
-
-<!-- ТЕРМИНАЛ -->
 <div class="term" id="terminal">
   <div class="term-header">
-    <span>SIALENS_TERMINAL // v1.2</span>
-    <button class="term-close" id="term-close" aria-label="закрыть">✕</button>
+    <span>SIALENS_TERMINAL // v2.0</span>
+    <button class="term-close" id="term-close">✕</button>
   </div>
   <div class="term-body" id="term-body">
-    <div class="term-line dim">// терминал загружен. напиши 'help' для списка команд.</div>
+    <div class="term-line dim">// терминал загружен. напиши 'help'.</div>
   </div>
   <div class="term-input-line">
     <span class="term-prompt">sialens@chaos:~$</span>
@@ -206,32 +242,25 @@
   </div>
 </div>
 
-<!-- МУЗЫКАЛЬНЫЙ ПЛЕЕР -->
+<!-- PLAYER -->
 <div class="player" id="player">
   <div class="player-info">
     <div class="player-title" id="player-title">SIALENS // MUSIC</div>
     <div class="player-status" id="player-status">пауза</div>
   </div>
-
   <div class="player-controls">
     <button class="player-btn small" id="player-prev" aria-label="назад">⏮</button>
     <button class="player-btn" id="player-play" aria-label="играть">▶</button>
     <button class="player-btn small" id="player-next" aria-label="вперёд">⏭</button>
   </div>
-
-  <input type="range" class="player-vol" id="player-vol" min="0" max="100" value="60" aria-label="громкость">
+  <input type="range" class="player-vol" id="player-vol" min="0" max="100" value="60">
 </div>
 
-<!-- НАВЕРХ -->
-<button class="to-top" id="to-top" aria-label="наверх">▲</button>
+<div class="toast" id="toast"></div>
+<div class="blood-flash" id="blood-flash">ХАОС АКТИВИРОВАН</div>
 
 <script>
   document.documentElement.classList.add('has-js');
-  setTimeout(function(){
-    document.querySelectorAll('.reveal').forEach(function(el){
-      el.classList.add('visible');
-    });
-  }, 3000);
 </script>
 <script src="script.js"></script>
 </body>
