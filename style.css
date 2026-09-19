@@ -417,12 +417,12 @@ footer {
 }
 
 /* ==== REVEAL ==== */
-.reveal {
+html.has-js .reveal {
   opacity: 0;
   transform: translateY(40px);
   transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.reveal.visible {
+html.has-js .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
