@@ -515,3 +515,195 @@ if (logoEl && bloodFlash) {
   tick();
   setInterval(tick, 1000);
 })();
+
+/* ============================================================
+   CANVAS ЧАСТИЦЫ
+   ============================================================ */
+(function initParticles() {
+  const canvas = document.getElementById('bg-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  // На мобиле меньше частиц, чтобы не жрало батарею
+  const isMobile = window.matchMedia('(max-width: 768px)').matches
+                || window.matchMedia('(pointer: coarse)').matches;
+  const COUNT = isMobile ? 28 : 70;
+  const LINK_DIST = isMobile ? 0 : 130; // связи между частицами — только на ПК
+  const MAX_SPEED = isMobile ? 0.25 : 0.4;
+
+  let W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
+  let particles = [];
+  let mouse = { x: -9999, y: -9999, active: false };
+  let rafId = null;
+
+  function resize() {
+    W = canvas.clientWidth;
+    H = canvas.clientHeight;
+    canvas.width = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
+  function rand(min, max) { return Math.random() * (max - min) + min; }
+
+  function createParticle() {
+    const angle = rand(0, Math.PI * 2);
+    const speed = rand(0.05, MAX_SPEED);
+    return {
+      x: rand(0, W),
+      y: rand(0, H),
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      r: rand(0.6, 1.8),
+      alpha: rand(0.25, 0.75),
+      pulse: rand(0, Math.PI * 2),
+      pulseSpeed: rand(0.01, 0.03)
+    };
+  }
+
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < COUNT; i++) particles.push(createParticle());
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // ---- связи между частицами (только ПК) ----
+    if (LINK_DIST > 0) {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const a = particles[i];
+          const b = particles[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const distSq = dx * dx + dy * dy;
+          if (distSq < LINK_DIST * LINK_DIST) {
+            const d = Math.sqrt(distSq);
+            const alpha = (1 - d / LINK_DIST) * 0.18;
+            ctx.strokeStyle = 'rgba(230, 0, 0, ' + alpha + ')';
+            ctx.lineWidth = 0.6;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    // ---- сами частицы ----
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+
+      // притяжение к курсору (лёгкое) — только если мышь активна
+      if (mouse.active && !isMobile) {
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const distSq = dx * dx + dy * dy;
+        const R = 160;
+        if (distSq < R * R && distSq > 0.01) {
+          const d = Math.sqrt(distSq);
+          const force = (1 - d / R) * 0.06;
+          p.vx += (dx / d) * force;
+          p.vy += (dy / d) * force;
+        }
+      }
+
+      // затухание скорости
+      p.vx *= 0.995;
+      p.vy *= 0.995;
+
+      // ограничение скорости
+      const sp = Math.hypot(p.vx, p.vy);
+      if (sp > MAX_SPEED) {
+        p.vx = (p.vx / sp) * MAX_SPEED;
+        p.vy = (p.vy / sp) * MAX_SPEED;
+      }
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // пульсация альфы
+      p.pulse += p.pulseSpeed;
+      const a = p.alpha * (0.7 + Math.sin(p.pulse) * 0.3);
+
+      // телепорт через края
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+      if (p.y < -10) p.y = H + 10;
+      if (p.y > H + 10) p.y = -10;
+
+      // свечение
+      const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 8);
+      grd.addColorStop(0, 'rgba(255, 60, 60, ' + a + ')');
+      grd.addColorStop(0.4, 'rgba(230, 0, 0, ' + (a * 0.4) + ')');
+      grd.addColorStop(1, 'rgba(230, 0, 0, 0)');
+
+      ctx.fillStyle = grd;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 8, 0, Math.PI * 2);
+      ctx.fill();
+
+      // ядро
+      ctx.fillStyle = 'rgba(255, 90, 90, ' + a + ')';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    rafId = requestAnimationFrame(draw);
+  }
+
+  // ---- события ----
+  window.addEventListener('resize', function () {
+    resize();
+    initParticles();
+  });
+
+  document.addEventListener('mousemove', function (e) {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouse.active = true;
+  });
+  document.addEventListener('mouseleave', function () {
+    mouse.active = false;
+  });
+
+  // тап на мобиле — короткая вспышка частиц от точки тапа
+  document.addEventListener('touchstart', function (e) {
+    if (!e.touches || !e.touches.length) return;
+    const t = e.touches[0];
+    for (let i = 0; i < 6; i++) {
+      const p = createParticle();
+      p.x = t.clientX;
+      p.y = t.clientY;
+      const ang = rand(0, Math.PI * 2);
+      const sp = rand(0.5, 1.6);
+      p.vx = Math.cos(ang) * sp;
+      p.vy = Math.sin(ang) * sp;
+      p.r = rand(0.8, 1.6);
+      p.alpha = 1;
+      particles.push(p);
+    }
+    // держим список в разумных размерах
+    if (particles.length > COUNT + 40) {
+      particles.splice(0, particles.length - COUNT - 40);
+    }
+  }, { passive: true });
+
+  // ---- старт ----
+  resize();
+  initParticles();
+  draw();
+
+  // Пауза, если вкладка неактивна — экономия ресурсов
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    } else if (!rafId) {
+      draw();
+    }
+  });
+})();
