@@ -1,4 +1,4 @@
-// ============ ЗВУК (Web Audio, без файлов) ============
+// ============ ЗВУК ============
 let audioCtx = null;
 let soundEnabled = true;
 
@@ -6,9 +6,7 @@ function initAudio() {
   if (!audioCtx) {
     try {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    } catch (e) {
-      console.warn('Аудио недоступно');
-    }
+    } catch (e) { console.warn('Аудио недоступно'); }
   }
 }
 
@@ -25,50 +23,80 @@ function beep(freq = 800, dur = 0.06, type = 'square', vol = 0.04) {
   o.stop(audioCtx.currentTime + dur);
 }
 
-// Инициализация аудио — по первому касанию/клику
 ['click', 'keydown', 'touchstart'].forEach(ev =>
   window.addEventListener(ev, initAudio, { once: true })
 );
 
-// Ховер-звуки
 document.querySelectorAll('[data-sound-hover]').forEach(el => {
   el.addEventListener('mouseenter', () => beep(1200, 0.04, 'square', 0.025));
 });
 
-// Клик-звуки
 document.querySelectorAll('[data-sound-click], a[href]').forEach(el => {
   el.addEventListener('click', () => beep(300, 0.09, 'sawtooth', 0.05));
 });
 
-// Кнопка звука
 const soundBtn = document.getElementById('sound-toggle');
 soundBtn.classList.add('on');
 soundBtn.addEventListener('click', () => {
   soundEnabled = !soundEnabled;
   soundBtn.classList.toggle('on', soundEnabled);
   soundBtn.textContent = soundEnabled ? '◉ SND' : '○ MUTE';
-  if (soundEnabled) {
-    initAudio();
-    beep(900, 0.08, 'square', 0.05);
-  }
+  if (soundEnabled) { initAudio(); beep(900, 0.08, 'square', 0.05); }
 });
 
-// ============ REVEAL ANIMATION ============
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
+// ============ REVEAL (исправлено) ============
+const reveals = document.querySelectorAll('.reveal');
+
+function revealElement(el) {
+  el.classList.add('visible');
+}
+
+function revealAll() {
+  reveals.forEach(revealElement);
+}
+
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        revealElement(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -5% 0px' });
+
+  reveals.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
+    if (inViewport) {
+      revealElement(el); // уже видно — показываем сразу
+    } else {
+      observer.observe(el);
     }
   });
-}, { threshold: 0.15 });
 
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  // Страховка: если что-то пошло не так — раскрываем всё
+  setTimeout(revealAll, 4000);
+} else {
+  revealAll(); // старый браузер — просто всё показываем
+}
 
-// ============ ГОД В ФУТЕРЕ ============
+// На всякий случай: если юзер вернулся к вкладке и что-то пропущено
+window.addEventListener('pageshow', () => {
+  setTimeout(() => {
+    reveals.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && !el.classList.contains('visible')) {
+        revealElement(el);
+      }
+    });
+  }, 200);
+});
+
+// ============ ГОД ============
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// ============ ГЛИТЧ-ВСПЫШКИ НА HERO ============
+// ============ ГЛИТЧ НА ИМЕНИ ============
 const glitchEl = document.querySelector('.glitch');
 if (glitchEl) {
   setInterval(() => {
