@@ -185,11 +185,31 @@ body::before {
 }
 
 .subtitle {
-  margin-top: 22px;
-  font-size: clamp(14px, 2vw, 18px);
+  margin-top: 30px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 3.2vw, 32px);
   color: var(--red-bright);
-  letter-spacing: 3px;
-  text-transform: lowercase;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  text-shadow: 0 0 22px rgba(230, 0, 0, 0.55);
+  position: relative;
+  display: inline-block;
+  animation: subtle-pulse 4s ease-in-out infinite;
+}
+
+.subtitle::before { content: '// '; color: var(--red); opacity: 0.7; }
+.subtitle::after  { content: ' //'; color: var(--red); opacity: 0.7; }
+
+@keyframes subtle-pulse {
+  0%, 100% { text-shadow: 0 0 22px rgba(230, 0, 0, 0.55); }
+  50%      { text-shadow: 0 0 38px rgba(255, 42, 42, 0.85); }
+}
+
+@media (max-width: 480px) {
+  .subtitle { letter-spacing: 4px; }
+  .subtitle::before { content: '// '; }
+  .subtitle::after  { content: ' //'; }
 }
 
 .hero-line {
