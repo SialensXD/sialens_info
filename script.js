@@ -1,4 +1,4 @@
-// ============ ЗВУК ============
+// ============ ЗВУК ===========
 let audioCtx = null;
 let soundEnabled = true;
 
