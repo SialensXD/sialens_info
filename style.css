@@ -12,8 +12,12 @@
 
 html { scroll-behavior: smooth; }
 
-body {
+html {
   background: var(--bg);
+}
+
+body {
+  background: transparent;
   color: var(--text);
   font-family: 'JetBrains Mono', monospace;
   font-weight: 300;
