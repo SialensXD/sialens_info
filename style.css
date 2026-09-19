@@ -816,13 +816,13 @@ body.blood-mode #bg-canvas { opacity: 1; filter: brightness(1.4) saturate(1.5); 
   .taskbar-insomnia { display: none; }
   #sound-toggle { font-size: 9px; padding: 3px 6px; }
 
-  .player { bottom: 60px; left: 12px; padding: 6px 10px; gap: 8px; }
-  .player-title { font-size: 10px; max-width: 100px; }
+  .player { bottom: 60px; left: 12px; right: 12px; padding: 6px 8px; gap: 6px; }
+  .player-info { flex: 1; min-width: 0; }
+  .player-title { font-size: 10px; max-width: none; }
   .player-status { font-size: 8px; }
   .player-btn { width: 30px; height: 30px; font-size: 12px; }
-  .player-btn.small { display: none; }
-  .player-vol { width: 54px; }
-
+  .player-btn.small { width: 26px; height: 26px; font-size: 11px; }
+  .player-vol { width: 44px; flex-shrink: 0; }
   .term-toggle { bottom: 62px; right: 12px; width: 44px; height: 44px; font-size: 14px; }
   .term { bottom: 118px; right: 12px; left: 12px; width: auto; max-height: 50vh; font-size: 12px; }
 
@@ -832,4 +832,6 @@ body.blood-mode #bg-canvas { opacity: 1; filter: brightness(1.4) saturate(1.5); 
 @media (max-width: 380px) {
   .icon-label { font-size: 9px; }
   .desktop-icon { min-width: 68px; }
+  .player-vol { display: none; }
+  .player-title { font-size: 9px; }
 }
