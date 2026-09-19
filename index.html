@@ -12,6 +12,15 @@
 </head>
 <body>
 
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <div class="loader-logo">SIALENS<span class="dot">.</span></div>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+    <div class="loader-text"><span id="loader-pct">0</span>% // загрузка системы</div>
+  </div>
+</div>
+
 <div class="scanlines"></div>
 <div class="vignette"></div>
 <div class="blood-flash" id="blood-flash">ХАОС АКТИВИРОВАН</div>
@@ -164,6 +173,21 @@
     });
   }, 3000);
 </script>
+
+<!-- TERMINAL -->
+<button class="terminal-toggle" id="terminal-toggle" aria-label="терминал">&gt;_</button>
+<div class="terminal" id="terminal">
+  <div class="terminal-head">
+    <span>SIALENS://terminal</span>
+    <button id="terminal-close" aria-label="закрыть">×</button>
+  </div>
+  <div class="terminal-body" id="terminal-body"></div>
+  <div class="terminal-input-wrap">
+    <span class="prompt">$</span>
+    <input type="text" id="terminal-input" autocomplete="off" spellcheck="false" placeholder="введи help">
+  </div>
+</div>
+
 <script src="script.js"></script>
 </body>
 </html>
