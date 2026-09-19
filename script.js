@@ -707,3 +707,250 @@ if (logoEl && bloodFlash) {
     }
   });
 })();
+
+/* ============================================================
+   СОЦКНОПКИ — копирование ника
+   ============================================================ */
+document.querySelectorAll('.social[data-copy]').forEach(function (el) {
+  el.addEventListener('click', function (e) {
+    e.preventDefault();
+    const nick = el.getAttribute('data-copy') || 'sialens_xd';
+    copyToClipboard(nick).then(function (ok) {
+      showToast(ok ? 'скопировано // @' + nick : 'не получилось :(');
+      haptic([10, 30, 10]);
+    });
+  });
+});
+
+/* ============================================================
+   МУЗЫКАЛЬНЫЙ ПЛЕЕР — синтез через Web Audio
+   ============================================================ */
+(function initMusicPlayer() {
+  const btn       = document.getElementById('player-play');
+  const statusEl  = document.getElementById('player-status');
+  const volSlider = document.getElementById('player-vol');
+  if (!btn || !volSlider) return;
+
+  let musicGain = null;
+  let musicPlaying = false;
+  let schedulerId = null;
+  let nextNoteTime = 0;
+  let currentStep = 0;
+
+  const BPM = 90;
+  const STEP_DUR = 60 / BPM / 4; // 16-я нота
+
+  const BASS_NOTES = [110.00, 87.31, 130.81, 98.00]; // Am F C G
+  const ARP_NOTES = [
+    [220.00, 261.63, 329.63, 440.00], // Am
+    [174.61, 220.00, 261.63, 349.23], // F
+    [261.63, 329.63, 392.00, 523.25], // C
+    [196.00, 246.94, 293.66, 392.00]  // G
+  ];
+
+  function ensureCtx() {
+    if (!audioCtx) initAudio();
+    if (!audioCtx) return false;
+    if (!musicGain) {
+      musicGain = audioCtx.createGain();
+      musicGain.gain.value = (volSlider.value / 100) * 0.5;
+      musicGain.connect(audioCtx.destination);
+    }
+    return true;
+  }
+
+  function noiseBuffer(seconds) {
+    const len = Math.floor(audioCtx.sampleRate * seconds);
+    const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    return buf;
+  }
+
+  function kick(t) {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.frequency.setValueAtTime(150, t);
+    o.frequency.exponentialRampToValueAtTime(40, t + 0.12);
+    g.gain.setValueAtTime(0.9, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+    o.connect(g); g.connect(musicGain);
+    o.start(t); o.stop(t + 0.4);
+  }
+
+  function snare(t) {
+    const src = audioCtx.createBufferSource();
+    src.buffer = noiseBuffer(0.2);
+    const f = audioCtx.createBiquadFilter();
+    f.type = 'highpass'; f.frequency.value = 1000;
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.35, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+    src.connect(f); f.connect(g); g.connect(musicGain);
+    src.start(t); src.stop(t + 0.2);
+  }
+
+  function hihat(t, vol) {
+    const src = audioCtx.createBufferSource();
+    src.buffer = noiseBuffer(0.05);
+    const f = audioCtx.createBiquadFilter();
+    f.type = 'highpass'; f.frequency.value = 7500;
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+    src.connect(f); f.connect(g); g.connect(musicGain);
+    src.start(t); src.stop(t + 0.06);
+  }
+
+  function bass(freq, t) {
+    const o = audioCtx.createOscillator();
+    o.type = 'sawtooth';
+    o.frequency.value = freq;
+    const f = audioCtx.createBiquadFilter();
+    f.type = 'lowpass';
+    f.frequency.setValueAtTime(900, t);
+    f.frequency.exponentialRampToValueAtTime(220, t + 0.6);
+    f.Q.value = 4;
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.001, t);
+    g.gain.exponentialRampToValueAtTime(0.26, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 1.9);
+    o.connect(f); f.connect(g); g.connect(musicGain);
+    o.start(t); o.stop(t + 2);
+  }
+
+  function arp(freq, t) {
+    const o = audioCtx.createOscillator();
+    o.type = 'triangle';
+    o.frequency.value = freq;
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.001, t);
+    g.gain.exponentialRampToValueAtTime(0.06, t + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+    o.connect(g); g.connect(musicGain);
+    o.start(t); o.stop(t + 0.22);
+  }
+
+  function scheduler() {
+    if (!musicPlaying) return;
+    while (nextNoteTime < audioCtx.currentTime + 0.12) {
+      const step = currentStep % 64;
+      const bar  = Math.floor(step / 16);
+      const beat = Math.floor((step % 16) / 4);
+      const sub  = step % 4;
+
+      if (sub === 0 && (beat === 0 || beat === 2)) kick(nextNoteTime);
+      if (sub === 0 && (beat === 1 || beat === 3)) snare(nextNoteTime);
+      if (sub % 2 === 0) hihat(nextNoteTime, sub === 0 ? 0.13 : 0.07);
+      if (step % 16 === 0) bass(BASS_NOTES[bar], nextNoteTime);
+      arp(ARP_NOTES[bar][sub], nextNoteTime);
+
+      nextNoteTime += STEP_DUR;
+      currentStep++;
+    }
+    schedulerId = setTimeout(scheduler, 25);
+  }
+
+  function start() {
+    if (!ensureCtx()) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    musicPlaying = true;
+    nextNoteTime = audioCtx.currentTime + 0.05;
+    currentStep = 0;
+    scheduler();
+    btn.textContent = '❚❚';
+    btn.classList.add('playing');
+    if (statusEl) statusEl.textContent = 'playing';
+    beep(900, 0.06, 'square', 0.05);
+  }
+
+  function stop() {
+    musicPlaying = false;
+    if (schedulerId) { clearTimeout(schedulerId); schedulerId = null; }
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
+    if (statusEl) statusEl.textContent = 'остановлено';
+    beep(400, 0.08, 'square', 0.05);
+  }
+
+  btn.addEventListener('click', function () {
+    if (musicPlaying) stop(); else start();
+    haptic(10);
+  });
+
+  volSlider.addEventListener('input', function () {
+    if (musicGain) {
+      musicGain.gain.setTargetAtTime((volSlider.value / 100) * 0.5, audioCtx.currentTime, 0.05);
+    }
+  });
+
+  // Авто-запуск при первом клике/тапе (иначе браузер не даст)
+  let autoStarted = false;
+  function tryAutoStart() {
+    if (autoStarted) return;
+    autoStarted = true;
+    start();
+    setTimeout(function () {
+      if (musicPlaying && statusEl) statusEl.textContent = 'auto-play';
+    }, 100);
+  }
+  window.addEventListener('click', tryAutoStart, { once: true });
+  window.addEventListener('touchstart', tryAutoStart, { once: true, passive: true });
+})();
+
+/* ============================================================
+   СТРЕЛКА ВВЕРХ
+   ============================================================ */
+(function initToTop() {
+  const btn = document.getElementById('to-top');
+  if (!btn) return;
+
+  function update() {
+    if (window.scrollY > 400) btn.classList.add('show');
+    else btn.classList.remove('show');
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+
+  btn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    beep(800, 0.08, 'square', 0.05);
+    haptic(10);
+  });
+})();
+
+/* ============================================================
+   ПАСХАЛКА — секретные слова на клавиатуре
+   ============================================================ */
+(function initSecretWords() {
+  const WORDS = {
+    chaos:     { toast: '// CHAOS UNLOCKED //',     blood: true },
+    ultrakill: { toast: '// V1 APPROVES //',        blood: true },
+    sialens:   { toast: '// ДОБРО ПОЖАЛОВАТЬ //',   blood: false }
+  };
+  const MAX = 20;
+  let buffer = '';
+
+  document.addEventListener('keydown', function (e) {
+    const tag = document.activeElement && document.activeElement.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (e.key.length !== 1) return;
+
+    buffer = (buffer + e.key.toLowerCase()).slice(-MAX);
+
+    for (const word in WORDS) {
+      if (buffer.endsWith(word)) {
+        const conf = WORDS[word];
+        showToast(conf.toast);
+        if (conf.blood && !document.body.classList.contains('blood-mode')) {
+          triggerBloodMode();
+        } else {
+          beep(1500, 0.15, 'square', 0.08);
+          haptic([15, 40, 15, 40, 100]);
+        }
+        buffer = '';
+        break;
+      }
+    }
+  });
+})();

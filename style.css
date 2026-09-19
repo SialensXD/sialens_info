@@ -1013,3 +1013,225 @@ body {
   position: relative;
   z-index: 0;
 }
+
+/* ============================================================
+   СОЦКНОПКИ
+   ============================================================ */
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 26px;
+}
+.social {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border: 1px solid var(--line);
+  background: var(--bg2);
+  color: var(--text);
+  text-decoration: none;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.social::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.social > * { position: relative; z-index: 1; }
+.social-icon {
+  font-size: 16px;
+  transition: transform 0.3s;
+}
+.social:hover, .social:active {
+  transform: translateY(-3px);
+  border-color: currentColor;
+}
+.social:hover .social-icon { transform: scale(1.2); }
+
+.social-tiktok:hover,   .social-tiktok:active   { color: #00e5ff; box-shadow: 0 8px 24px rgba(0, 229, 255, 0.3); }
+.social-telegram:hover, .social-telegram:active { color: #29a9eb; box-shadow: 0 8px 24px rgba(41, 169, 235, 0.3); }
+.social-discord:hover,  .social-discord:active  { color: #8b6cf0; box-shadow: 0 8px 24px rgba(139, 108, 240, 0.3); }
+.social-github:hover,   .social-github:active   { color: #e8e8e8; box-shadow: 0 8px 24px rgba(232, 232, 232, 0.2); }
+
+/* ============================================================
+   МУЗЫКАЛЬНЫЙ ПЛЕЕР
+   ============================================================ */
+.player {
+  position: fixed;
+  bottom: 22px;
+  left: 22px;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px 8px 14px;
+  background: rgba(10, 5, 5, 0.9);
+  border: 1px solid var(--red);
+  box-shadow: 0 0 24px rgba(230, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-family: 'JetBrains Mono', monospace;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: player-in 0.6s ease 2.6s forwards;
+  max-width: calc(100vw - 44px);
+}
+@keyframes player-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+.player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.2;
+}
+.player-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--red-bright);
+  white-space: nowrap;
+}
+.player-status {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--dim);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.player-btn {
+  width: 34px;
+  height: 34px;
+  background: transparent;
+  border: 1px solid var(--red);
+  color: var(--red-bright);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s;
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+}
+.player-btn:hover, .player-btn:active {
+  background: var(--red);
+  color: #fff;
+  box-shadow: 0 0 16px rgba(230, 0, 0, 0.8);
+}
+.player-btn.playing { background: var(--red); color: #fff; }
+
+.player-vol {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 70px;
+  height: 3px;
+  background: rgba(230, 0, 0, 0.25);
+  outline: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.player-vol::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--red-bright);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 42, 42, 0.9);
+}
+.player-vol::-moz-range-thumb {
+  width: 12px; height: 12px; background: var(--red-bright);
+  border: none; cursor: pointer; box-shadow: 0 0 10px rgba(255, 42, 42, 0.9);
+}
+
+/* ============================================================
+   СТРЕЛКА ВВЕРХ
+   ============================================================ */
+.to-top {
+  position: fixed;
+  bottom: 84px;
+  left: 22px;
+  z-index: 500;
+  width: 44px;
+  height: 44px;
+  background: rgba(10, 5, 5, 0.85);
+  border: 1px solid var(--red);
+  color: var(--red-bright);
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(230, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+}
+.to-top.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.to-top:hover, .to-top:active {
+  background: rgba(230, 0, 0, 0.15);
+  box-shadow: 0 0 32px rgba(230, 0, 0, 0.7);
+  transform: translateY(-4px);
+}
+
+/* ============================================================
+   ВЫДЕЛЕНИЕ ТЕКСТА
+   ============================================================ */
+::selection {
+  background: var(--red-bright);
+  color: #0a0505;
+  text-shadow: none;
+}
+::-moz-selection {
+  background: var(--red-bright);
+  color: #0a0505;
+  text-shadow: none;
+}
+
+/* ============================================================
+   МОБИЛКА — плеер и стрелка
+   ============================================================ */
+@media (max-width: 600px) {
+  .player {
+    bottom: 16px;
+    left: 16px;
+    padding: 6px 10px 6px 12px;
+    gap: 8px;
+  }
+  .player-title { font-size: 10px; }
+  .player-status { font-size: 8px; }
+  .player-btn { width: 30px; height: 30px; font-size: 12px; }
+  .player-vol { width: 54px; }
+  .to-top {
+    bottom: 70px;
+    left: 16px;
+    width: 40px;
+    height: 40px;
+    font-size: 12px;
+  }
+}
+@media (max-width: 380px) {
+  .player-status { display: none; }
+  .player-vol { width: 44px; }
+}

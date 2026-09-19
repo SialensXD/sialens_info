@@ -146,16 +146,35 @@
     </div>
   </section>
 
-  <!-- CONTACT -->
+    <!-- CONTACT -->
   <section id="contact" class="section reveal">
     <h2><span class="num">05</span> связь</h2>
     <div class="contact-box">
-      <p>Основное место обитания — TikTok. Везде я под ником <strong>@sialens_xd</strong>.</p>
+      <p>Везде я под ником <strong>@sialens_xd</strong>. Есть не во всех соцсетях, но ник один.</p>
       <a class="contact-link" href="#" data-copy="sialens_xd" id="copy-nick">
         <span class="at">@</span>sialens_xd <span class="arrow">→</span>
       </a>
       <p class="dim small mt">// тапни — скопируется в буфер</p>
-      <p class="dim small">есть не во всех соцсетях, но ник везде одинаковый</p>
+
+      <div class="socials">
+        <a class="social social-tiktok" href="#" data-copy="sialens_xd" data-sound-hover>
+          <span class="social-icon">♪</span>
+          <span class="social-name">TikTok</span>
+        </a>
+        <a class="social social-telegram" href="#" data-copy="sialens_xd" data-sound-hover>
+          <span class="social-icon">✈</span>
+          <span class="social-name">Telegram</span>
+        </a>
+        <a class="social social-discord" href="#" data-copy="sialens_xd" data-sound-hover>
+          <span class="social-icon">◆</span>
+          <span class="social-name">Discord</span>
+        </a>
+        <a class="social social-github" href="#" data-copy="sialens_xd" data-sound-hover>
+          <span class="social-icon">⌘</span>
+          <span class="social-name">GitHub</span>
+        </a>
+      </div>
+      <p class="dim small mt">// у всех соцсетей — один ник, тапни чтобы скопировать</p>
     </div>
   </section>
 
@@ -185,6 +204,19 @@
     <input type="text" id="term-input" autocomplete="off" spellcheck="false">
   </div>
 </div>
+
+<!-- МУЗЫКАЛЬНЫЙ ПЛЕЕР -->
+<div class="player" id="player">
+  <div class="player-info">
+    <div class="player-title">SIALENS // THEME</div>
+    <div class="player-status" id="player-status">остановлено</div>
+  </div>
+  <button class="player-btn" id="player-play" aria-label="играть">▶</button>
+  <input type="range" class="player-vol" id="player-vol" min="0" max="100" value="40" aria-label="громкость">
+</div>
+
+<!-- НАВЕРХ -->
+<button class="to-top" id="to-top" aria-label="наверх">▲</button>
 
 <script>
   document.documentElement.classList.add('has-js');
