@@ -806,7 +806,7 @@ body.blood-mode #bg-canvas { opacity: 1; filter: brightness(1.4) saturate(1.5); 
     left: 12px !important; right: 12px;
     top: 60px !important;
     width: auto;
-    max-height: calc(100vh - 130px);
+    max-height: calc(100vh - 220px);
   }
   .app-body { padding: 22px 20px; }
 
@@ -818,11 +818,11 @@ body.blood-mode #bg-canvas { opacity: 1; filter: brightness(1.4) saturate(1.5); 
 
     .player {
     position: fixed;
-    bottom: 60px;
+    bottom: 58px;
     left: 12px;
-    right: 12px;
+    right: auto;
     width: auto;
-    max-width: none;
+    max-width: calc(100vw - 90px);
     padding: 6px 8px;
     gap: 6px;
     display: flex;
@@ -852,25 +852,25 @@ body.blood-mode #bg-canvas { opacity: 1; filter: brightness(1.4) saturate(1.5); 
     flex-shrink: 0;
   }
   .player-btn {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     font-size: 12px;
     flex-shrink: 0;
     padding: 0;
   }
   .player-btn.small {
-    display: flex;   /* ← ключевая строка */
-    width: 24px;
-    height: 24px;
+    display: flex;
+    width: 26px;
+    height: 26px;
     font-size: 10px;
     opacity: 1;
     padding: 0;
   }
   .player-vol {
-    display: none;   /* громкость на мобиле не нужна — там своя */
+    display: none;
   }
-  .term-toggle { bottom: 62px; right: 12px; width: 44px; height: 44px; font-size: 14px; }
-  .term { bottom: 118px; right: 12px; left: 12px; width: auto; max-height: 50vh; font-size: 12px; }
+  .term-toggle { bottom: 58px; right: 12px; width: 44px; height: 44px; font-size: 14px; z-index: 530; }
+  .term { bottom: 114px; right: 12px; left: 12px; width: auto; max-height: 45vh; font-size: 12px; }
 
   .toast { bottom: 68px; font-size: 11px; padding: 10px 16px; }
 }
