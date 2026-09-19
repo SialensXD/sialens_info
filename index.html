@@ -12,15 +12,14 @@
 </head>
 <body>
 
-<!-- LOADER -->
-<div class="loader" id="loader">
-  <div class="loader-inner">
-    <div class="loader-logo">SIALENS<span class="dot">.</span></div>
-    <div class="loader-bar"><div class="loader-fill"></div></div>
-    <div class="loader-text"><span id="loader-pct">0</span>% // загрузка системы</div>
+<div class="boot-screen">
+  <div class="boot-inner">
+    <div class="boot-logo">SIALENS<span class="dot">.</span></div>
+    <div class="boot-line">// initializing chaos protocol</div>
+    <div class="boot-bar"><div class="boot-bar-fill"></div></div>
+    <div class="boot-status">loading&nbsp;<span class="blink">_</span></div>
   </div>
 </div>
-
 <div class="scanlines"></div>
 <div class="vignette"></div>
 <div class="blood-flash" id="blood-flash">ХАОС АКТИВИРОВАН</div>
@@ -161,9 +160,29 @@
 </main>
 
 <footer>
-  <div>SIALENS © <span id="year"></span></div>
-  <div class="dim">chaos = order // v1.1</div>
+  <div class="status-item">SIALENS © <span id="year"></span></div>
+  <div class="status-item"><span class="status-label">время:</span> <span id="status-clock">--:--:--</span></div>
+  <div class="status-item"><span class="status-label">бессонница:</span> <span id="status-insomnia">—</span></div>
+  <div class="status-item dim">chaos = order // v1.2</div>
 </footer>
+
+<!-- КНОПКА ТЕРМИНАЛА -->
+<button id="term-toggle" class="term-toggle" aria-label="терминал">>_</button>
+
+<!-- ТЕРМИНАЛ -->
+<div class="term" id="terminal">
+  <div class="term-header">
+    <span>SIALENS_TERMINAL // v1.2</span>
+    <button class="term-close" id="term-close" aria-label="закрыть">✕</button>
+  </div>
+  <div class="term-body" id="term-body">
+    <div class="term-line dim">// терминал загружен. напиши 'help' для списка команд.</div>
+  </div>
+  <div class="term-input-line">
+    <span class="term-prompt">sialens@chaos:~$</span>
+    <input type="text" id="term-input" autocomplete="off" spellcheck="false">
+  </div>
+</div>
 
 <script>
   document.documentElement.classList.add('has-js');
@@ -173,21 +192,6 @@
     });
   }, 3000);
 </script>
-
-<!-- TERMINAL -->
-<button class="terminal-toggle" id="terminal-toggle" aria-label="терминал">&gt;_</button>
-<div class="terminal" id="terminal">
-  <div class="terminal-head">
-    <span>SIALENS://terminal</span>
-    <button id="terminal-close" aria-label="закрыть">×</button>
-  </div>
-  <div class="terminal-body" id="terminal-body"></div>
-  <div class="terminal-input-wrap">
-    <span class="prompt">$</span>
-    <input type="text" id="terminal-input" autocomplete="off" spellcheck="false" placeholder="введи help">
-  </div>
-</div>
-
 <script src="script.js"></script>
 </body>
 </html>

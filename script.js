@@ -21,6 +21,7 @@ function beep(freq, dur, type, vol) {
   dur  = dur  || 0.06;
   type = type || 'square';
   vol  = vol  || 0.04;
+  vol = vol * 3;
   if (!soundEnabled || !audioCtx) return;
   try {
     const osc = audioCtx.createOscillator();
@@ -319,216 +320,198 @@ if (logoEl && bloodFlash) {
 }
 
 /* ============================================================
-   LOADER + TERMINAL
+   ТЕРМИНАЛ
    ============================================================ */
+(function initTerminal() {
+  const termEl   = document.getElementById('terminal');
+  const termBody = document.getElementById('term-body');
+  const termInput= document.getElementById('term-input');
+  const termOpen = document.getElementById('term-toggle');
+  const termClose= document.getElementById('term-close');
+  if (!termEl || !termBody || !termInput) return;
 
-// ---------- ЗАГРУЗОЧНЫЙ ЭКРАН ----------
-(function () {
-  const loader = document.getElementById('loader');
-  if (!loader) return;
+  const PROMPT = 'sialens@chaos:~$';
 
-  // Если уже показывали в этой сессии — убираем сразу
-  if (sessionStorage.getItem('sialens_loaded')) {
-    if (loader.parentNode) loader.parentNode.removeChild(loader);
-    return;
+  function line(text, cls) {
+    const div = document.createElement('div');
+    div.className = 'term-line' + (cls ? ' ' + cls : '');
+    div.textContent = text;
+    termBody.appendChild(div);
+    termBody.scrollTop = termBody.scrollHeight;
   }
 
-  const pctEl = document.getElementById('loader-pct');
-  const fillEl = loader.querySelector('.loader-fill');
-  let p = 0;
-
-  const tick = setInterval(function () {
-    p += Math.random() * 14 + 5;
-    if (p > 100) p = 100;
-    if (pctEl) pctEl.textContent = Math.floor(p);
-    if (fillEl) fillEl.style.width = p + '%';
-
-    if (p >= 100) {
-      clearInterval(tick);
-      setTimeout(function () {
-        loader.classList.add('done');
-        try { sessionStorage.setItem('sialens_loaded', '1'); } catch (e) {}
-        setTimeout(function () {
-          if (loader.parentNode) loader.parentNode.removeChild(loader);
-        }, 600);
-      }, 250);
-    }
-  }, 90);
-})();
-
-// ---------- ТЕРМИНАЛ ----------
-(function () {
-  const toggle = document.getElementById('terminal-toggle');
-  const term = document.getElementById('terminal');
-  const closeBtn = document.getElementById('terminal-close');
-  const body = document.getElementById('terminal-body');
-  const input = document.getElementById('terminal-input');
-
-  if (!toggle  !term  !body || !input) return;
-
-  let greeted = false;
-
-  function print(text, cls) {
-    const line = document.createElement('div');
-    line.className = 'term-line' + (cls ? ' ' + cls : '');
-    line.textContent = text;
-    body.appendChild(line);
-    body.scrollTop = body.scrollHeight;
+  function printLines(arr, cls) {
+    arr.forEach(function (t) { line(t, cls); });
   }
 
-  function printMulti(lines) {
-    lines.forEach(function (l) { print(l); });
-  }
-
-  function openTerm() {
-    term.classList.add('open');
-    toggle.classList.add('active');
-    document.body.classList.add('term-open');
-
-    if (!greeted) {
-      greeted = true;
-      printMulti([
-        'SIALENS OS v1.1 // терминал активен',
-        '// введи help чтобы увидеть команды'
-      ]);
-    }
-    setTimeout(function () { input.focus(); }, 120);
-    beep(700, 0.06, 'square', 0.05);
-  }
-
-  function closeTerm() {
-    term.classList.remove('open');
-    toggle.classList.remove('active');
-    document.body.classList.remove('term-open');
-    beep(400, 0.06, 'square', 0.05);
-  }
-
-  function toggleTerm() {
-    if (term.classList.contains('open')) closeTerm();
-    else openTerm();
-  }
-
-  toggle.addEventListener('click', toggleTerm);
-  if (closeBtn) closeBtn.addEventListener('click', closeTerm);
-
-  // Горячая клавиша ~ или  (тильда) — только ПК
-  document.addEventListener('keydown', function (e) {
-    if (e.key === ''  e.key === '~'  e.key === 'ё' || e.key === 'Ё') {
-      if (document.activeElement !== input) {
-        e.preventDefault();
-        toggleTerm();
-      }
-    }
-    if (e.key === 'Escape' && term.classList.contains('open')) {
-      closeTerm();
-    }
-  });
-
-  // Клик по телу терминала → фокус в input (для мобилы)
-  body.addEventListener('click', function () { input.focus(); });
-
-  // ---------- КОМАНДЫ ----------
   const commands = {
     help: function () {
-      printMulti([
-        '// доступные команды:',
-        '  help      — этот список',
-        '  whoami    — кто я',
-        '  about     — коротко обо мне',
-        '  skills    — что умею',
-        '  games     — во что играю',
-        '  music     — что слушаю',
-        '  social    — где меня найти',
-        '  chaos     — ???',
-        '  date      — дата и время',
-        '  echo X    — повторить X',
-        '  clear     — очистить экран',
-        '  exit      — закрыть терминал'
-      ]);
+      printLines([
+        '> доступные команды:',
+        '  help       — этот список',
+        '  whoami     — кто я',
+        '  games      — во что играю',
+        '  music      — что слушаю',
+        '  contact    — как связаться',
+        '  stats      — характеристики',
+        '  chaos      — включить blood mode',
+        '  echo <t>   — повторить текст',
+        '  ls         — список файлов',
+        '  sudo       — попробуй :)',
+        '  clear      — очистить экран'
+      ], '');
     },
     whoami: function () {
-      printMulti([
-        'Sialens // 14 лет // 9 класс',
-        'человек-эмоция, хаос = порядок'
-      ]);
-    },
-    about: function () {
-      printMulti([
-        'пишу ботов на Python, иногда сайты.',
-        'люблю шутеры, песочницы, рогалики.',
-        'музыка — топливо, бессонница — режим по умолчанию.'
-      ]);
-    },
-    skills: function () {
-      printMulti([
-        'python   [████████░░] 80%',
-        'js/html  [██████░░░░] 60%',
-        'chaos    [██████████] 100%'
+      printLines([
+        'Sialens · 14 лет · 9 класс',
+        'человек-эмоция · python · ultrakill',
+        'принцип: chaos = order'
       ]);
     },
     games: function () {
-      printMulti([
-        'шутеры:    Ultrakill, DOOM Eternal, DUSK',
-        'песочницы: Minecraft, Terraria',
-        'рогалики:  Hades, Dead Cells, Risk of Rain 2'
+      printLines([
+        '> шутеры:    Ultrakill, DOOM Eternal, DUSK',
+        '> песочницы: Minecraft, Terraria',
+        '> рогалики:  Hades, Dead Cells, Risk of Rain 2'
       ]);
     },
     music: function () {
-      print('// допишу позже :)');
+      printLines([
+        '> плейлист пока пополняется...',
+        '> (допишу позже)'
+      ], 'dim');
     },
-    social: function () {
-      printMulti([
-        'всё под ником @sialens_xd',
-        'основное место — TikTok'
+    contact: function () {
+      printLines([
+        '> tiktok: @sialens_xd',
+        '> везде под этим ником',
+        '> нажми на ник в секции "связь" — скопируется'
+      ]);
+    },
+    stats: function () {
+      printLines([
+        '> возраст:     14',
+        '> класс:       9',
+        '> стек:        Python',
+        '> режим:       chaos',
+        '> бессонница:  постоянная'
       ]);
     },
     chaos: function () {
-      print('// activating blood mode...', 'red');
-      if (typeof triggerBloodMode === 'function') triggerBloodMode();
+      line('> АКТИВИРУЮ ХАОС...', 'err');
+      if (typeof triggerBloodMode === 'function') {
+        if (!document.body.classList.contains('blood-mode')) {
+          triggerBloodMode();
+        } else {
+          line('  blood mode уже активен', 'dim');
+        }
+      }
     },
-    date: function () {
-      print(new Date().toLocaleString('ru-RU'));
+    ls: function () {
+      printLines([
+        'index.html    style.css    script.js',
+        'chaos.txt     insomnia.log secrets.enc'
+      ], 'dim');
     },
     sudo: function () {
-      print('sialens is not in the sudoers file. this incident will be reported.', 'red');
+      printLines([
+        'sialens is not in the sudoers file.',
+        'This incident has been reported. 🩸'
+      ], 'err');
     },
-    exit: function () {
-      closeTerm();
+    clear: function () {
+      termBody.innerHTML = '';
     }
   };
 
   function runCommand(raw) {
-    const trimmed = raw.trim();
-    if (!trimmed) return;
+    const input = raw.trim();
+    if (!input) return;
 
-    print('$ ' + trimmed, 'cmd');
+    line(PROMPT + ' ' + input, 'cmd');
 
-    const parts = trimmed.split(/\s+/);
+    const parts = input.split(/\s+/);
     const cmd = parts[0].toLowerCase();
-    const args = parts.slice(1);
+    const rest = parts.slice(1).join(' ');
 
-    if (cmd === 'clear') {
-      body.innerHTML = '';
-      return;
-    }
     if (cmd === 'echo') {
-      print(args.join(' '));
+      line(rest || '', '');
       return;
     }
     if (commands[cmd]) {
-      commands[cmd](args);
+      commands[cmd]();
+      beep(900, 0.05, 'square', 0.05);
     } else {
-      print('команда не найдена: ' + cmd + ' (попробуй help)', 'red');
+      line("команда не найдена: '" + cmd + "'. напиши 'help'.", 'err');
+      beep(200, 0.1, 'sawtooth', 0.06);
     }
   }
 
-  input.addEventListener('keydown', function (e) {
+  function openTerm() {
+    termEl.classList.add('open');
+    termOpen.classList.add('open');
+    setTimeout(function () { termInput.focus(); }, 300);
+    beep(700, 0.06, 'square', 0.05);
+    haptic(10);
+  }
+  function closeTerm() {
+    termEl.classList.remove('open');
+    termOpen.classList.remove('open');
+    beep(400, 0.06, 'square', 0.05);
+  }
+  function toggleTerm() {
+    if (termEl.classList.contains('open')) closeTerm();
+    else openTerm();
+  }
+
+  termOpen.addEventListener('click', toggleTerm);
+  if (termClose) termClose.addEventListener('click', closeTerm);
+
+  termInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
-      const val = input.value;
-      input.value = '';
-      runCommand(val);
-      beep(1000, 0.03, 'square', 0.05);
-      haptic(6);
+      runCommand(termInput.value);
+      termInput.value = '';
     }
   });
+
+  // Клавиша ~ или ` открывает терминал (только ПК)
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '`' || e.key === '~' || e.key === 'ё' || e.key === 'Ё') {
+      const tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      e.preventDefault();
+      toggleTerm();
+    }
+    if (e.key === 'Escape' && termEl.classList.contains('open')) {
+      closeTerm();
+    }
+  });
+})();
+
+/* ============================================================
+   СТАТУС-БАР В ФУТЕРЕ
+   ============================================================ */
+(function initStatusBar() {
+  const clockEl    = document.getElementById('status-clock');
+  const insomniaEl = document.getElementById('status-insomnia');
+  if (!clockEl || !insomniaEl) return;
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  function tick() {
+    const now = new Date();
+    clockEl.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+
+    const h = now.getHours();
+    const isNight = (h >= 23 || h < 6);
+    if (isNight) {
+      insomniaEl.textContent = 'активна';
+      insomniaEl.className = 'awake blink';
+    } else {
+      insomniaEl.textContent = 'спит';
+      insomniaEl.className = 'sleep';
+    }
+  }
+  tick();
+  setInterval(tick, 1000);
 })();

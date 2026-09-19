@@ -713,165 +713,199 @@ body.blood-mode::after {
   .tagline { font-size: 11px; }
 }
 
-/* ============ LOADER ============ */
-.loader {
+/* ============================================================
+   BOOT SCREEN
+   ============================================================ */
+.boot-screen {
   position: fixed;
   inset: 0;
-  background: #0a0505;
-  z-index: 99999;
+  background: #050202;
+  z-index: 99998;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.5s ease;
+  animation: boot-hide 0.5s ease 2s forwards;
 }
-.loader.done {
-  opacity: 0;
-  pointer-events: none;
+@keyframes boot-hide {
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
 }
-.loader-inner {
+
+.boot-inner {
+  width: min(420px, 85vw);
   text-align: center;
-  width: min(420px, 80vw);
+  padding: 0 20px;
 }
-.loader-logo {
+
+.boot-logo {
   font-family: 'Rajdhani', sans-serif;
   font-weight: 700;
   font-size: clamp(36px, 8vw, 56px);
-  letter-spacing: 8px;
+  letter-spacing: 6px;
   color: var(--text);
-  margin-bottom: 26px;
-  text-shadow: 0 0 30px rgba(230,0,0,0.6);
+  text-shadow: 0 0 30px rgba(230,0,0,0.5);
+  margin-bottom: 14px;
 }
-.loader-logo .dot { color: var(--red); }
-.loader-bar {
-  height: 3px;
+.boot-logo .dot { color: var(--red); }
+
+.boot-line {
+  color: var(--red);
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-bottom: 26px;
+  opacity: 0.8;
+}
+
+.boot-bar {
+  width: 100%;
+  height: 4px;
   background: rgba(230,0,0,0.15);
   overflow: hidden;
   margin-bottom: 14px;
+  border: 1px solid rgba(230,0,0,0.25);
 }
-.loader-fill {
+.boot-bar-fill {
   height: 100%;
-  width: 0;
   background: linear-gradient(to right, var(--red), var(--red-bright));
-  box-shadow: 0 0 18px rgba(230,0,0,0.9);
-  transition: width 0.15s linear;
+  box-shadow: 0 0 12px rgba(230,0,0,0.9);
+  width: 0;
+  animation: boot-fill 1.9s cubic-bezier(0.6, 0, 0.4, 1) forwards;
 }
-.loader-text {
+@keyframes boot-fill {
+  0%   { width: 0%; }
+  30%  { width: 45%; }
+  60%  { width: 62%; }
+  85%  { width: 92%; }
+  100% { width: 100%; }
+}
+
+.boot-status {
   color: var(--dim);
   font-size: 11px;
   letter-spacing: 3px;
   text-transform: uppercase;
 }
-#loader-pct { color: var(--red-bright); }
 
-/* ============ TERMINAL TOGGLE ============ */
-.terminal-toggle {
+/* ============================================================
+   TERMINAL
+   ============================================================ */
+.term-toggle {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  bottom: 22px;
+  right: 22px;
+  z-index: 500;
   width: 52px;
   height: 52px;
-  background: rgba(18, 8, 8, 0.9);
+  background: rgba(10, 5, 5, 0.85);
   border: 1px solid var(--red);
   color: var(--red-bright);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  z-index: 900;
-  transition: all 0.3s;
-  box-shadow: 0 0 20px rgba(230,0,0,0.3);
   letter-spacing: 1px;
-  padding: 0;
+  box-shadow: 0 0 20px rgba(230,0,0,0.35);
+  transition: all 0.25s;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
-.terminal-toggle:hover,
-.terminal-toggle.active {
+.term-toggle:hover,
+.term-toggle:active {
   background: rgba(230, 0, 0, 0.15);
-  box-shadow: 0 0 30px rgba(230,0,0,0.7);
+  box-shadow: 0 0 32px rgba(230,0,0,0.7);
+  transform: scale(1.05);
+}
+.term-toggle.open {
+  background: var(--red);
   color: #fff;
 }
 
-/* ============ TERMINAL ============ */
-.terminal {
+.term {
   position: fixed;
-  right: 20px;
-  bottom: 84px;
-  width: min(440px, calc(100vw - 40px));
-  height: min(360px, 60vh);
-  background: rgba(10, 5, 5, 0.97);
+  bottom: 90px;
+  right: 22px;
+  width: min(440px, calc(100vw - 44px));
+  max-height: min(400px, 60vh);
+  background: rgba(6, 3, 3, 0.96);
   border: 1px solid var(--red);
-  box-shadow: 0 0 40px rgba(230,0,0,0.35), inset 0 0 30px rgba(230,0,0,0.05);
-  z-index: 899;
+  box-shadow: 0 0 40px rgba(230,0,0,0.4);
+  z-index: 499;
   display: flex;
   flex-direction: column;
   font-family: 'JetBrains Mono', monospace;
   font-size: 13px;
-  transform: translateY(20px);
   opacity: 0;
+  transform: translateY(20px) scale(0.97);
   pointer-events: none;
-  transition: opacity 0.25s, transform 0.25s;
+  transition: opacity 0.3s, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
-.terminal.open {
+.term.open {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
   pointer-events: auto;
 }
-.terminal-head {
+
+.term-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 8px 14px;
-  border-bottom: 1px solid rgba(230,0,0,0.3);
-  background: rgba(230,0,0,0.06);
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--red-bright);
   font-family: 'Rajdhani', sans-serif;
   font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--red-bright);
   font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
-.terminal-head button {
+.term-close {
   background: transparent;
   border: none;
-  color: var(--red);
-  font-size: 22px;
+  color: var(--dim);
+  font-size: 14px;
   cursor: pointer;
-  padding: 0 6px;
-  line-height: 1;
+  padding: 0 4px;
   transition: color 0.2s;
 }
-.terminal-head button:hover { color: #fff; }
+.term-close:hover { color: var(--red-bright); }
 
-.terminal-body {
+.term-body {
   flex: 1;
   overflow-y: auto;
   padding: 12px 14px;
   color: #cfcfcf;
-  line-height: 1.6;
+  line-height: 1.55;
+  min-height: 120px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--red) transparent;
+}
+.term-body::-webkit-scrollbar { width: 6px; }
+.term-body::-webkit-scrollbar-thumb { background: var(--red); }
+
+.term-line {
   white-space: pre-wrap;
   word-break: break-word;
+  margin-bottom: 3px;
 }
-.term-line { margin-bottom: 2px; font-size: 12.5px; }
-.term-line.cmd { color: var(--red-bright); }
-.term-line.red { color: var(--red); }
-.terminal-body::-webkit-scrollbar { width: 6px; }
-.terminal-body::-webkit-scrollbar-track { background: rgba(230,0,0,0.05); }
-.terminal-body::-webkit-scrollbar-thumb { background: var(--red); }
+.term-line.err { color: var(--red-bright); }
+.term-line.ok  { color: #6effa0; }
+.term-line.cmd { color: var(--red); }
 
-.terminal-input-wrap {
+.term-input-line {
   display: flex;
   align-items: center;
-  border-top: 1px solid rgba(230,0,0,0.3);
-  padding: 8px 14px;
-  background: rgba(230,0,0,0.04);
   gap: 8px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line);
+  background: rgba(230, 0, 0, 0.03);
 }
-.terminal-input-wrap .prompt {
+.term-prompt {
   color: var(--red-bright);
-  font-weight: 700;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 16px;
+  font-size: 12px;
+  white-space: nowrap;
 }
-#terminal-input {
+#term-input {
   flex: 1;
   background: transparent;
   border: none;
@@ -879,21 +913,45 @@ body.blood-mode::after {
   color: var(--text);
   font-family: inherit;
   font-size: 13px;
-  padding: 4px 0;
   caret-color: var(--red-bright);
 }
-#terminal-input::placeholder { color: rgba(230,0,0,0.4); }
 
-@media (max-width: 768px) {
-  .terminal-toggle { right: 14px; bottom: 14px; width: 46px; height: 46px; font-size: 13px; }
-  .terminal {
-    right: 0; left: 0; bottom: 0;
-    width: 100%;
-    height: 55vh;
-    border-left: none; border-right: none; border-bottom: none;
-    transform: translateY(100%);
+/* ============================================================
+   FOOTER STATUS
+   ============================================================ */
+footer {
+  flex-wrap: wrap;
+  gap: 14px 26px;
+}
+.status-item {
+  white-space: nowrap;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+.status-label { color: var(--red); text-transform: uppercase; font-size: 11px; letter-spacing: 1.5px; }
+#status-clock { color: var(--text); font-family: 'Rajdhani', sans-serif; font-weight: 700; letter-spacing: 2px; }
+#status-insomnia.awake { color: var(--red-bright); text-shadow: 0 0 10px rgba(230,0,0,0.7); }
+#status-insomnia.sleep { color: #6effa0; }
+
+/* ============================================================
+   МОБИЛКА — терминал на всю ширину
+   ============================================================ */
+@media (max-width: 600px) {
+  .term {
+    bottom: 84px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-height: 55vh;
+    font-size: 12px;
   }
-  .terminal.open { transform: translateY(0); }
-  .terminal-toggle.active { opacity: 0; pointer-events: none; }
-  body.term-open { overflow: hidden; }
+  .term-toggle {
+    bottom: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    font-size: 15px;
+  }
+  #term-input { font-size: 12px; }
+  .term-prompt { font-size: 11px; }
 }
