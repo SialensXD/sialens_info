@@ -2,7 +2,8 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0505">
 <title>SIALENS // chaos = order</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,26 +14,44 @@
 
 <div class="scanlines"></div>
 <div class="vignette"></div>
+<div class="blood-flash" id="blood-flash">ХАОС АКТИВИРОВАН</div>
+<div class="toast" id="toast"></div>
 
 <header class="nav">
-  <div class="logo" data-sound-hover>SIALENS<span class="dot">.</span></div>
-  <nav>
+  <div class="logo" id="logo" data-sound-hover>SIALENS<span class="dot">.</span></div>
+  <nav class="desktop-nav">
     <a href="#about" data-sound-hover>обо мне</a>
     <a href="#interests" data-sound-hover>интересы</a>
+    <a href="#stuff" data-sound-hover>игры / музыка</a>
     <a href="#chaos" data-sound-hover>хаос</a>
     <a href="#contact" data-sound-hover>связь</a>
   </nav>
-  <button id="sound-toggle" title="звук вкл/выкл" data-sound-hover>◉ SND</button>
+  <div class="nav-right">
+    <button id="sound-toggle" title="звук вкл/выкл" data-sound-hover>◉ SND</button>
+    <button class="burger" id="burger" aria-label="меню">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </header>
+
+<div class="mobile-menu" id="mobile-menu">
+  <nav>
+    <a href="#about">обо мне</a>
+    <a href="#interests">интересы</a>
+    <a href="#stuff">игры / музыка</a>
+    <a href="#chaos">хаос</a>
+    <a href="#contact">связь</a>
+  </nav>
+</div>
 
 <main>
 
   <!-- HERO -->
   <section id="hero" class="hero">
     <div class="hero-inner">
-      <div class="tag">// user found</div>
+      <div class="tag">// пользователь найден</div>
       <h1 class="glitch" data-text="SIALENS">SIALENS</h1>
-      <p class="subtitle">chaos = order &nbsp;·&nbsp; chaos = order</p>
+      <p class="subtitle">хаос = порядок</p>
       <p class="hero-line">14 лет · 9 класс · python · ultrakill · бессонница</p>
       <a href="#about" class="scroll-hint" data-sound-hover>▼ прокрути</a>
     </div>
@@ -83,9 +102,33 @@
     </div>
   </section>
 
+  <!-- STUFF: GAMES / MUSIC -->
+  <section id="stuff" class="section reveal">
+    <h2><span class="num">03</span> игры / музыка</h2>
+    <div class="stuff-grid">
+      <div class="stuff-col">
+        <h3 class="stuff-title"><span class="ico">▣</span> во что играю</h3>
+        <ul class="stuff-list">
+          <li><span class="tagline">шутеры</span><span class="val">Ultrakill, DOOM Eternal, DUSK</span></li>
+          <li><span class="tagline">песочницы</span><span class="val">Minecraft, Terraria</span></li>
+          <li><span class="tagline">рогалики</span><span class="val">Hades, Dead Cells, Risk of Rain 2</span></li>
+        </ul>
+        <!-- ↑ допиши свои игры сюда, формат: <li><span class="tagline">категория</span><span class="val">список</span></li> -->
+      </div>
+      <div class="stuff-col">
+        <h3 class="stuff-title"><span class="ico">♪</span> что слушаю</h3>
+        <ul class="stuff-list">
+          <li><span class="tagline">тут пока пусто</span><span class="val">допишу позже</span></li>
+        </ul>
+        <p class="dim small mt">// впиши своих исполнителей сюда</p>
+        <!-- ↑ замени строку выше на <li><span class="tagline">жанр/настроение</span><span class="val">исполнители</span></li> -->
+      </div>
+    </div>
+  </section>
+
   <!-- CHAOS -->
   <section id="chaos" class="section reveal">
-    <h2><span class="num">03</span> хаос</h2>
+    <h2><span class="num">04</span> хаос</h2>
     <div class="chaos-box">
       <p class="chaos-line">«порядок — это просто хорошо организованный хаос»</p>
       <p>Я — человек-эмоция. Могу за минуту переключиться с полного спокойствия на что угодно. Делаю необдуманные вещи, потом думаю. Иногда получается круто.</p>
@@ -95,12 +138,13 @@
 
   <!-- CONTACT -->
   <section id="contact" class="section reveal">
-    <h2><span class="num">04</span> связь</h2>
+    <h2><span class="num">05</span> связь</h2>
     <div class="contact-box">
       <p>Основное место обитания — TikTok. Везде я под ником <strong>@sialens_xd</strong>.</p>
-      <a class="contact-link" href="https://tiktok.com/@sialens_xd" target="_blank" rel="noopener" data-sound-click>
+      <a class="contact-link" href="#" data-copy="sialens_xd" id="copy-nick">
         <span class="at">@</span>sialens_xd <span class="arrow">→</span>
       </a>
+      <p class="dim small mt">// тапни — скопируется в буфер</p>
       <p class="dim small">есть не во всех соцсетях, но ник везде одинаковый</p>
     </div>
   </section>
@@ -109,21 +153,17 @@
 
 <footer>
   <div>SIALENS © <span id="year"></span></div>
-  <div class="dim">chaos = order // v1.0</div>
+  <div class="dim">chaos = order // v1.1</div>
 </footer>
 
 <script>
-  // Мгновенно помечаем, что JS работает — если что-то упадёт дальше, CSS всё равно покажет контент
   document.documentElement.classList.add('has-js');
-
-  // Абсолютная страховка: через 3 сек раскрываем ВСЁ, что осталось скрытым
   setTimeout(function(){
     document.querySelectorAll('.reveal').forEach(function(el){
       el.classList.add('visible');
     });
   }, 3000);
 </script>
-  
 <script src="script.js"></script>
 </body>
 </html>
