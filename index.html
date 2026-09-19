@@ -112,6 +112,18 @@
   <div class="dim">chaos = order // v1.0</div>
 </footer>
 
+<script>
+  // Мгновенно помечаем, что JS работает — если что-то упадёт дальше, CSS всё равно покажет контент
+  document.documentElement.classList.add('has-js');
+
+  // Абсолютная страховка: через 3 сек раскрываем ВСЁ, что осталось скрытым
+  setTimeout(function(){
+    document.querySelectorAll('.reveal').forEach(function(el){
+      el.classList.add('visible');
+    });
+  }, 3000);
+</script>
+  
 <script src="script.js"></script>
 </body>
 </html>
