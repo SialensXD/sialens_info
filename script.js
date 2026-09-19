@@ -332,7 +332,7 @@ function triggerBloodMode() {
   const termClose = document.getElementById('term-close');
   if (!termEl || !termBody || !termInput) return;
 
-  const PROMPT = 'sialens@chaos:~$';
+  const PROMPT = 'тупой_ишак228:';
 
   function line(text, cls) {
     const div = document.createElement('div');
