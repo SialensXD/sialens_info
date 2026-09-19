@@ -1007,4 +1007,9 @@ html {
   z-index: -1;
   pointer-events: none;
   opacity: 1;
+
+body {
+  position: relative;
+  z-index: 0;
+}
 }
