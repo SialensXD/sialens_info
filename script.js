@@ -518,100 +518,124 @@ function triggerBloodMode() {
   tick(); setInterval(tick, 1000);
 })();
 
-// ============================================================
-// CANVAS ЧАСТИЦЫ
-// ============================================================
+/* ============================================================
+   CANVAS — плавающие масти (Balatro style)
+   ============================================================ */
 (function initParticles() {
   const canvas = document.getElementById('bg-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
-  const isMobile = window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches;
-  const COUNT = isMobile ? 28 : 70;
-  const LINK_DIST = isMobile ? 0 : 130;
-  const MAX_SPEED = isMobile ? 0.25 : 0.4;
+
+  const isMobile = window.matchMedia('(max-width: 768px)').matches
+                || window.matchMedia('(pointer: coarse)').matches;
+
+  const COUNT = isMobile ? 14 : 28;
+
+  // Символы мастей + цвета в палитре Balatro
+  const SUITS = [
+    { char: '♠', color: '#F0E6D2' }, // крем
+    { char: '♠', color: '#F1C40F' }, // золото
+    { char: '♥', color: '#E74C3C' }, // красный
+    { char: '♦', color: '#E74C3C' }, // красный
+    { char: '♦', color: '#E67E22' }, // оранжевый
+    { char: '♣', color: '#F0E6D2' }, // крем
+    { char: '♣', color: '#F1C40F' }  // золото
+  ];
 
   let W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
   let particles = [];
-  let mouse = { x: -9999, y: -9999, active: false };
   let rafId = null;
 
   function resize() {
-    W = canvas.clientWidth; H = canvas.clientHeight;
-    canvas.width = Math.floor(W * DPR); canvas.height = Math.floor(H * DPR);
+    W = canvas.clientWidth;
+    H = canvas.clientHeight;
+    canvas.width = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   }
+
   function rand(a, b) { return Math.random() * (b - a) + a; }
-  function createParticle() {
-    const a = rand(0, Math.PI * 2), s = rand(0.05, MAX_SPEED);
-    return { x: rand(0, W), y: rand(0, H), vx: Math.cos(a) * s, vy: Math.sin(a) * s,
-      r: rand(0.6, 1.8), alpha: rand(0.25, 0.75), pulse: rand(0, Math.PI * 2), pulseSpeed: rand(0.01, 0.03) };
+
+  function createParticle(initY) {
+    const suit = SUITS[Math.floor(Math.random() * SUITS.length)];
+    return {
+      x: rand(0, W),
+      y: initY ? rand(0, H) : -30,
+      vx: rand(-0.15, 0.15),
+      vy: rand(0.08, 0.35),
+      size: rand(10, 26),
+      alpha: rand(0.08, 0.22),
+      rot: rand(-0.3, 0.3),
+      rotSpeed: rand(-0.003, 0.003),
+      char: suit.char,
+      color: suit.color,
+      wobble: rand(0, Math.PI * 2),
+      wobbleSpeed: rand(0.005, 0.015)
+    };
   }
-  function initParticles() { particles = []; for (let i = 0; i < COUNT; i++) particles.push(createParticle()); }
+
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < COUNT; i++) particles.push(createParticle(true));
+  }
 
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    if (LINK_DIST > 0) {
-      for (let i = 0; i < particles.length; i++) for (let j = i + 1; j < particles.length; j++) {
-        const a = particles[i], b = particles[j];
-        const dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
-        if (d2 < LINK_DIST * LINK_DIST) {
-          const d = Math.sqrt(d2), alpha = (1 - d / LINK_DIST) * 0.18;
-          ctx.strokeStyle = 'rgba(230,0,0,' + alpha + ')'; ctx.lineWidth = 0.6;
-          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-        }
-      }
-    }
+
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
-      if (mouse.active && !isMobile) {
-        const dx = mouse.x - p.x, dy = mouse.y - p.y, d2 = dx * dx + dy * dy, R = 160;
-        if (d2 < R * R && d2 > 0.01) {
-          const d = Math.sqrt(d2), f = (1 - d / R) * 0.06;
-          p.vx += (dx / d) * f; p.vy += (dy / d) * f;
-        }
+
+      // движение
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.rotSpeed;
+
+      // лёгкое покачивание влево-вправо
+      p.wobble += p.wobbleSpeed;
+      const wobbleX = Math.sin(p.wobble) * 0.4;
+
+      // сброс наверх, когда ушёл вниз
+      if (p.y > H + 40) {
+        p.y = -40;
+        p.x = rand(0, W);
+        p.vx = rand(-0.15, 0.15);
       }
-      p.vx *= 0.995; p.vy *= 0.995;
-      const sp = Math.hypot(p.vx, p.vy);
-      if (sp > MAX_SPEED) { p.vx = (p.vx / sp) * MAX_SPEED; p.vy = (p.vy / sp) * MAX_SPEED; }
-      p.x += p.vx; p.y += p.vy;
-      p.pulse += p.pulseSpeed;
-      const a = p.alpha * (0.7 + Math.sin(p.pulse) * 0.3);
-      if (p.x < -10) p.x = W + 10; if (p.x > W + 10) p.x = -10;
-      if (p.y < -10) p.y = H + 10; if (p.y > H + 10) p.y = -10;
-      const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 8);
-      grd.addColorStop(0, 'rgba(255,60,60,' + a + ')');
-      grd.addColorStop(0.4, 'rgba(230,0,0,' + (a * 0.4) + ')');
-      grd.addColorStop(1, 'rgba(230,0,0,0)');
-      ctx.fillStyle = grd;
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 8, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = 'rgba(255,90,90,' + a + ')';
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+      if (p.x < -50) p.x = W + 50;
+      if (p.x > W + 50) p.x = -50;
+
+      // рисуем символ
+      ctx.save();
+      ctx.translate(p.x + wobbleX, p.y);
+      ctx.rotate(p.rot);
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+      ctx.font = 'bold ' + p.size + 'px "Pixelify Sans", "Arial", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(p.char, 0, 0);
+      ctx.restore();
     }
+
     rafId = requestAnimationFrame(draw);
   }
-  window.addEventListener('resize', function () { resize(); initParticles(); });
-  document.addEventListener('mousemove', function (e) { mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true; });
-  document.addEventListener('mouseleave', function () { mouse.active = false; });
-  document.addEventListener('touchstart', function (e) {
-    if (!e.touches || !e.touches.length) return;
-    const t = e.touches[0];
-    for (let i = 0; i < 6; i++) {
-      const p = createParticle();
-      p.x = t.clientX; p.y = t.clientY;
-      const ang = rand(0, Math.PI * 2), sp = rand(0.5, 1.6);
-      p.vx = Math.cos(ang) * sp; p.vy = Math.sin(ang) * sp;
-      p.r = rand(0.8, 1.6); p.alpha = 1;
-      particles.push(p);
-    }
-    if (particles.length > COUNT + 40) particles.splice(0, particles.length - COUNT - 40);
-  }, { passive: true });
 
-  resize(); initParticles(); draw();
+  window.addEventListener('resize', function () {
+    resize();
+    initParticles();
+  });
 
+  resize();
+  initParticles();
+  draw();
+
+  // пауза когда вкладка неактивна
   document.addEventListener('visibilitychange', function () {
-    if (document.hidden) { if (rafId) { cancelAnimationFrame(rafId); rafId = null; } }
-    else if (!rafId) draw();
+    if (document.hidden) {
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    } else if (!rafId) {
+      draw();
+    }
   });
 })();
 
