@@ -855,3 +855,45 @@ const PLAYLIST = [
     if (document.hidden) farewell();
   });
 })();
+
+/* ============================================================
+   СВОРАЧИВАНИЕ ПЛЕЕРА
+   ============================================================ */
+(function initPlayerMinimize() {
+  const player = document.getElementById('player');
+  const minimizeBtn = document.getElementById('player-minimize');
+  const icon = document.getElementById('player-icon');
+  if (!player || !minimizeBtn || !icon) return;
+
+  function minimize() {
+    player.classList.add('hidden');
+    icon.classList.add('show');
+    syncIconState();
+    beep(500, 0.06, 'square', 0.05);
+    haptic(8);
+  }
+
+  function expand() {
+    player.classList.remove('hidden');
+    icon.classList.remove('show');
+    beep(900, 0.06, 'square', 0.05);
+    haptic(8);
+  }
+
+  function syncIconState() {
+    const btnPlay = document.getElementById('player-play');
+    if (btnPlay) {
+      icon.classList.toggle('playing', btnPlay.classList.contains('playing'));
+    }
+  }
+
+  minimizeBtn.addEventListener('click', minimize);
+  icon.addEventListener('click', expand);
+
+  // Синхронизируем цвет иконки с состоянием плеера
+  const btnPlay = document.getElementById('player-play');
+  if (btnPlay) {
+    const obs = new MutationObserver(syncIconState);
+    obs.observe(btnPlay, { attributes: true, attributeFilter: ['class'] });
+  }
+})();

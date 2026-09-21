@@ -299,7 +299,7 @@ body.entered .desktop { opacity: 1; }
 /* ============================================================
    WINDOWS
    ============================================================ */
-.windows { position: absolute; inset: 0; pointer-events: none; z-index: 100; }
+.windows { position: absolute; inset: 0; pointer-events: none; z-index: 700; }
 .window {
   position: absolute; pointer-events: auto;
   background: var(--panel);
@@ -1224,4 +1224,58 @@ body.shutting-down .shutdown-overlay {
 
   .system-logo { font-size: 26px; letter-spacing: 2px; }
   .system-row { grid-template-columns: 100px 1fr; gap: 12px; font-size: 12.5px; }
+}
+
+/* ============================================================
+   СВОРАЧИВАНИЕ ПЛЕЕРА
+   ============================================================ */
+.player.hidden { display: none !important; }
+
+.player-icon {
+  position: fixed;
+  bottom: 76px; left: 22px;
+  z-index: 520;
+  width: 54px; height: 54px;
+  background: var(--orange);
+  border: 2px solid var(--outline);
+  color: var(--text);
+  font-size: 26px;
+  font-family: 'Pixelify Sans', sans-serif; font-weight: 700;
+  cursor: pointer;
+  display: none;
+  align-items: center; justify-content: center;
+  box-shadow: 4px 4px 0 var(--outline), 0 0 0 1px rgba(255,255,255,0.15) inset;
+  transition: all 0.12s;
+  padding: 0; line-height: 1;
+}
+.player-icon.show { display: flex; }
+.player-icon:hover, .player-icon:active {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--outline), 0 0 0 1px rgba(255,255,255,0.2) inset;
+}
+.player-icon.playing {
+  background: var(--red);
+  animation: player-pulse 1.5s ease-in-out infinite;
+}
+.player-icon.playing::after {
+  content: '';
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 14px; height: 14px;
+  background: #7DDB8E;
+  border: 2px solid var(--outline);
+  border-radius: 50%;
+  animation: blink 1.2s steps(2) infinite;
+}
+@keyframes player-pulse {
+  0%, 100% { box-shadow: 4px 4px 0 var(--outline), 0 0 0 1px rgba(255,255,255,0.15) inset; }
+  50%      { box-shadow: 4px 4px 0 var(--outline), 0 0 0 1px rgba(255,255,255,0.15) inset, 0 0 20px rgba(231,76,60,0.7); }
+}
+
+@media (max-width: 768px) {
+  .player-icon {
+    bottom: 68px; left: 12px;
+    width: 46px; height: 46px;
+    font-size: 22px;
+  }
 }
