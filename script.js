@@ -897,3 +897,57 @@ const PLAYLIST = [
     obs.observe(btnPlay, { attributes: true, attributeFilter: ['class'] });
   }
 })();
+
+/* ============================================================
+   ПЛАВНОЕ КАЧАНИЕ ЛОГО (синусоида, без рывков)
+   ============================================================ */
+(function initLogoMotion() {
+  const logo = document.querySelector('.wallpaper-logo');
+  const subtitle = document.querySelector('.wallpaper-subtitle');
+  if (!logo) return;
+
+  // настройки: амплитуда и скорость
+  const LOGO_Y_AMP    = 12;     // вверх-вниз, px
+  const LOGO_ROT_AMP  = 2.2;    // наклон, градусы
+  const LOGO_SCALE_AMP = 0.025; // «дыхание», от 1
+  const LOGO_SPEED    = 0.0009; // радиан/мс — больше = быстрее
+
+  const SUB_Y_AMP   = 4;
+  const SUB_ROT_AMP = 2.0;
+  const SUB_SPEED   = 0.0009;
+
+  let start = null;
+  let rafId = null;
+
+  function tick(ts) {
+    if (!start) start = ts;
+    const t = (ts - start);
+
+    if (logo) {
+      const y = Math.sin(t * LOGO_SPEED * Math.PI * 2) * LOGO_Y_AMP;
+      const rot = Math.sin(t * LOGO_SPEED * Math.PI * 2 + Math.PI * 0.5) * LOGO_ROT_AMP;
+      const scale = 1 + Math.sin(t * LOGO_SPEED * Math.PI * 2 + Math.PI) * LOGO_SCALE_AMP;
+      logo.style.transform = 'translateY(' + y.toFixed(2) + 'px) rotate(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
+    }
+
+    if (subtitle) {
+      const y = Math.sin(t * SUB_SPEED * Math.PI * 2 + Math.PI) * SUB_Y_AMP;
+      const rot = Math.sin(t * SUB_SPEED * Math.PI * 2) * -SUB_ROT_AMP;
+      subtitle.style.transform = 'translateY(' + y.toFixed(2) + 'px) rotate(' + rot.toFixed(2) + 'deg)';
+    }
+
+    rafId = requestAnimationFrame(tick);
+  }
+
+  rafId = requestAnimationFrame(tick);
+
+  // пауза, когда вкладка неактивна
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    } else if (!rafId) {
+      start = null;
+      rafId = requestAnimationFrame(tick);
+    }
+  });
+})();
