@@ -182,7 +182,7 @@ function triggerBloodMode() {
   };
 
   const openWindows = {}; // id → { el, chipEl, appId }
-  let zTop = 200;
+  let zTop = 550;
   let cascade = 0;
 
   const isMobile = () => window.matchMedia('(max-width: 900px)').matches;

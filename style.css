@@ -307,7 +307,7 @@ body.entered .desktop { opacity: 1; }
   box-shadow: 8px 8px 0 var(--outline), 0 0 0 1px rgba(255,255,255,0.12) inset;
   display: flex; flex-direction: column;
   width: min(720px, calc(100vw - 200px));
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 160px);
   animation: window-in 0.2s ease;
   top: 80px; left: 180px;
   overflow: hidden;
@@ -412,7 +412,7 @@ body.entered .desktop { opacity: 1; }
   background: var(--panel-3);
   border-top: 3px solid var(--outline);
   box-shadow: 0 -1px 0 rgba(255,255,255,0.08) inset;
-  z-index: 500;
+  z-index: 900;
 }
 .taskbar-logo {
   font-family: 'Pixelify Sans', sans-serif; font-weight: 700;
@@ -965,7 +965,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
     left: 10px !important; right: 10px;
     top: 58px !important;
     width: auto;
-    max-height: calc(100vh - 230px);
+    max-height: calc(100vh - 200px);
     box-shadow: 6px 6px 0 var(--outline), 0 0 0 1px rgba(255,255,255,0.1) inset;
   }
   .window-title { font-size: 14px; }
@@ -1038,7 +1038,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
   background: var(--panel);
   border: 2px solid var(--outline);
   box-shadow: 8px 8px 0 var(--outline), 0 0 0 1px rgba(255,255,255,0.12) inset;
-  z-index: 540;
+  z-index: 950;
   display: flex; flex-direction: column;
   opacity: 0; transform: translateY(15px);
   pointer-events: none;
