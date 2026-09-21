@@ -177,7 +177,8 @@ function triggerBloodMode() {
     stuff:     { title: 'игры / музыка',   tpl: 'tpl-stuff' },
     archive:   { title: 'архив',           tpl: 'tpl-archive' },
     chaos:     { title: 'хаос',            tpl: 'tpl-chaos' },
-    contact:   { title: 'связь',           tpl: 'tpl-contact' }
+    contact:   { title: 'связь',           tpl: 'tpl-contact' },
+    system:    { title: 'о системе',       tpl: 'tpl-system' }
   };
 
   const openWindows = {}; // id → { el, chipEl, appId }
@@ -763,5 +764,94 @@ const PLAYLIST = [
         break;
       }
     }
+  });
+})();
+
+/* ============================================================
+   МЕНЮ ПУСК
+   ============================================================ */
+(function initStartMenu() {
+  const startBtn = document.getElementById('start-btn');
+  const menu = document.getElementById('start-menu');
+  const systemBtn = document.getElementById('start-system');
+  const shutdownBtn = document.getElementById('start-shutdown');
+  const overlay = document.getElementById('shutdown-overlay');
+  if (!startBtn || !menu) return;
+
+  function toggleStart(force) {
+    const open = typeof force === 'boolean' ? force : !menu.classList.contains('open');
+    menu.classList.toggle('open', open);
+    startBtn.classList.toggle('open', open);
+    beep(open ? 700 : 400, 0.06, 'square', 0.05);
+    haptic(open ? [10, 30, 10] : 10);
+  }
+
+  startBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    toggleStart();
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!menu.classList.contains('open')) return;
+    if (e.target.closest('#start-menu') || e.target.closest('#start-btn')) return;
+    toggleStart(false);
+  });
+
+  menu.querySelectorAll('.start-app').forEach(function (el) {
+    el.addEventListener('click', function () {
+      toggleStart(false);
+      if (typeof window.openApp === 'function') window.openApp(el.dataset.app);
+    });
+  });
+
+  if (systemBtn) {
+    systemBtn.addEventListener('click', function () {
+      toggleStart(false);
+      if (typeof window.openApp === 'function') window.openApp('system');
+    });
+  }
+
+  if (shutdownBtn) {
+    shutdownBtn.addEventListener('click', function () {
+      toggleStart(false);
+      if (!overlay) return;
+      document.body.classList.add('shutting-down');
+      beep(300, 0.4, 'sawtooth', 0.1);
+      haptic([50, 100, 50]);
+      setTimeout(function () {
+        document.body.classList.remove('shutting-down');
+        showToast('// шутка, не выключилось');
+      }, 2500);
+    });
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && menu.classList.contains('open')) toggleStart(false);
+  });
+})();
+
+/* ============================================================
+   ПРОЩАЛЬНЫЙ ТОСТ
+   ============================================================ */
+(function initFarewell() {
+  let shown = false;
+  let cooldown = null;
+
+  function farewell() {
+    if (shown) return;
+    shown = true;
+    showToast('// возвращайся 👋');
+    clearTimeout(cooldown);
+    cooldown = setTimeout(function () { shown = false; }, 60000);
+  }
+
+  // ПК: курсор уходит вверх за пределы окна
+  document.addEventListener('mouseleave', function (e) {
+    if (e.clientY <= 0) farewell();
+  });
+
+  // Мобила: вкладка скрылась
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) farewell();
   });
 })();

@@ -1005,3 +1005,223 @@ body.blood-mode #bg-canvas { opacity: 1; }
   .icon-label { font-size: 8px; }
   .player-title { font-size: 11px; }
 }
+
+/* ============================================================
+   START BUTTON
+   ============================================================ */
+.taskbar-start {
+  background: var(--orange);
+  border: 2px solid var(--outline);
+  color: var(--text);
+  width: 42px; height: 36px;
+  cursor: pointer; font-size: 18px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 2px 2px 0 var(--outline);
+  font-family: inherit;
+  transition: all 0.12s;
+  flex-shrink: 0; padding: 0;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
+}
+.taskbar-start:hover, .taskbar-start:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--outline);
+}
+.taskbar-start.open { background: var(--red); }
+
+/* ============================================================
+   START MENU
+   ============================================================ */
+.start-menu {
+  position: fixed;
+  bottom: 72px; left: 18px;
+  width: 320px;
+  background: var(--panel);
+  border: 2px solid var(--outline);
+  box-shadow: 8px 8px 0 var(--outline), 0 0 0 1px rgba(255,255,255,0.12) inset;
+  z-index: 540;
+  display: flex; flex-direction: column;
+  opacity: 0; transform: translateY(15px);
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.start-menu.open {
+  opacity: 1; transform: translateY(0); pointer-events: auto;
+}
+
+.start-header {
+  padding: 16px 18px;
+  background: var(--orange);
+  border-bottom: 2px solid var(--outline);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset;
+}
+.start-user {
+  font-family: 'Pixelify Sans', sans-serif; font-weight: 700;
+  font-size: 17px; letter-spacing: 2px; color: var(--text);
+  text-transform: uppercase; text-shadow: 2px 2px 0 rgba(0,0,0,0.35);
+}
+.start-tag {
+  font-size: 11px; color: var(--text);
+  opacity: 0.8; letter-spacing: 1.5px;
+  margin-top: 2px; text-transform: uppercase; font-weight: 600;
+}
+
+.start-apps {
+  padding: 10px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+}
+.start-app {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  background: var(--panel-2);
+  border: 2px solid var(--outline);
+  box-shadow: 2px 2px 0 var(--outline);
+  cursor: pointer; transition: all 0.12s;
+  color: var(--text);
+  font-family: 'Pixelify Sans', sans-serif; font-weight: 600;
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.start-app:hover, .start-app:active {
+  background: var(--orange);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--outline);
+}
+.start-app-icon {
+  color: var(--orange-2); font-size: 16px;
+  filter: drop-shadow(1px 1px 0 var(--outline));
+}
+.start-app:hover .start-app-icon { color: var(--text); }
+
+.start-footer {
+  border-top: 2px solid var(--outline);
+  padding: 8px; display: flex; gap: 6px;
+}
+.start-action {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 10px 12px;
+  background: var(--panel-2);
+  border: 2px solid var(--outline);
+  box-shadow: 2px 2px 0 var(--outline);
+  color: var(--text); cursor: pointer;
+  font-family: 'Pixelify Sans', sans-serif; font-weight: 600;
+  font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase;
+  transition: all 0.12s;
+}
+.start-action:hover, .start-action:active {
+  background: var(--orange);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--outline);
+}
+.start-action.shutdown:hover { background: var(--red); }
+
+/* ============================================================
+   SYSTEM TEMPLATE
+   ============================================================ */
+.system-box {
+  border: 2px solid var(--outline);
+  background: var(--panel-2);
+  padding: 28px 26px;
+  box-shadow: 4px 4px 0 var(--outline), 0 0 0 1px rgba(255,255,255,0.08) inset;
+}
+.system-logo {
+  font-family: 'Pixelify Sans', sans-serif; font-weight: 700;
+  font-size: 34px; letter-spacing: 3px;
+  color: var(--orange-2); text-transform: uppercase;
+  text-shadow: 3px 3px 0 var(--outline);
+  margin-bottom: 6px;
+}
+.system-version {
+  color: var(--text-mute); font-size: 12px;
+  letter-spacing: 2px; text-transform: uppercase; font-weight: 600;
+  margin-bottom: 24px; padding-bottom: 18px;
+  border-bottom: 2px dashed var(--panel-4);
+}
+.system-rows { display: grid; gap: 12px; }
+.system-row {
+  display: grid; grid-template-columns: 120px 1fr;
+  gap: 16px; font-size: 13.5px; align-items: baseline;
+}
+.system-key {
+  color: var(--text-mute); font-size: 11px;
+  letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;
+}
+.system-val { color: var(--text); }
+.system-val a {
+  color: var(--orange-2); text-decoration: none;
+  border-bottom: 2px dashed var(--orange-2);
+  transition: all 0.15s;
+}
+.system-val a:hover { color: var(--yellow); border-bottom-color: var(--yellow); }
+.system-thanks {
+  margin-top: 24px; padding-top: 18px;
+  border-top: 2px dashed var(--panel-4);
+  color: var(--text-mute); font-size: 12px;
+  letter-spacing: 1px; text-align: center;
+}
+
+/* ============================================================
+   MUSIC CHANNEL LINK
+   ============================================================ */
+.music-channel {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px; margin-top: 14px;
+  background: var(--panel-3);
+  border: 2px solid var(--outline);
+  box-shadow: 3px 3px 0 var(--outline);
+  text-decoration: none; color: var(--text);
+  font-family: 'Pixelify Sans', sans-serif; font-weight: 700;
+  font-size: 13px; letter-spacing: 1px; text-transform: uppercase;
+  transition: all 0.15s;
+}
+.music-channel:hover {
+  background: var(--orange);
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--outline);
+}
+.music-channel-icon {
+  color: var(--orange-2); font-size: 20px;
+  filter: drop-shadow(1px 1px 0 var(--outline));
+}
+.music-channel:hover .music-channel-icon { color: var(--text); }
+.music-channel-arrow {
+  margin-left: auto; color: var(--orange-2); font-size: 16px;
+}
+.music-channel:hover .music-channel-arrow { color: var(--text); }
+
+/* ============================================================
+   SHUTDOWN OVERLAY
+   ============================================================ */
+.shutdown-overlay {
+  position: fixed; inset: 0;
+  background: #000;
+  z-index: 999998;
+  opacity: 0; pointer-events: none;
+}
+body.shutting-down .shutdown-overlay {
+  animation: shutdown-anim 2.4s ease forwards;
+}
+@keyframes shutdown-anim {
+  0% { opacity: 0; }
+  25% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ============================================================
+   МОБИЛКА — старт-меню
+   ============================================================ */
+@media (max-width: 768px) {
+  .taskbar-start { width: 38px; height: 32px; font-size: 16px; }
+  .start-menu {
+    left: 8px; right: 8px;
+    width: auto; bottom: 66px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+  }
+  .start-apps { grid-template-columns: 1fr 1fr; gap: 5px; padding: 8px; }
+  .start-app { padding: 9px 10px; font-size: 11px; gap: 8px; }
+  .start-app-icon { font-size: 14px; }
+  .start-action { padding: 9px 10px; font-size: 10px; }
+
+  .system-logo { font-size: 26px; letter-spacing: 2px; }
+  .system-row { grid-template-columns: 100px 1fr; gap: 12px; font-size: 12.5px; }
+}

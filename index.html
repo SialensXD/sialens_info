@@ -75,13 +75,34 @@
 
   <div class="windows" id="windows"></div>
 
-  <div class="taskbar">
+    <div class="taskbar">
+    <button class="taskbar-start" id="start-btn" aria-label="меню">⊞</button>
     <div class="taskbar-logo">SIALENS OS<span class="dot">.</span></div>
     <div class="taskbar-windows" id="taskbar-windows"></div>
     <div class="taskbar-right">
       <button id="sound-toggle" title="звук" data-sound-hover>◉ Звуки</button>
       <span class="taskbar-clock" id="taskbar-clock">--:--:--</span>
       <span class="taskbar-insomnia" id="taskbar-insomnia">—</span>
+    </div>
+  </div>
+
+    <!-- START MENU -->
+  <div class="start-menu" id="start-menu">
+    <div class="start-header">
+      <div class="start-user">SIALENS OS</div>
+      <div class="start-tag">// версия 1.0 · 2025</div>
+    </div>
+    <div class="start-apps">
+      <div class="start-app" data-app="about"><span class="start-app-icon">⬢</span><span>обо мне</span></div>
+      <div class="start-app" data-app="interests"><span class="start-app-icon">✦</span><span>интересы</span></div>
+      <div class="start-app" data-app="stuff"><span class="start-app-icon">▶</span><span>игры / музыка</span></div>
+      <div class="start-app" data-app="archive"><span class="start-app-icon">▤</span><span>архив</span></div>
+      <div class="start-app" data-app="chaos"><span class="start-app-icon">☯</span><span>хаос</span></div>
+      <div class="start-app" data-app="contact"><span class="start-app-icon">✉</span><span>связь</span></div>
+    </div>
+    <div class="start-footer">
+      <button class="start-action" id="start-system"><span>ⓘ</span> О системе</button>
+      <button class="start-action shutdown" id="start-shutdown"><span>⏻</span> Выключить</button>
     </div>
   </div>
 
@@ -148,13 +169,11 @@
           <li><span class="tagline">ламповое</span><span class="val">Terraria, Dead Cells</span></li>
         </ul>
       </div>
-      <div class="stuff-col">
-        <h3 class="stuff-title"><span class="ico">♪</span> что слушаю</h3>
-        <ul class="stuff-list">
-          <li><span class="tagline">тяжёлое</span><span class="val">брейккор, эксп металл, индастриал рок</span></li>
-          <li><span class="tagline">спокойное</span><span class="val">под ламповые игры, под настроение</span></li>
-        </ul>
-      </div>
+              <a class="music-channel" href="https://t.me/sialens_music" target="_blank" rel="noopener">
+          <span class="music-channel-icon">♫</span>
+          <span>мой плейлист(?)</span>
+          <span class="music-channel-arrow">→</span>
+        </a>
     </div>
   </div>
 </template>
@@ -242,6 +261,41 @@
   </div>
 </div>
 
+<template id="tpl-system">
+  <div class="app-body">
+    <div class="app-tag">// о системе</div>
+    <div class="system-box">
+      <div class="system-logo">SIALENS OS</div>
+      <div class="system-version">версия 1.0 · сборка 2026</div>
+
+      <div class="system-rows">
+        <div class="system-row">
+          <span class="system-key">владелец</span>
+          <span class="system-val">Sialens</span>
+        </div>
+        <div class="system-row">
+          <span class="system-key">сделано на</span>
+          <span class="system-val">HTML, CSS, JS без фреймворков</span>
+        </div>
+        <div class="system-row">
+          <span class="system-key">музыка</span>
+          <span class="system-val"><a href="https://t.me/sialens_music" target="_blank" rel="noopener">t.me/sialens_music</a></span>
+        </div>
+        <div class="system-row">
+          <span class="system-key">вдохновлено</span>
+          <span class="system-val">Ultrakill, Balatro</span>
+        </div>
+        <div class="system-row">
+          <span class="system-key">обновлено</span>
+          <span class="system-val">21.09.2026</span>
+        </div>
+      </div>
+
+      <p class="system-thanks">// спасибо, что зашёл ;) </p>
+    </div>
+  </div>
+</template>
+
 <!-- PLAYER -->
 <div class="player" id="player">
   <div class="player-info">
@@ -258,6 +312,8 @@
 
 <div class="toast" id="toast"></div>
 <div class="blood-flash" id="blood-flash">У МЕНЯ ПОРВАН ТУЗ!!!!!</div>
+
+<div class="shutdown-overlay" id="shutdown-overlay"></div>
 
 <script>
   document.documentElement.classList.add('has-js');
