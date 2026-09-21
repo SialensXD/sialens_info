@@ -905,16 +905,17 @@ const PLAYLIST = [
   const logo = document.querySelector('.wallpaper-logo');
   const subtitle = document.querySelector('.wallpaper-subtitle');
   if (!logo) return;
-
+   
   // настройки: амплитуда и скорость
-  const LOGO_Y_AMP    = 12;     // вверх-вниз, px
-  const LOGO_ROT_AMP  = 2.2;    // наклон, градусы
-  const LOGO_SCALE_AMP = 0.025; // «дыхание», от 1
-  const LOGO_SPEED    = 0.0009; // радиан/мс — больше = быстрее
+  const LOGO_Y_AMP     = 12;     // вверх-вниз, px
+  const LOGO_ROT_AMP   = 2.2;    // наклон, градусы
+  const LOGO_SCALE_AMP = 0.025;  // «дыхание», от 1
+  const LOGO_SPEED     = 0.0005; // радиан/мс — больше = быстрее
 
-  const SUB_Y_AMP   = 4;
-  const SUB_ROT_AMP = 2.0;
-  const SUB_SPEED   = 0.0009;
+  const SUB_Y_AMP     = 14;     // тоже прыгает
+  const SUB_ROT_AMP   = 2.2;
+  const SUB_SCALE_AMP = 0.035;  // чуть сильнее дышит, чем лого
+  const SUB_SPEED     = 0.0005;
 
   let start = null;
   let rafId = null;
@@ -933,7 +934,8 @@ const PLAYLIST = [
     if (subtitle) {
       const y = Math.sin(t * SUB_SPEED * Math.PI * 2 + Math.PI) * SUB_Y_AMP;
       const rot = Math.sin(t * SUB_SPEED * Math.PI * 2) * -SUB_ROT_AMP;
-      subtitle.style.transform = 'translateY(' + y.toFixed(2) + 'px) rotate(' + rot.toFixed(2) + 'deg)';
+      const scale = 1 + Math.sin(t * SUB_SPEED * Math.PI * 2 + Math.PI * 0.5) * SUB_SCALE_AMP;
+      subtitle.style.transform = 'translateY(' + y.toFixed(2) + 'px) rotate(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
     }
 
     rafId = requestAnimationFrame(tick);
