@@ -1461,7 +1461,7 @@ body.shutting-down .shutdown-overlay {
   transition: opacity 0.5s;
   pointer-events: none;
 }
-.cutscene-screen.active::before { opacity: 1; animation: cutscene-bg-pulse 2s ease-in-out infinite; }
+.cutscene-screen.active::before { opacity: 1; animation: cutscene-bg-pulse 1s ease-in-out infinite; }
 @keyframes cutscene-bg-pulse {
   0%, 100% { opacity: 0.4; }
   50%      { opacity: 0.75; }
