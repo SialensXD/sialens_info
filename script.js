@@ -640,14 +640,12 @@ function triggerBloodMode() {
     beep(1200, 0.1, 'square', 0.07);
     haptic([15, 40, 15, 40, 100]);
 
-    setTimeout(function () {
-      if (typeof window.startCutscene === 'function') {
-        window.startCutscene();
-      } else {
-        document.body.classList.add('entered');
-        startBackgroundMusic();
-      }
-    }, 400);
+    if (typeof window.startCutscene === 'function') {
+      window.startCutscene();
+    } else {
+      document.body.classList.add('entered');
+      startBackgroundMusic();
+    }
 
     setTimeout(function () { if (entry.parentNode) entry.parentNode.removeChild(entry); }, 900);
   }
