@@ -1430,3 +1430,165 @@ body.shutting-down .shutdown-overlay {
     font-size: 24px;
   }
 }
+
+/* ============================================================
+   CUTSCENE — War Without Reason
+   ============================================================ */
+.cutscene-screen {
+  position: fixed; inset: 0;
+  background: #000;
+  z-index: 99996;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.6s ease;
+  overflow: hidden;
+}
+.cutscene-screen.active { opacity: 1; pointer-events: auto; }
+.cutscene-screen.hide { opacity: 0; pointer-events: none; transition: opacity 0.8s ease; }
+
+/* фоновый красный пульс */
+.cutscene-screen::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(193,18,31,0.35) 100%);
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+}
+.cutscene-screen.active::before { opacity: 1; animation: cutscene-bg-pulse 2s ease-in-out infinite; }
+@keyframes cutscene-bg-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 0.75; }
+}
+
+.cutscene-content {
+  text-align: center;
+  padding: 20px;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.15s;
+}
+
+.cutscene-line {
+  font-family: 'VT323', monospace;
+  font-size: clamp(22px, 3.2vw, 36px);
+  letter-spacing: 5px;
+  color: var(--blood-2);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.45s ease, transform 0.45s ease, color 0.15s, text-shadow 0.15s;
+  text-shadow: 0 0 24px rgba(255, 46, 58, 0.85);
+}
+.cutscene-line.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.cutscene-line.flash {
+  color: var(--bone);
+  text-shadow:
+    0 0 30px rgba(255, 46, 58, 1),
+    0 0 60px rgba(255, 46, 58, 0.9),
+    0 0 90px rgba(255, 46, 58, 0.6);
+}
+
+.cutscene-title {
+  font-family: 'VT323', monospace;
+  font-size: clamp(80px, 16vw, 200px);
+  letter-spacing: 10px;
+  line-height: 0.9;
+  color: var(--bone);
+  text-transform: uppercase;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  text-shadow:
+    6px 6px 0 var(--outline),
+    9px 9px 0 var(--blood-3),
+    -2px -2px 0 var(--outline),
+    0 0 80px rgba(193, 18, 31, 0.95);
+  margin: 26px 0;
+}
+.cutscene-title.show { opacity: 1; transform: scale(1); }
+.cutscene-title.glitch {
+  animation: cutscene-glitch 0.09s steps(2) 8;
+}
+@keyframes cutscene-glitch {
+  0%, 100% { transform: scale(1) translate(0, 0); }
+  25%      { transform: scale(1) translate(-7px, 4px); }
+  50%      { transform: scale(1) translate(6px, -5px); }
+  75%      { transform: scale(1) translate(-4px, -6px); }
+}
+
+.cutscene-subtitle {
+  font-family: 'VT323', monospace;
+  font-size: clamp(20px, 2.6vw, 30px);
+  letter-spacing: 10px;
+  color: var(--blood-2);
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  text-shadow: 0 0 26px rgba(255, 46, 58, 0.95);
+  margin-top: 10px;
+}
+.cutscene-subtitle.show { opacity: 1; transform: translateY(0); }
+
+/* тряска контента */
+.cutscene-screen.shake .cutscene-content {
+  animation: cutscene-shake 0.65s ease;
+}
+@keyframes cutscene-shake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-10px, 5px); }
+  20% { transform: translate(8px, -7px); }
+  30% { transform: translate(-6px, -9px); }
+  40% { transform: translate(10px, 7px); }
+  50% { transform: translate(-8px, 5px); }
+  60% { transform: translate(5px, -5px); }
+  70% { transform: translate(-10px, 3px); }
+  80% { transform: translate(7px, 9px); }
+  90% { transform: translate(-5px, -5px); }
+}
+
+/* красная вспышка */
+.cutscene-screen.flash-red::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 46, 58, 0.85), rgba(193, 18, 31, 0.3) 40%, transparent 75%);
+  pointer-events: none;
+  z-index: 3;
+  animation: cutscene-flash 0.5s ease 2;
+}
+@keyframes cutscene-flash {
+  0%, 100% { opacity: 0; }
+  50%      { opacity: 1; }
+}
+
+.cutscene-skip {
+  position: absolute;
+  bottom: 32px;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+  letter-spacing: 4px;
+  color: var(--bone-mute);
+  text-transform: uppercase;
+  z-index: 4;
+  animation: cutscene-skip-blink 2s ease-in-out infinite;
+}
+@keyframes cutscene-skip-blink {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 0.7; }
+}
+
+@media (max-width: 768px) {
+  .cutscene-line { font-size: clamp(18px, 5vw, 24px); letter-spacing: 3px; margin-bottom: 14px; }
+  .cutscene-title { font-size: clamp(60px, 20vw, 120px); letter-spacing: 6px; margin: 20px 0; }
+  .cutscene-subtitle { font-size: clamp(16px, 4vw, 22px); letter-spacing: 6px; }
+  .cutscene-skip { font-size: 12px; bottom: 24px; }
+}
