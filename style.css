@@ -1592,3 +1592,31 @@ body.shutting-down .shutdown-overlay {
   .cutscene-subtitle { font-size: clamp(16px, 4vw, 22px); letter-spacing: 6px; }
   .cutscene-skip { font-size: 12px; bottom: 24px; }
 }
+
+/* финальная белая вспышка катсцены */
+.cutscene-screen.flash-white::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: #fff;
+  pointer-events: none;
+  z-index: 5;
+  animation: cutscene-white-flash 0.7s ease forwards;
+}
+@keyframes cutscene-white-flash {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+  60%  { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+/* лёгкая тряска для зарядки (короткая) */
+.cutscene-screen.shake-small .cutscene-content {
+  animation: cutscene-shake-small 0.9s ease;
+}
+@keyframes cutscene-shake-small {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-2px, 1px); }
+  40% { transform: translate(2px, -1px); }
+  60% { transform: translate(-1px, -2px); }
+  80% { transform: translate(1px, 1px); }
+}
