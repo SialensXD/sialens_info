@@ -70,7 +70,7 @@ html { background: var(--void-2); }
 body {
   background: transparent;
   color: var(--bone);
-  font-family: 'VT323', 'Pixelify Sans', monospace;
+  font-family: 'VCR OSD Mono', 'VCR OSD Mono', monospace;
   font-weight: 400;
   font-size: 17px;
   line-height: 1.5;
@@ -178,7 +178,7 @@ body::before {
 .boot-inner { width: min(460px, 85vw); text-align: center; padding: 0 20px; }
 
 .boot-logo {
-  font-family: 'VT323', monospace; font-weight: 400;
+  font-family: 'VCR OSD Mono', monospace; font-weight: 400;
   font-size: clamp(46px, 10vw, 76px); letter-spacing: 4px;
   color: var(--bone);
   text-shadow:
@@ -192,7 +192,7 @@ body::before {
 .boot-line {
   color: var(--blood-2); font-size: 15px; letter-spacing: 3px;
   margin-bottom: 26px; text-transform: uppercase;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   text-shadow: 0 0 8px rgba(255, 46, 58, 0.7);
 }
 
@@ -218,7 +218,7 @@ body::before {
 .boot-status {
   color: var(--bone-mute); font-size: 14px; letter-spacing: 3px;
   text-transform: uppercase;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
 }
 
 /* ============================================================
@@ -240,7 +240,7 @@ body::before {
 }
 
 .entry-logo {
-  font-family: 'VT323', monospace; font-weight: 400;
+  font-family: 'VCR OSD Mono', monospace; font-weight: 400;
   font-size: clamp(58px, 14vw, 116px); letter-spacing: 4px;
   color: var(--bone);
   text-shadow:
@@ -255,11 +255,11 @@ body::before {
 .entry-line {
   color: var(--blood-2); font-size: 17px; letter-spacing: 4px;
   margin-bottom: 46px; text-transform: uppercase;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   text-shadow: 0 0 10px rgba(255, 46, 58, 0.6);
 }
 .entry-prompt {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(20px, 2.6vw, 28px); letter-spacing: 3px;
   color: var(--bone);
   text-transform: uppercase; padding: 18px 30px;
@@ -277,7 +277,7 @@ body::before {
 }
 .entry-hint {
   color: var(--bone-mute); font-size: 13px; letter-spacing: 3px;
-  margin-top: 24px; font-family: 'VT323', monospace;
+  margin-top: 24px; font-family: 'VCR OSD Mono', monospace;
   text-transform: uppercase;
 }
 
@@ -306,7 +306,7 @@ body.entered .desktop { opacity: 1; }
   color: var(--bone);
   font-size: 13px; letter-spacing: 5px;
   margin-bottom: 22px;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   text-transform: uppercase;
   background: var(--blood-3);
   padding: 8px 18px;
@@ -317,7 +317,7 @@ body.entered .desktop { opacity: 1; }
 .wallpaper-tag::after  { content: ' ///'; color: var(--bone-mute); }
 
 .wallpaper-logo {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(64px, 15vw, 200px);
   letter-spacing: clamp(4px, 1vw, 10px);
   line-height: 0.9;
@@ -336,7 +336,7 @@ body.entered .desktop { opacity: 1; }
 
 .wallpaper-subtitle {
   margin-top: 34px;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(16px, 2vw, 22px);
   color: var(--bone);
   letter-spacing: 6px; text-transform: uppercase;
@@ -356,7 +356,7 @@ body.entered .desktop { opacity: 1; }
   margin-top: 40px; color: var(--bone-mute); font-size: 13px;
   letter-spacing: 3px;
   text-transform: uppercase;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
 }
 .wallpaper-hint::before { content: '// '; color: var(--blood-2); }
 
@@ -396,7 +396,7 @@ body.entered .desktop { opacity: 1; }
 }
 .desktop-icon:hover .icon-glyph { transform: scale(1.15); color: var(--blood-2); }
 .icon-label {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 13px; letter-spacing: 2px;
   color: var(--bone); text-transform: uppercase;
   text-align: center;
@@ -474,7 +474,7 @@ body.entered .desktop { opacity: 1; }
 .window-dots span:nth-child(3) { background: var(--cyan); }
 .window-title {
   flex: 1;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 19px; letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--bone);
@@ -493,7 +493,7 @@ body.entered .desktop { opacity: 1; }
   transition: all 0.12s;
   padding: 0; flex-shrink: 0;
   box-shadow: 2px 2px 0 var(--outline);
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
 }
 .window-close:hover, .window-close:active {
   background: var(--blood-2);
@@ -527,7 +527,7 @@ body.entered .desktop { opacity: 1; }
   padding: 5px 14px;
   border: 2px solid var(--blood-2);
   box-shadow: 3px 3px 0 var(--outline), 0 0 16px rgba(193,18,31,0.6);
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   text-transform: uppercase;
 }
 
@@ -547,7 +547,7 @@ body.entered .desktop { opacity: 1; }
   z-index: 900;
 }
 .taskbar-logo {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 22px; letter-spacing: 3px;
   color: var(--bone); flex-shrink: 0;
   padding-right: 16px;
@@ -568,7 +568,7 @@ body.entered .desktop { opacity: 1; }
   background: var(--panel-2);
   border: 2px solid var(--blood-3);
   color: var(--bone);
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
   cursor: pointer; white-space: nowrap;
   transition: all 0.12s;
@@ -601,7 +601,7 @@ body.entered .desktop { opacity: 1; }
   background: var(--panel-2);
   border: 2px solid var(--blood-3);
   color: var(--bone);
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 13px;
   padding: 5px 10px; cursor: pointer; letter-spacing: 2px;
   transition: all 0.12s;
@@ -616,14 +616,14 @@ body.entered .desktop { opacity: 1; }
 }
 .taskbar-clock {
   color: var(--cyan);
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 19px; letter-spacing: 2px;
   text-shadow: 0 0 10px rgba(0, 229, 255, 0.8), 1px 1px 0 var(--outline);
 }
 .taskbar-insomnia {
   font-size: 13px; letter-spacing: 2px;
   text-transform: uppercase;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   color: var(--bone-dim);
 }
 .taskbar-insomnia::before { content: '☾ '; opacity: 0.8; }
@@ -657,10 +657,10 @@ body.entered .desktop { opacity: 1; }
 .stat span {
   color: var(--bone-mute); letter-spacing: 2px;
   text-transform: uppercase; font-size: 12px;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
 }
 .stat b {
-  color: var(--bone); font-family: 'VT323', monospace;
+  color: var(--bone); font-family: 'VCR OSD Mono', monospace;
   font-weight: 400; font-size: 22px; letter-spacing: 2px;
   text-shadow: 1px 1px 0 var(--outline), 0 0 12px rgba(255,46,58,0.6);
 }
@@ -689,7 +689,7 @@ body.entered .desktop { opacity: 1; }
   text-shadow: 2px 2px 0 var(--outline), 0 0 14px rgba(255,46,58,0.8);
 }
 .card h3 {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   letter-spacing: 3px; font-size: 22px; margin-bottom: 8px;
   color: var(--bone);
   text-transform: uppercase;
@@ -704,7 +704,7 @@ body.entered .desktop { opacity: 1; }
   box-shadow: 4px 4px 0 var(--outline), 0 0 0 1px rgba(255,46,58,0.12) inset;
 }
 .stuff-title {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 20px; letter-spacing: 3px; text-transform: uppercase;
   margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
   color: var(--bone);
@@ -721,7 +721,7 @@ body.entered .desktop { opacity: 1; }
 }
 .stuff-list li:last-child { border-bottom: none; padding-bottom: 0; }
 .tagline {
-  color: var(--bone); font-family: 'VT323', monospace;
+  color: var(--bone); font-family: 'VCR OSD Mono', monospace;
   letter-spacing: 2px; text-transform: uppercase; font-size: 12px;
   background: var(--blood-3);
   padding: 3px 10px;
@@ -742,7 +742,7 @@ body.entered .desktop { opacity: 1; }
 }
 .archive-item:hover { padding-left: 8px; border-bottom-color: var(--blood-2); }
 .archive-year {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   color: var(--blood-2); letter-spacing: 3px; font-size: 22px;
   text-shadow: 1px 1px 0 var(--outline), 0 0 12px rgba(255,46,58,0.6);
 }
@@ -756,7 +756,7 @@ body.entered .desktop { opacity: 1; }
   padding: 3px 10px;
   border: 2px solid var(--blood-2);
   letter-spacing: 2px; margin-left: 8px;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   animation: blink 1.5s steps(2) infinite;
   display: inline-block;
   box-shadow: 0 0 16px rgba(255,46,58,0.85);
@@ -771,7 +771,7 @@ body.entered .desktop { opacity: 1; }
   box-shadow: 4px 4px 0 var(--outline), 0 0 30px rgba(193,18,31,0.4) inset;
 }
 .chaos-line {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(20px, 2.4vw, 26px); color: var(--bone);
   margin-bottom: 18px; letter-spacing: 1.5px;
   text-shadow: 2px 2px 0 var(--outline), 0 0 14px rgba(255,46,58,0.7);
@@ -787,7 +787,7 @@ body.entered .desktop { opacity: 1; }
 
 .contact-link {
   display: inline-flex; align-items: center; gap: 8px;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(32px, 5vw, 52px); color: var(--bone);
   text-decoration: none; letter-spacing: 3px; padding: 12px 26px;
   transition: all 0.15s; cursor: pointer; margin: 10px 0;
@@ -810,7 +810,7 @@ body.entered .desktop { opacity: 1; }
   border: 2px solid var(--blood-3);
   background: var(--panel-2);
   color: var(--bone); text-decoration: none;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 15px; letter-spacing: 2px; text-transform: uppercase;
   transition: all 0.15s ease;
   box-shadow: 4px 4px 0 var(--outline), 0 0 0 1px rgba(255,46,58,0.12) inset;
@@ -834,7 +834,7 @@ body.entered .desktop { opacity: 1; }
   z-index: 520; width: 58px; height: 58px;
   background: var(--blood);
   border: 2px solid var(--blood-2); color: var(--bone);
-  font-family: 'VT323', monospace; font-size: 26px;
+  font-family: 'VCR OSD Mono', monospace; font-size: 26px;
   cursor: pointer; letter-spacing: 1px;
   box-shadow: 4px 4px 0 var(--outline), 0 0 24px rgba(255,46,58,0.7);
   transition: all 0.12s;
@@ -854,7 +854,7 @@ body.entered .desktop { opacity: 1; }
   box-shadow: 8px 8px 0 var(--outline), 0 0 40px rgba(193,18,31,0.5);
   z-index: 519;
   display: flex; flex-direction: column;
-  font-family: 'VT323', monospace; font-size: 18px;
+  font-family: 'VCR OSD Mono', monospace; font-size: 18px;
   opacity: 0; transform: translateY(20px) scale(0.96);
   pointer-events: none;
   transition: opacity 0.25s, transform 0.25s ease;
@@ -867,7 +867,7 @@ body.entered .desktop { opacity: 1; }
   background: var(--blood-3);
   color: var(--bone);
   border-bottom: 2px solid var(--blood-2);
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 16px; letter-spacing: 2px; text-transform: uppercase;
   box-shadow: 0 0 18px rgba(255,46,58,0.55) inset;
 }
@@ -875,7 +875,7 @@ body.entered .desktop { opacity: 1; }
   background: var(--panel-3); border: 2px solid var(--blood-2); color: var(--bone);
   font-size: 14px; cursor: pointer; padding: 2px 8px;
   box-shadow: 2px 2px 0 var(--outline);
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
 }
 .term-close:hover {
   background: var(--blood-2);
@@ -920,7 +920,7 @@ body.entered .desktop { opacity: 1; }
   background: linear-gradient(180deg, var(--panel-2), var(--panel));
   border: 2px solid var(--blood-3);
   box-shadow: 4px 4px 0 var(--outline), 0 0 24px rgba(193,18,31,0.5);
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   opacity: 0; transform: translateY(20px);
   animation: player-in 0.6s ease 2.6s forwards;
   max-width: calc(100vw - 44px);
@@ -928,7 +928,7 @@ body.entered .desktop { opacity: 1; }
 @keyframes player-in { to { opacity: 1; transform: translateY(0); } }
 .player-info { display: flex; flex-direction: column; gap: 2px; line-height: 1.15; }
 .player-title {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 17px; letter-spacing: 2px; color: var(--bone);
   max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   text-shadow: 1px 1px 0 var(--outline), 0 0 10px rgba(255,46,58,0.7);
@@ -936,7 +936,7 @@ body.entered .desktop { opacity: 1; }
 .player-status {
   font-size: 12px; letter-spacing: 2px; color: var(--bone-mute);
   text-transform: uppercase; white-space: nowrap;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
 }
 .player-controls { display: flex; align-items: center; gap: 5px; }
 .player-btn {
@@ -946,7 +946,7 @@ body.entered .desktop { opacity: 1; }
   display: flex; align-items: center; justify-content: center;
   transition: all 0.12s; padding: 0; line-height: 1; flex-shrink: 0;
   box-shadow: 2px 2px 0 var(--outline), 0 0 12px rgba(255,46,58,0.55);
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
 }
 .player-btn.small {
   width: 30px; height: 30px; font-size: 13px;
@@ -1034,7 +1034,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
 .blood-flash {
   position: fixed; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(34px, 7vw, 88px); letter-spacing: 6px;
   color: var(--bone);
   text-shadow:
@@ -1057,7 +1057,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
   border: 2px solid var(--blood-2);
   padding: 12px 26px;
   color: var(--bone);
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   letter-spacing: 3px; font-size: 18px; text-transform: uppercase;
   opacity: 0; pointer-events: none;
   transition: opacity 0.3s, transform 0.3s;
@@ -1168,7 +1168,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
   cursor: pointer; font-size: 20px;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 2px 2px 0 var(--outline), 0 0 16px rgba(255,46,58,0.65);
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   transition: all 0.12s;
   flex-shrink: 0; padding: 0;
   text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
@@ -1209,7 +1209,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
   box-shadow: 0 0 20px rgba(255,46,58,0.55) inset;
 }
 .start-user {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 22px; letter-spacing: 3px; color: var(--bone);
   text-transform: uppercase;
   text-shadow: 2px 2px 0 var(--outline), 0 0 12px rgba(255,46,58,0.7);
@@ -1218,7 +1218,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
   font-size: 13px; color: var(--bone-dim);
   letter-spacing: 3px;
   margin-top: 2px; text-transform: uppercase;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
 }
 
 .start-apps {
@@ -1233,7 +1233,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
   box-shadow: 2px 2px 0 var(--outline);
   cursor: pointer; transition: all 0.12s;
   color: var(--bone);
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 15px; text-transform: uppercase; letter-spacing: 2px;
 }
 .start-app:hover, .start-app:active {
@@ -1259,7 +1259,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
   border: 2px solid var(--blood-3);
   box-shadow: 2px 2px 0 var(--outline);
   color: var(--bone); cursor: pointer;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
   transition: all 0.12s;
 }
@@ -1281,7 +1281,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
   box-shadow: 4px 4px 0 var(--outline), 0 0 0 1px rgba(255,46,58,0.15) inset;
 }
 .system-logo {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 40px; letter-spacing: 4px;
   color: var(--bone); text-transform: uppercase;
   text-shadow: 3px 3px 0 var(--blood-3), 0 0 20px rgba(255,46,58,0.7);
@@ -1290,7 +1290,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
 .system-version {
   color: var(--bone-mute); font-size: 14px;
   letter-spacing: 3px; text-transform: uppercase;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   margin-bottom: 24px; padding-bottom: 18px;
   border-bottom: 2px dashed var(--panel-4);
 }
@@ -1302,7 +1302,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
 .system-key {
   color: var(--bone-mute); font-size: 13px;
   letter-spacing: 2px; text-transform: uppercase;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
 }
 .system-val { color: var(--bone); }
 .system-val a {
@@ -1317,7 +1317,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
   border-top: 2px dashed var(--panel-4);
   color: var(--bone-mute); font-size: 14px;
   letter-spacing: 2px; text-align: center;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
 }
 
 /* ============================================================
@@ -1330,7 +1330,7 @@ body.blood-mode #bg-canvas { opacity: 1; }
   border: 2px solid var(--blood-3);
   box-shadow: 3px 3px 0 var(--outline);
   text-decoration: none; color: var(--bone);
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 16px; letter-spacing: 2px; text-transform: uppercase;
   transition: all 0.15s;
 }
@@ -1403,7 +1403,7 @@ body.shutting-down .shutdown-overlay {
   border: 2px solid var(--blood-2);
   color: var(--bone);
   font-size: 28px;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   cursor: pointer;
   display: none;
   align-items: center; justify-content: center;
@@ -1487,7 +1487,7 @@ body.shutting-down .shutdown-overlay {
 }
 
 .cutscene-line {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(22px, 3.2vw, 36px);
   letter-spacing: 5px;
   color: var(--blood-2);
@@ -1511,7 +1511,7 @@ body.shutting-down .shutdown-overlay {
 }
 
 .cutscene-title {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(80px, 16vw, 200px);
   letter-spacing: 10px;
   line-height: 0.9;
@@ -1539,7 +1539,7 @@ body.shutting-down .shutdown-overlay {
 }
 
 .cutscene-subtitle {
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(20px, 2.6vw, 30px);
   letter-spacing: 10px;
   color: var(--blood-2);
@@ -1588,7 +1588,7 @@ body.shutting-down .shutdown-overlay {
   bottom: 32px;
   left: 0; right: 0;
   text-align: center;
-  font-family: 'VT323', monospace;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 15px;
   letter-spacing: 4px;
   color: var(--bone-mute);
