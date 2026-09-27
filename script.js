@@ -739,7 +739,7 @@ function triggerBloodMode() {
       haptic([50, 100, 50]);
       setTimeout(function () {
         document.body.classList.remove('shutting-down');
-        showToast('// шутка, не выключилось');
+        showToast('// хорошая попытка👁️');
       }, 2500);
     });
   }
