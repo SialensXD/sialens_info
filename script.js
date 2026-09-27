@@ -1,5 +1,6 @@
 /* ============================================================
-   SIALENS — script.js v2.0 (DESKTOP EDITION) да, йоу
+   SIALENS OS — script.js v3.0
+   ULTRAKILL EDITION // War Without Reason cutscene
    ============================================================ */
 
 // ---------- АУДИО ----------
@@ -34,7 +35,7 @@ function beep(freq, dur, type, vol) {
 });
 
 function haptic(pattern) {
-  if (!soundEnabled || !navigator.vibrate) return;
+  if (!navigator.vibrate) return;
   try { navigator.vibrate(pattern || 10); } catch (e) {}
 }
 
@@ -87,11 +88,10 @@ function copyToClipboard(text) {
   });
 }
 
-// клик по нику (динамически — работает и в окнах)
 document.addEventListener('click', function (e) {
   const el = e.target.closest('#copy-nick, [data-copy]');
   if (!el) return;
-  if (el.classList.contains('social')) return; // соцкнопки — реальные ссылки
+  if (el.classList.contains('social')) return;
   if (el.id === 'copy-nick') {
     e.preventDefault();
     const nick = el.getAttribute('data-copy') || 'sialens_xd';
@@ -102,15 +102,19 @@ document.addEventListener('click', function (e) {
   }
 });
 
-// ---------- ГЛИТЧ (wallpaper лого) ----------
+// ---------- ГЛИТЧ НА ЛОГО ----------
 const glitchEl = document.querySelector('.wallpaper-logo');
 if (glitchEl) {
   setInterval(function () {
     if (Math.random() < 0.15) {
       const dx = (Math.random() - 0.5) * 4;
       const dy = (Math.random() - 0.5) * 4;
-      glitchEl.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
-      setTimeout(function () { glitchEl.style.transform = ''; }, 80);
+      glitchEl.style.setProperty('--glitch-x', dx + 'px');
+      glitchEl.style.setProperty('--glitch-y', dy + 'px');
+      setTimeout(function () {
+        glitchEl.style.setProperty('--glitch-x', '0px');
+        glitchEl.style.setProperty('--glitch-y', '0px');
+      }, 80);
     }
   }, 1500);
 }
@@ -181,27 +185,23 @@ function triggerBloodMode() {
     system:    { title: 'о системе',       tpl: 'tpl-system' }
   };
 
-  const openWindows = {}; // id → { el, chipEl, appId }
+  const openWindows = {};
   let zTop = 550;
   let cascade = 0;
 
   const isMobile = () => window.matchMedia('(max-width: 900px)').matches;
 
   function openApp(appId) {
-    // если окно уже открыто — фокус на него
     if (openWindows[appId]) { focusWindow(appId); return; }
-
     const cfg = APPS[appId];
     if (!cfg) return;
     const tpl = document.getElementById(cfg.tpl);
     if (!tpl) return;
 
-    // создаём окно
     const win = document.createElement('div');
     win.className = 'window';
     win.dataset.app = appId;
 
-    // позиция
     if (!isMobile()) {
       const baseX = 170 + (cascade % 4) * 30;
       const baseY = 70 + (cascade % 4) * 24;
@@ -211,7 +211,6 @@ function triggerBloodMode() {
     }
     win.style.zIndex = ++zTop;
 
-    // header
     const header = document.createElement('div');
     header.className = 'window-header';
     header.innerHTML = '<div class="window-dots"><span></span><span></span><span></span></div>' +
@@ -219,7 +218,6 @@ function triggerBloodMode() {
                        '<button class="window-close" aria-label="закрыть">✕</button>';
     win.appendChild(header);
 
-    // body
     const body = document.createElement('div');
     body.className = 'window-body';
     body.appendChild(tpl.content.cloneNode(true));
@@ -228,7 +226,6 @@ function triggerBloodMode() {
     windowsRoot.appendChild(win);
     openWindows[appId] = { el: win, chipEl: null, appId: appId };
 
-    // чип в таскбаре
     if (taskbarWin) {
       const chip = document.createElement('div');
       chip.className = 'taskbar-chip active';
@@ -242,16 +239,11 @@ function triggerBloodMode() {
       });
     }
 
-    // закрытие
     header.querySelector('.window-close').addEventListener('click', function () { closeApp(appId); });
 
-    // drag
     if (!isMobile()) initDrag(win, header);
-
-    // фокус
     win.addEventListener('mousedown', function () { focusWindow(appId); });
 
-    // звуки
     beep(700, 0.06, 'square', 0.05);
     haptic(10);
   }
@@ -307,7 +299,6 @@ function triggerBloodMode() {
     });
   }
 
-  // клики по иконкам
   document.querySelectorAll('.desktop-icon').forEach(function (icon) {
     icon.addEventListener('click', function () { openApp(icon.dataset.app); });
     icon.addEventListener('keydown', function (e) {
@@ -315,7 +306,6 @@ function triggerBloodMode() {
     });
   });
 
-  // глобальный доступ
   window.openApp = openApp;
   window.closeAllWindows = function () {
     Object.keys(openWindows).forEach(function (id) { closeApp(id); });
@@ -364,7 +354,6 @@ function triggerBloodMode() {
         '  ...и ещё есть пара, но их сам ищи ;)'
       ]);
     },
-
     chaos: function () {
       line('> ЗАПУСК ПРОТОКОЛА ХАОСА...', 'err');
       delay(function () { line('> 3...', 'err'); }, 200);
@@ -377,24 +366,12 @@ function triggerBloodMode() {
         }
       }, 1100);
     },
-
     sudo: function () {
-      printLines([
-        'User is not in the sudoers file.',
-        'This incident has been reported 🩸'
-      ], 'err');
+      printLines(['User is not in the sudoers file.', 'This incident has been reported 🩸'], 'err');
     },
-
     sleep: function () {
-      printLines([
-        '> попытка уснуть...',
-        '> ...',
-        '> ошибка: много хочешь',
-        '> иди попей магний',
-        '> это типо метафора(?) на мою бессоницу, я хз'
-      ], 'err');
+      printLines(['> попытка уснуть...', '> ...', '> ошибка: много хочешь', '> иди попей магний', '> это типо метафора(?) на мою бессоницу, я хз'], 'err');
     },
-
     hack: function () {
       line('> взлом пентагона...', '');
       delay(function () { line('> обход firewall... 12%', ''); }, 300);
@@ -406,19 +383,16 @@ function triggerBloodMode() {
         beep(200, 0.2, 'sawtooth', 0.08);
       }, 1900);
     },
-
     coffee: function () {
       line('> варю кофе...', '');
       delay(function () { line('> ...', ''); }, 500);
       delay(function () { line('> ошибка 418: я чайник (что это блять значит????)', 'err'); }, 1000);
     },
-
     matrix: function () {
       line('> waking up...', '');
       delay(function () { line('> follow the white rabbit', ''); }, 400);
       delay(function () { line('> red pill or blue pill?', ''); }, 900);
     },
-
     ping: function () {
       printLines([
         'PING sialens.ru (пусть домен и другой): 56 data bytes',
@@ -430,7 +404,6 @@ function triggerBloodMode() {
         '// это фейк инфа кста👀'
       ]);
     },
-
     whoami: function () {
       printLines([
         '> ты — случайный прохожий, который забрёл сюда',
@@ -438,7 +411,6 @@ function triggerBloodMode() {
         '> уважаю.'
       ]);
     },
-
     ls: function () {
       printLines([
         'голые_фурри.png         insomnia.log       дик_пик.png',
@@ -446,7 +418,6 @@ function triggerBloodMode() {
         'sleep.exe         (не отвечает)'
       ], 'dim');
     },
-
     cats: function () {
       printLines([
         '  /\\_/\\   ',
@@ -455,7 +426,6 @@ function triggerBloodMode() {
         '> мяу.'
       ], '');
     },
-
     clear: function () { termBody.innerHTML = ''; }
   };
 
@@ -519,9 +489,9 @@ function triggerBloodMode() {
   tick(); setInterval(tick, 1000);
 })();
 
-/* ============================================================
-   CANVAS — плавающие масти (Balatro style)
-   ============================================================ */
+// ============================================================
+// CANVAS — плавающие символы
+// ============================================================
 (function initParticles() {
   const canvas = document.getElementById('bg-canvas');
   if (!canvas) return;
@@ -531,17 +501,15 @@ function triggerBloodMode() {
   const isMobile = window.matchMedia('(max-width: 768px)').matches
                 || window.matchMedia('(pointer: coarse)').matches;
 
-  const COUNT = isMobile ? 14 : 28;
+  const COUNT = isMobile ? 16 : 32;
 
-  // Символы мастей + цвета в палитре Balatro
   const SUITS = [
-    { char: '♠', color: '#F0E6D2' }, // крем
-    { char: '♠', color: '#F1C40F' }, // золото
-    { char: '♥', color: '#E74C3C' }, // красный
-    { char: '♦', color: '#E74C3C' }, // красный
-    { char: '♦', color: '#E67E22' }, // оранжевый
-    { char: '♣', color: '#F0E6D2' }, // крем
-    { char: '♣', color: '#F1C40F' }  // золото
+    { char: '✕', color: '#c1121f' },
+    { char: '◆', color: '#e8e4d9' },
+    { char: '▮', color: '#c1121f' },
+    { char: '+', color: '#8b0000' },
+    { char: '⌁', color: '#e8e4d9' },
+    { char: '✕', color: '#ff2e3a' }
   ];
 
   let W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -559,18 +527,18 @@ function triggerBloodMode() {
   function rand(a, b) { return Math.random() * (b - a) + a; }
 
   function createParticle(initY) {
-    const suit = SUITS[Math.floor(Math.random() * SUITS.length)];
+    const s = SUITS[Math.floor(Math.random() * SUITS.length)];
     return {
       x: rand(0, W),
       y: initY ? rand(0, H) : -30,
       vx: rand(-0.15, 0.15),
       vy: rand(0.08, 0.35),
-      size: rand(10, 26),
+      size: rand(12, 28),
       alpha: rand(0.08, 0.22),
       rot: rand(-0.3, 0.3),
       rotSpeed: rand(-0.003, 0.003),
-      char: suit.char,
-      color: suit.color,
+      char: s.char,
+      color: s.color,
       wobble: rand(0, Math.PI * 2),
       wobbleSpeed: rand(0.005, 0.015)
     };
@@ -586,17 +554,12 @@ function triggerBloodMode() {
 
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
-
-      // движение
       p.x += p.vx;
       p.y += p.vy;
       p.rot += p.rotSpeed;
-
-      // лёгкое покачивание влево-вправо
       p.wobble += p.wobbleSpeed;
       const wobbleX = Math.sin(p.wobble) * 0.4;
 
-      // сброс наверх, когда ушёл вниз
       if (p.y > H + 40) {
         p.y = -40;
         p.x = rand(0, W);
@@ -605,13 +568,12 @@ function triggerBloodMode() {
       if (p.x < -50) p.x = W + 50;
       if (p.x > W + 50) p.x = -50;
 
-      // рисуем символ
       ctx.save();
       ctx.translate(p.x + wobbleX, p.y);
       ctx.rotate(p.rot);
       ctx.globalAlpha = p.alpha;
       ctx.fillStyle = p.color;
-      ctx.font = 'bold ' + p.size + 'px "Pixelify Sans", "Arial", sans-serif';
+      ctx.font = 'bold ' + p.size + 'px "VT323", monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(p.char, 0, 0);
@@ -630,7 +592,6 @@ function triggerBloodMode() {
   initParticles();
   draw();
 
-  // пауза когда вкладка неактивна
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) {
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
@@ -641,45 +602,36 @@ function triggerBloodMode() {
 })();
 
 // ============================================================
-// МУЗЫКАЛЬНЫЙ ПЛЕЕР
+// МУЗЫКАЛЬНЫЙ ПЛЕЕР — один трек: War Without Reason
 // ============================================================
-const PLAYLIST = [
-  { src: 'audio/track1.mp3', title: 'Main Theme' },
-  { src: 'audio/track2.mp3', title: 'Glory' },
-  { src: 'audio/track3.mp3', title: 'War Without Reason' }
-];
+const TRACK = {
+  src: 'audio/track3.mp3',
+  title: 'War Without Reason'
+};
 
 (function initMusicPlayer() {
   const btnPlay = document.getElementById('player-play');
-  const btnPrev = document.getElementById('player-prev');
-  const btnNext = document.getElementById('player-next');
   const titleEl = document.getElementById('player-title');
   const statusEl = document.getElementById('player-status');
   const volSlider = document.getElementById('player-vol');
   if (!btnPlay) return;
 
-  let currentIndex = 0, isPlaying = false;
+  let isPlaying = false;
   const audio = new Audio();
-  audio.preload = 'metadata';
-  audio.loop = false;
+  audio.preload = 'auto';
+  audio.loop = true;
+  audio.src = TRACK.src;
   audio.volume = (volSlider ? volSlider.value : 60) / 100;
 
-  function updateTitle() {
-    const t = PLAYLIST[currentIndex];
-    if (titleEl) titleEl.textContent = t ? t.title : 'НЕТ ТРЕКОВ';
-  }
-  function loadTrack(i) {
-    if (!PLAYLIST.length) return;
-    currentIndex = (i + PLAYLIST.length) % PLAYLIST.length;
-    audio.src = PLAYLIST[currentIndex].src;
-    updateTitle();
-  }
+  if (titleEl) titleEl.textContent = TRACK.title;
+
   function setPlayingUI(p) {
     isPlaying = p;
     btnPlay.textContent = p ? '❚❚' : '▶';
     btnPlay.classList.toggle('playing', p);
     if (statusEl) statusEl.textContent = p ? 'играет' : 'пауза';
   }
+
   function play() {
     const pr = audio.play();
     if (pr && pr.catch) {
@@ -690,34 +642,25 @@ const PLAYLIST = [
     }
   }
   function pause() { audio.pause(); setPlayingUI(false); }
-  function next() { loadTrack(currentIndex + 1); if (isPlaying) play(); }
-  function prev() {
-    if (audio.currentTime > 3) { audio.currentTime = 0; return; }
-    loadTrack(currentIndex - 1); if (isPlaying) play();
-  }
 
   btnPlay.addEventListener('click', function () {
     if (isPlaying) pause(); else play();
-    beep(isPlaying ? 900 : 500, 0.06, 'square', 0.05); haptic(10);
+    beep(isPlaying ? 900 : 500, 0.06, 'square', 0.05);
+    haptic(10);
   });
-  if (btnNext) btnNext.addEventListener('click', function () { next(); beep(1000, 0.05, 'square', 0.05); haptic(8); });
-  if (btnPrev) btnPrev.addEventListener('click', function () { prev(); beep(600, 0.05, 'square', 0.05); haptic(8); });
+
   if (volSlider) volSlider.addEventListener('input', function () { audio.volume = volSlider.value / 100; });
-  audio.addEventListener('ended', next);
-  document.addEventListener('visibilitychange', function () { if (document.hidden && isPlaying) pause(); });
 
-  window.startMusicPlayer = function () {
-    if (isPlaying) return;
-    if (!PLAYLIST.length) return;
-    if (!audio.src) loadTrack(0);
-    play();
-  };
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden && isPlaying) pause();
+  });
 
-  updateTitle(); loadTrack(0); setPlayingUI(false);
+  window.startMusicPlayer = function () { if (!isPlaying) play(); };
+  window.stopMusicPlayer  = function () { if (isPlaying) pause(); };
 })();
 
 // ============================================================
-// ЭКРАН ВХОДА
+// ЭКРАН ВХОДА → запуск катсцены
 // ============================================================
 (function initEntryScreen() {
   const entry = document.getElementById('entry-screen');
@@ -726,10 +669,18 @@ const PLAYLIST = [
   function enter() {
     if (entered) return; entered = true;
     entry.classList.add('hide');
-    document.body.classList.add('entered');
-    if (typeof window.startMusicPlayer === 'function') window.startMusicPlayer();
-    if (typeof beep === 'function') beep(1200, 0.1, 'square', 0.07);
-    if (typeof haptic === 'function') haptic([15, 40, 15, 40, 100]);
+    beep(1200, 0.1, 'square', 0.07);
+    haptic([15, 40, 15, 40, 100]);
+
+    setTimeout(function () {
+      if (typeof window.startCutscene === 'function') {
+        window.startCutscene();
+      } else {
+        document.body.classList.add('entered');
+        if (typeof window.startMusicPlayer === 'function') window.startMusicPlayer();
+      }
+    }, 400);
+
     setTimeout(function () { if (entry.parentNode) entry.parentNode.removeChild(entry); }, 900);
   }
   entry.addEventListener('click', enter);
@@ -767,9 +718,9 @@ const PLAYLIST = [
   });
 })();
 
-/* ============================================================
-   МЕНЮ ПУСК
-   ============================================================ */
+// ============================================================
+// МЕНЮ ПУСК
+// ============================================================
 (function initStartMenu() {
   const startBtn = document.getElementById('start-btn');
   const menu = document.getElementById('start-menu');
@@ -830,9 +781,9 @@ const PLAYLIST = [
   });
 })();
 
-/* ============================================================
-   ПРОЩАЛЬНЫЙ ТОСТ
-   ============================================================ */
+// ============================================================
+// ПРОЩАЛЬНЫЙ ТОСТ
+// ============================================================
 (function initFarewell() {
   let shown = false;
   let cooldown = null;
@@ -845,20 +796,18 @@ const PLAYLIST = [
     cooldown = setTimeout(function () { shown = false; }, 60000);
   }
 
-  // ПК: курсор уходит вверх за пределы окна
   document.addEventListener('mouseleave', function (e) {
     if (e.clientY <= 0) farewell();
   });
 
-  // Мобила: вкладка скрылась
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) farewell();
   });
 })();
 
-/* ============================================================
-   СВОРАЧИВАНИЕ ПЛЕЕРА
-   ============================================================ */
+// ============================================================
+// СВОРАЧИВАНИЕ ПЛЕЕРА
+// ============================================================
 (function initPlayerMinimize() {
   const player = document.getElementById('player');
   const minimizeBtn = document.getElementById('player-minimize');
@@ -882,15 +831,12 @@ const PLAYLIST = [
 
   function syncIconState() {
     const btnPlay = document.getElementById('player-play');
-    if (btnPlay) {
-      icon.classList.toggle('playing', btnPlay.classList.contains('playing'));
-    }
+    if (btnPlay) icon.classList.toggle('playing', btnPlay.classList.contains('playing'));
   }
 
   minimizeBtn.addEventListener('click', minimize);
   icon.addEventListener('click', expand);
 
-  // Синхронизируем цвет иконки с состоянием плеера
   const btnPlay = document.getElementById('player-play');
   if (btnPlay) {
     const obs = new MutationObserver(syncIconState);
@@ -898,39 +844,38 @@ const PLAYLIST = [
   }
 })();
 
-/* ============================================================
-   ПЛАВНОЕ КАЧАНИЕ ЛОГО (синусоида, без рывков)
-   ============================================================ */
+// ============================================================
+// ПЛАВНОЕ КАЧАНИЕ ЛОГО (только лого)
+// ============================================================
 (function initLogoMotion() {
   const logo = document.querySelector('.wallpaper-logo');
   if (!logo) return;
-   
-  // настройки: амплитуда и скорость
-  const LOGO_Y_AMP     = 12;     // вверх-вниз, px
-  const LOGO_ROT_AMP   = 2.2;    // наклон, градусы
-  const LOGO_SCALE_AMP = 0.025;  // «дыхание», от 1
-  const LOGO_SPEED     = 0.0005; // радиан/мс — больше = быстрее
+
+  const LOGO_Y_AMP     = 12;
+  const LOGO_ROT_AMP   = 2.2;
+  const LOGO_SCALE_AMP = 0.025;
+  const LOGO_SPEED     = 0.0005;
 
   let start = null;
   let rafId = null;
 
   function tick(ts) {
     if (!start) start = ts;
-    const t = (ts - start);
+    const t = ts - start;
 
-    if (logo) {
-      const y = Math.sin(t * LOGO_SPEED * Math.PI * 2) * LOGO_Y_AMP;
-      const rot = Math.sin(t * LOGO_SPEED * Math.PI * 2 + Math.PI * 0.5) * LOGO_ROT_AMP;
-      const scale = 1 + Math.sin(t * LOGO_SPEED * Math.PI * 2 + Math.PI) * LOGO_SCALE_AMP;
+    const y = Math.sin(t * LOGO_SPEED * Math.PI * 2) * LOGO_Y_AMP;
+    const rot = Math.sin(t * LOGO_SPEED * Math.PI * 2 + Math.PI * 0.5) * LOGO_ROT_AMP;
+    const scale = 1 + Math.sin(t * LOGO_SPEED * Math.PI * 2 + Math.PI) * LOGO_SCALE_AMP;
+
+    // не перезаписываем transform, если glitch активен
+    if (!logo.dataset.glitching) {
       logo.style.transform = 'translateY(' + y.toFixed(2) + 'px) rotate(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
     }
-
     rafId = requestAnimationFrame(tick);
   }
 
   rafId = requestAnimationFrame(tick);
 
-  // пауза, когда вкладка неактивна
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) {
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
@@ -939,4 +884,132 @@ const PLAYLIST = [
       rafId = requestAnimationFrame(tick);
     }
   });
+})();
+
+// ============================================================
+// CUTSCENE — War Without Reason
+// ============================================================
+const INTRO_SOUND_1 = 'audio/intro1.mp3'; // первый звук
+const INTRO_SOUND_2 = 'audio/intro2.mp3'; // второй звук
+
+(function initCutscene() {
+  const cutscene = document.getElementById('cutscene-screen');
+  if (!cutscene) return;
+
+  const lines = cutscene.querySelectorAll('.cutscene-line');
+  const title = cutscene.querySelector('.cutscene-title');
+  const subtitle = cutscene.querySelector('.cutscene-subtitle');
+
+  let timers = [];
+  let skipped = false;
+
+  // готовим звуки
+  const s1 = new Audio(INTRO_SOUND_1);
+  s1.preload = 'auto';
+  const s2 = new Audio(INTRO_SOUND_2);
+  s2.preload = 'auto';
+
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function clearAll() {
+    timers.forEach(clearTimeout);
+    timers = [];
+    try { s1.pause(); } catch (e) {}
+    try { s2.pause(); } catch (e) {}
+  }
+
+  function playSound(a, vol) {
+    if (!soundEnabled) return;
+    try {
+      a.volume = vol;
+      a.currentTime = 0;
+      const pr = a.play();
+      if (pr && pr.catch) pr.catch(function () {});
+    } catch (e) {}
+  }
+
+  function finish() {
+    if (skipped) return;
+    skipped = true;
+    clearAll();
+    cutscene.classList.add('hide');
+    document.body.classList.add('entered');
+    setTimeout(function () {
+      if (cutscene.parentNode) cutscene.parentNode.removeChild(cutscene);
+    }, 900);
+  }
+
+  function play() {
+    cutscene.classList.add('active');
+    if (typeof initAudio === 'function') initAudio();
+
+    // ============ ДВА ЗВУКА ============
+
+    // первый — на 0.3s
+    later(function () {
+      playSound(s1, 1);
+      haptic(60);
+    }, 300);
+
+    // второй — на 1.1s
+    later(function () {
+      playSound(s2, 1);
+      haptic(50);
+    }, 1100);
+
+    // ============ МУЗЫКА — на 1.8s ============
+    later(function () {
+      if (typeof window.startMusicPlayer === 'function') window.startMusicPlayer();
+    }, 1800);
+
+    // ============ ТЕКСТЫ ============
+
+    later(function () { lines[0].classList.add('show'); beep(320, 0.18, 'sawtooth', 0.07); }, 2200);
+    later(function () { lines[1].classList.add('show'); beep(420, 0.18, 'sawtooth', 0.07); }, 3800);
+    later(function () { lines[2].classList.add('show'); beep(520, 0.18, 'sawtooth', 0.07); }, 5000);
+    later(function () { lines[3].classList.add('show'); beep(620, 0.18, 'sawtooth', 0.07); }, 6200);
+
+    // тряска + вспышка
+    later(function () {
+      cutscene.classList.add('shake', 'flash-red');
+      haptic([40, 60, 40, 60, 120]);
+      beep(120, 0.6, 'sawtooth', 0.11);
+      beep(80, 0.8, 'sawtooth', 0.11);
+      lines.forEach(function (l) { l.classList.add('flash'); });
+      setTimeout(function () { cutscene.classList.remove('shake', 'flash-red'); }, 900);
+    }, 7600);
+
+    // прячем строки
+    later(function () { lines.forEach(function (l) { l.classList.remove('show'); }); }, 8600);
+
+    // титр SIALENS
+    later(function () {
+      title.classList.add('show', 'glitch');
+      beep(880, 0.35, 'square', 0.09);
+      beep(1320, 0.3, 'square', 0.07);
+      haptic([50, 80, 50, 80, 200]);
+      setTimeout(function () { title.classList.remove('glitch'); }, 1200);
+    }, 9000);
+
+    // подзаголовок
+    later(function () {
+      subtitle.classList.add('show');
+      beep(660, 0.2, 'square', 0.07);
+    }, 11200);
+
+    // финал
+    later(function () { finish(); }, 13500);
+  }
+
+  cutscene.addEventListener('click', finish);
+  cutscene.addEventListener('touchstart', finish, { passive: true });
+  document.addEventListener('keydown', function (e) {
+    if (cutscene.classList.contains('active') && !skipped) {
+      if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        finish();
+      }
+    }
+  });
+
+  window.startCutscene = play;
 })();
