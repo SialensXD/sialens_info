@@ -780,9 +780,9 @@ function triggerBloodMode() {
   const logo = document.querySelector('.wallpaper-logo');
   if (!logo) return;
 
-  const LOGO_Y_AMP     = 12;
-  const LOGO_ROT_AMP   = 2.2;
-  const LOGO_SCALE_AMP = 0.025;
+  const LOGO_Y_AMP     = 7;
+  const LOGO_ROT_AMP   = 1.5;
+  const LOGO_SCALE_AMP = 0.015;
   const LOGO_SPEED     = 0.0005;
 
   let start = null;
