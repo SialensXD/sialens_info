@@ -904,7 +904,7 @@ const INTRO_FILES = [
 
     // 1. СИРЕНА
     later(function () {
-      playSound(sounds[0], 1);
+      playSound(sounds[0], 1, 800);
       haptic(60);
       lines[0].classList.add('show');
       beep(320, 0.18, 'sawtooth', 0.07);
@@ -912,7 +912,7 @@ const INTRO_FILES = [
 
     // 2. РЁВ ЗЕМЛЕДВИГА
     later(function () {
-      playSound(sounds[1], 1);
+      playSound(sounds[1], 1, 1000);
       haptic(90);
       lines[0].classList.remove('show');
       lines[1].classList.add('show');
