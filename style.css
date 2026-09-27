@@ -1593,19 +1593,18 @@ body.shutting-down .shutdown-overlay {
   .cutscene-skip { font-size: 12px; bottom: 24px; }
 }
 
-/* финальная белая вспышка катсцены */
 .cutscene-screen.flash-white::after {
   content: '';
   position: absolute; inset: 0;
   background: #fff;
   pointer-events: none;
   z-index: 5;
-  animation: cutscene-white-flash 0.7s ease forwards;
+  animation: cutscene-white-flash 2.5s ease forwards;
 }
 @keyframes cutscene-white-flash {
   0%   { opacity: 0; }
-  20%  { opacity: 1; }
-  60%  { opacity: 0.9; }
+  3%   { opacity: 1; }
+  90%  { opacity: 1; }
   100% { opacity: 0; }
 }
 
