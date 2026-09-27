@@ -967,7 +967,7 @@ const INTRO_FILES = [
       beep(120, 0.6, 'sawtooth', 0.11);
       beep(80, 0.8, 'sawtooth', 0.11);
       setTimeout(function () { cutscene.classList.remove('shake', 'flash-red'); }, 900);
-    }, 9800); // ← вот это число, поставь сколько нужно
+    }, 9550); // ← вот это число, поставь сколько нужно
 
     // 5. ФИНАЛ: сайт открывается сразу под белой вспышкой
     later(function () {
