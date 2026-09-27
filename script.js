@@ -12,7 +12,7 @@ const bgAudio = new Audio();
 bgAudio.preload = 'auto';
 bgAudio.loop = true;
 bgAudio.src = 'audio/track3.mp3';
-bgAudio.volume = 0.5;
+bgAudio.volume = 0.85;
 
 function startBackgroundMusic() {
   if (!soundEnabled) return;
@@ -876,16 +876,29 @@ const INTRO_FILES = [
   } catch (e) {}
   }
 
-  function finish() {
+  function finish(userSkip) {
     if (skipped) return;
     skipped = true;
-    clearAll();
-    cutscene.classList.add('hide');
-    document.body.classList.add('entered');
-    startBackgroundMusic();
-    setTimeout(function () {
-      if (cutscene.parentNode) cutscene.parentNode.removeChild(cutscene);
-    }, 900);
+    timers.forEach(clearTimeout);
+    timers = [];
+
+    if (userSkip) {
+    // если скипнули — глушим всё
+      sounds.forEach(function (a) { try { a.pause(); } catch (e) {} });
+    } else {
+    // если катсцена закончилась сама — глушим всё кроме взрыва (sounds[3])
+      sounds.forEach(function (a, i) {
+        if (i < 3) { try { a.pause(); } catch (e) {} }
+      });
+    }
+
+  cutscene.classList.add('hide');
+  document.body.classList.add('entered');
+  startBackgroundMusic();
+
+  setTimeout(function () {
+    if (cutscene.parentNode) cutscene.parentNode.removeChild(cutscene);
+  }, 1200);
   }
 
   function play() {
@@ -953,17 +966,17 @@ const INTRO_FILES = [
 
     // 5. ФИНАЛ: сайт открывается сразу под белой вспышкой
     later(function () {
-      finish(); // открывает сайт + стартует WWoR
-    }, 9600);  
+      finish(false); // открывает сайт + стартует WWoR
+    }, 11500);  
   }
 
-  cutscene.addEventListener('click', finish);
-  cutscene.addEventListener('touchstart', finish, { passive: true });
+  cutscene.addEventListener('click', function () { finish(true); });
+  cutscene.addEventListener('touchstart', function () { finish(true); }, { passive: true });
   document.addEventListener('keydown', function (e) {
     if (cutscene.classList.contains('active') && !skipped) {
       if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
-        finish();
+        finish(true);
       }
     }
   });
