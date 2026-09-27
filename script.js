@@ -849,14 +849,31 @@ const INTRO_FILES = [
     sounds.forEach(function (a) { try { a.pause(); } catch (e) {} });
   }
 
-  function playSound(a, vol) {
-    if (!soundEnabled) return;
-    try {
-      a.volume = vol || 1;
-      a.currentTime = 0;
-      const pr = a.play();
-      if (pr && pr.catch) pr.catch(function () {});
-    } catch (e) {}
+  function playSound(a, vol, fadeInMs) {
+  if (!soundEnabled) return;
+  try {
+    const targetVol = vol || 1;
+    a.volume = fadeInMs ? 0 : targetVol;
+    a.currentTime = 0;
+    const pr = a.play();
+    if (pr && pr.catch) pr.catch(function () {});
+
+    if (fadeInMs && fadeInMs > 0) {
+      const steps = 30;
+      const stepTime = fadeInMs / steps;
+      const volStep = targetVol / steps;
+      let i = 0;
+      const fade = setInterval(function () {
+        i++;
+        if (i >= steps) {
+          a.volume = targetVol;
+          clearInterval(fade);
+        } else {
+          a.volume = Math.min(targetVol, volStep * i);
+        }
+      }, stepTime);
+    }
+  } catch (e) {}
   }
 
   function finish() {
