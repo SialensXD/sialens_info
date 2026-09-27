@@ -66,7 +66,7 @@ if (soundBtn) {
   soundBtn.addEventListener('click', function () {
     soundEnabled = !soundEnabled;
     soundBtn.classList.toggle('on', soundEnabled);
-    soundBtn.textContent = soundEnabled ? '◉ Звуки' : '○ Звуки';
+    soundBtn.textContent = soundEnabled ? '◉ Звук' : '○ Звук';
     if (soundEnabled) {
       initAudio();
       beep(900, 0.08, 'square', 0.05);
@@ -440,8 +440,7 @@ function triggerBloodMode() {
     ls: function () {
       printLines([
         'голые_фурри.png         insomnia.log       дик_пик.png',
-        'memories/          bots/              homework(пусто)',
-        'sleep.exe         (не отвечает)'
+        'memories/          bots/              homework(пусто)'
       ], 'dim');
     },
     cats: function () {
@@ -663,9 +662,9 @@ function triggerBloodMode() {
 // ============================================================
 (function initSecretWords() {
   const WORDS = {
-    chaos:     { toast: '// CHAOS UNLOCKED //',   blood: true },
-    ultrakill: { toast: '// V1 APPROVES //',      blood: true },
-    sialens:   { toast: '// ДОБРО ПОЖАЛОВАТЬ, КЛОН //', blood: false }
+    chaos:     { toast: '// хаос.. хаос.. 👀👀 //',   blood: true },
+    ultrakill: { toast: '// да, он самый //',      blood: true },
+    sialens:   { toast: '// мб что-то по оригинальнее? //', blood: false }
   };
   const MAX = 20;
   let buffer = '';
