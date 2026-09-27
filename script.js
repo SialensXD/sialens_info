@@ -1,11 +1,27 @@
 /* ============================================================
-   SIALENS OS — script.js v3.0
-   ULTRAKILL EDITION // War Without Reason cutscene
+   SIALENS OS — script.js v4.0
+   ULTRAKILL EDITION // War Without Reason
    ============================================================ */
 
 // ---------- АУДИО ----------
 let audioCtx = null;
 let soundEnabled = true;
+
+// фоновая музыка — War Without Reason (loop, без UI)
+const bgAudio = new Audio();
+bgAudio.preload = 'auto';
+bgAudio.loop = true;
+bgAudio.src = 'audio/track3.mp3';
+bgAudio.volume = 0.5;
+
+function startBackgroundMusic() {
+  if (!soundEnabled) return;
+  const pr = bgAudio.play();
+  if (pr && pr.catch) pr.catch(function () {});
+}
+function stopBackgroundMusic() {
+  try { bgAudio.pause(); } catch (e) {}
+}
 
 function initAudio() {
   if (audioCtx) return;
@@ -43,7 +59,7 @@ document.querySelectorAll('[data-sound-hover]').forEach(function (el) {
   el.addEventListener('mouseenter', function () { beep(1200, 0.04, 'square', 0.025); });
 });
 
-// ---------- КНОПКА ЗВУКА ----------
+// ---------- КНОПКА ЗВУКА (управляет и бипами, и музыкой) ----------
 const soundBtn = document.getElementById('sound-toggle');
 if (soundBtn) {
   soundBtn.classList.add('on');
@@ -51,7 +67,17 @@ if (soundBtn) {
     soundEnabled = !soundEnabled;
     soundBtn.classList.toggle('on', soundEnabled);
     soundBtn.textContent = soundEnabled ? '◉ Звуки' : '○ Звуки';
-    if (soundEnabled) { initAudio(); beep(900, 0.08, 'square', 0.05); haptic(12); }
+    if (soundEnabled) {
+      initAudio();
+      beep(900, 0.08, 'square', 0.05);
+      haptic(12);
+      // возобновляем музыку, если она уже была запущена и на паузе
+      if (bgAudio.currentTime > 0 && bgAudio.paused) {
+        bgAudio.play().catch(function () {});
+      }
+    } else {
+      stopBackgroundMusic();
+    }
   });
 }
 
@@ -602,64 +628,6 @@ function triggerBloodMode() {
 })();
 
 // ============================================================
-// МУЗЫКАЛЬНЫЙ ПЛЕЕР — один трек: War Without Reason
-// ============================================================
-const TRACK = {
-  src: 'audio/track3.mp3',
-  title: 'War Without Reason'
-};
-
-(function initMusicPlayer() {
-  const btnPlay = document.getElementById('player-play');
-  const titleEl = document.getElementById('player-title');
-  const statusEl = document.getElementById('player-status');
-  const volSlider = document.getElementById('player-vol');
-  if (!btnPlay) return;
-
-  let isPlaying = false;
-  const audio = new Audio();
-  audio.preload = 'auto';
-  audio.loop = true;
-  audio.src = TRACK.src;
-  audio.volume = (volSlider ? volSlider.value : 60) / 100;
-
-  if (titleEl) titleEl.textContent = TRACK.title;
-
-  function setPlayingUI(p) {
-    isPlaying = p;
-    btnPlay.textContent = p ? '❚❚' : '▶';
-    btnPlay.classList.toggle('playing', p);
-    if (statusEl) statusEl.textContent = p ? 'играет' : 'пауза';
-  }
-
-  function play() {
-    const pr = audio.play();
-    if (pr && pr.catch) {
-      pr.then(function () { setPlayingUI(true); }).catch(function () {
-        setPlayingUI(false);
-        if (statusEl) statusEl.textContent = 'файл не найден';
-      });
-    }
-  }
-  function pause() { audio.pause(); setPlayingUI(false); }
-
-  btnPlay.addEventListener('click', function () {
-    if (isPlaying) pause(); else play();
-    beep(isPlaying ? 900 : 500, 0.06, 'square', 0.05);
-    haptic(10);
-  });
-
-  if (volSlider) volSlider.addEventListener('input', function () { audio.volume = volSlider.value / 100; });
-
-  document.addEventListener('visibilitychange', function () {
-    if (document.hidden && isPlaying) pause();
-  });
-
-  window.startMusicPlayer = function () { if (!isPlaying) play(); };
-  window.stopMusicPlayer  = function () { if (isPlaying) pause(); };
-})();
-
-// ============================================================
 // ЭКРАН ВХОДА → запуск катсцены
 // ============================================================
 (function initEntryScreen() {
@@ -677,7 +645,7 @@ const TRACK = {
         window.startCutscene();
       } else {
         document.body.classList.add('entered');
-        if (typeof window.startMusicPlayer === 'function') window.startMusicPlayer();
+        startBackgroundMusic();
       }
     }, 400);
 
@@ -690,7 +658,7 @@ const TRACK = {
 })();
 
 // ============================================================
-// ПАСХАЛКА — секретные слова на клавиатуре
+// ПАСХАЛКА — секретные слова
 // ============================================================
 (function initSecretWords() {
   const WORDS = {
@@ -806,45 +774,6 @@ const TRACK = {
 })();
 
 // ============================================================
-// СВОРАЧИВАНИЕ ПЛЕЕРА
-// ============================================================
-(function initPlayerMinimize() {
-  const player = document.getElementById('player');
-  const minimizeBtn = document.getElementById('player-minimize');
-  const icon = document.getElementById('player-icon');
-  if (!player || !minimizeBtn || !icon) return;
-
-  function minimize() {
-    player.classList.add('hidden');
-    icon.classList.add('show');
-    syncIconState();
-    beep(500, 0.06, 'square', 0.05);
-    haptic(8);
-  }
-
-  function expand() {
-    player.classList.remove('hidden');
-    icon.classList.remove('show');
-    beep(900, 0.06, 'square', 0.05);
-    haptic(8);
-  }
-
-  function syncIconState() {
-    const btnPlay = document.getElementById('player-play');
-    if (btnPlay) icon.classList.toggle('playing', btnPlay.classList.contains('playing'));
-  }
-
-  minimizeBtn.addEventListener('click', minimize);
-  icon.addEventListener('click', expand);
-
-  const btnPlay = document.getElementById('player-play');
-  if (btnPlay) {
-    const obs = new MutationObserver(syncIconState);
-    obs.observe(btnPlay, { attributes: true, attributeFilter: ['class'] });
-  }
-})();
-
-// ============================================================
 // ПЛАВНОЕ КАЧАНИЕ ЛОГО (только лого)
 // ============================================================
 (function initLogoMotion() {
@@ -867,7 +796,6 @@ const TRACK = {
     const rot = Math.sin(t * LOGO_SPEED * Math.PI * 2 + Math.PI * 0.5) * LOGO_ROT_AMP;
     const scale = 1 + Math.sin(t * LOGO_SPEED * Math.PI * 2 + Math.PI) * LOGO_SCALE_AMP;
 
-    // не перезаписываем transform, если glitch активен
     if (!logo.dataset.glitching) {
       logo.style.transform = 'translateY(' + y.toFixed(2) + 'px) rotate(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
     }
@@ -889,8 +817,12 @@ const TRACK = {
 // ============================================================
 // CUTSCENE — War Without Reason
 // ============================================================
-const INTRO_SOUND_1 = 'audio/intro1.mp3'; // первый звук
-const INTRO_SOUND_2 = 'audio/intro2.mp3'; // второй звук
+const INTRO_FILES = [
+  'audio/intro1.mp3', // 1. СИРЕНА (3 сек)
+  'audio/intro2.mp3', // 2. РЁВ ЗЕМЛЕДВИГА (5 сек)
+  'audio/intro3.mp3', // 3. ЗАРЯДКА РЕЛЬСАТРОНА (1 сек)
+  'audio/intro4.mp3'  // 4. ВЗРЫВ
+];
 
 (function initCutscene() {
   const cutscene = document.getElementById('cutscene-screen');
@@ -903,24 +835,24 @@ const INTRO_SOUND_2 = 'audio/intro2.mp3'; // второй звук
   let timers = [];
   let skipped = false;
 
-  // готовим звуки
-  const s1 = new Audio(INTRO_SOUND_1);
-  s1.preload = 'auto';
-  const s2 = new Audio(INTRO_SOUND_2);
-  s2.preload = 'auto';
+  const sounds = INTRO_FILES.map(function (src) {
+    const a = new Audio();
+    a.preload = 'auto';
+    a.src = src;
+    return a;
+  });
 
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
   function clearAll() {
     timers.forEach(clearTimeout);
     timers = [];
-    try { s1.pause(); } catch (e) {}
-    try { s2.pause(); } catch (e) {}
+    sounds.forEach(function (a) { try { a.pause(); } catch (e) {} });
   }
 
   function playSound(a, vol) {
     if (!soundEnabled) return;
     try {
-      a.volume = vol;
+      a.volume = vol || 1;
       a.currentTime = 0;
       const pr = a.play();
       if (pr && pr.catch) pr.catch(function () {});
@@ -933,6 +865,7 @@ const INTRO_SOUND_2 = 'audio/intro2.mp3'; // второй звук
     clearAll();
     cutscene.classList.add('hide');
     document.body.classList.add('entered');
+    startBackgroundMusic();
     setTimeout(function () {
       if (cutscene.parentNode) cutscene.parentNode.removeChild(cutscene);
     }, 900);
@@ -942,62 +875,79 @@ const INTRO_SOUND_2 = 'audio/intro2.mp3'; // второй звук
     cutscene.classList.add('active');
     if (typeof initAudio === 'function') initAudio();
 
-    // ============ ДВА ЗВУКА ============
+    // ============================================================
+    // ТАЙМЛАЙН (все числа в ms — можно крутить)
+    // ============================================================
+    // 0.3s    → intro1 СИРЕНА (играет ~3 сек)
+    // 3.3s    → intro2 РЁВ ЗЕМЛЕДВИГА (играет ~5 сек)
+    // 8.3s    → intro3 ЗАРЯДКА РЕЛЬСАТРОНА (играет ~1 сек)
+    // 9.3s    → intro4 ВЗРЫВ
+    // 12.0s   → БЕЛАЯ ВСПЫШКА + открытие сайта + старт WWoR
+    // ============================================================
 
-    // первый — на 0.3s
+    // 1. СИРЕНА
     later(function () {
-      playSound(s1, 1);
+      playSound(sounds[0], 1);
       haptic(60);
+      lines[0].classList.add('show');
+      beep(320, 0.18, 'sawtooth', 0.07);
     }, 300);
 
-    // второй — на 1.1s
+    // 2. РЁВ ЗЕМЛЕДВИГА
     later(function () {
-      playSound(s2, 1);
-      haptic(50);
-    }, 1100);
+      playSound(sounds[1], 1);
+      haptic(90);
+      lines[0].classList.remove('show');
+      lines[1].classList.add('show');
+      beep(420, 0.18, 'sawtooth', 0.07);
+    }, 3300);
 
-    // ============ МУЗЫКА — на 1.8s ============
+    // тексты во время рёва
     later(function () {
-      if (typeof window.startMusicPlayer === 'function') window.startMusicPlayer();
-    }, 1800);
+      lines[1].classList.remove('show');
+      lines[2].classList.add('show');
+      beep(520, 0.18, 'sawtooth', 0.07);
+    }, 5500);
 
-    // ============ ТЕКСТЫ ============
-
-    later(function () { lines[0].classList.add('show'); beep(320, 0.18, 'sawtooth', 0.07); }, 2200);
-    later(function () { lines[1].classList.add('show'); beep(420, 0.18, 'sawtooth', 0.07); }, 3800);
-    later(function () { lines[2].classList.add('show'); beep(520, 0.18, 'sawtooth', 0.07); }, 5000);
-    later(function () { lines[3].classList.add('show'); beep(620, 0.18, 'sawtooth', 0.07); }, 6200);
-
-    // тряска + вспышка
     later(function () {
+      lines[2].classList.remove('show');
+      lines[3].classList.add('show');
+      beep(620, 0.18, 'sawtooth', 0.07);
+    }, 7300);
+
+    // 3. ЗАРЯДКА РЕЛЬСАТРОНА
+    later(function () {
+      playSound(sounds[2], 1);
+      haptic(40);
+      cutscene.classList.add('shake-small');
+      setTimeout(function () { cutscene.classList.remove('shake-small'); }, 900);
+    }, 8300);
+
+    // 4. ВЗРЫВ
+    later(function () {
+      playSound(sounds[3], 1);
+      haptic([100, 50, 200, 50, 300]);
       cutscene.classList.add('shake', 'flash-red');
-      haptic([40, 60, 40, 60, 120]);
+      lines.forEach(function (l) { l.classList.add('flash'); });
       beep(120, 0.6, 'sawtooth', 0.11);
       beep(80, 0.8, 'sawtooth', 0.11);
-      lines.forEach(function (l) { l.classList.add('flash'); });
       setTimeout(function () { cutscene.classList.remove('shake', 'flash-red'); }, 900);
-    }, 7600);
+    }, 9300);
 
     // прячем строки
-    later(function () { lines.forEach(function (l) { l.classList.remove('show'); }); }, 8600);
-
-    // титр SIALENS
     later(function () {
-      title.classList.add('show', 'glitch');
-      beep(880, 0.35, 'square', 0.09);
-      beep(1320, 0.3, 'square', 0.07);
-      haptic([50, 80, 50, 80, 200]);
-      setTimeout(function () { title.classList.remove('glitch'); }, 1200);
-    }, 9000);
+      lines.forEach(function (l) { l.classList.remove('show'); });
+    }, 10800);
 
-    // подзаголовок
+    // 5. ФИНАЛ: БЕЛАЯ ВСПЫШКА + САЙТ + WWOR
     later(function () {
-      subtitle.classList.add('show');
-      beep(660, 0.2, 'square', 0.07);
-    }, 11200);
-
-    // финал
-    later(function () { finish(); }, 13500);
+      cutscene.classList.add('flash-white');
+      haptic([200]);
+      beep(1400, 0.5, 'square', 0.1);
+      setTimeout(function () {
+        finish(); // открывает сайт + стартует WWoR
+      }, 250);
+    }, 12000);
   }
 
   cutscene.addEventListener('click', finish);
