@@ -1597,7 +1597,7 @@ body.shutting-down .shutdown-overlay {
   background: #fff;
   pointer-events: none;
   z-index: 5;
-  animation: cutscene-white-flash 2.5s ease forwards;
+  animation: cutscene-white-flash 3.2s ease forwards;
 }
 @keyframes cutscene-white-flash {
   0%   { opacity: 0; }
