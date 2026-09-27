@@ -954,16 +954,20 @@ const INTRO_FILES = [
       setTimeout(function () { cutscene.classList.remove('shake-small'); }, 900);
     }, 8300);
 
-    // 4. ВЗРЫВ + БЕЛАЯ ВСПЫШКА ОДНОВРЕМЕННО
+    // 4a. ЗВУК ВЗРЫВА — стартует раньше
     later(function () {
       playSound(sounds[3], 1);
       haptic([100, 50, 200, 50, 300]);
+    }, 9300);
+
+    // 4b. ВСПЫШКА + ТРЯСКА — в момент удара
+    later(function () {
       cutscene.classList.add('shake', 'flash-red', 'flash-white');
       lines.forEach(function (l) { l.classList.add('flash'); });
       beep(120, 0.6, 'sawtooth', 0.11);
       beep(80, 0.8, 'sawtooth', 0.11);
       setTimeout(function () { cutscene.classList.remove('shake', 'flash-red'); }, 900);
-    }, 9300);
+    }, 9800); // ← вот это число, поставь сколько нужно
 
     // 5. ФИНАЛ: сайт открывается сразу под белой вспышкой
     later(function () {
