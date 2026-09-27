@@ -965,7 +965,7 @@ const INTRO_FILES = [
     // 5. ФИНАЛ: сайт открывается сразу под белой вспышкой
     later(function () {
       finish(false); // открывает сайт + стартует WWoR
-    }, 11500);  
+    }, 12000);  
   }
 
   cutscene.addEventListener('click', function () { finish(true); });
