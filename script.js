@@ -923,31 +923,21 @@ const INTRO_FILES = [
       setTimeout(function () { cutscene.classList.remove('shake-small'); }, 900);
     }, 8300);
 
-    // 4. ВЗРЫВ
+    // 4. ВЗРЫВ + БЕЛАЯ ВСПЫШКА ОДНОВРЕМЕННО
     later(function () {
       playSound(sounds[3], 1);
       haptic([100, 50, 200, 50, 300]);
-      cutscene.classList.add('shake', 'flash-red');
+      cutscene.classList.add('shake', 'flash-red', 'flash-white');
       lines.forEach(function (l) { l.classList.add('flash'); });
       beep(120, 0.6, 'sawtooth', 0.11);
       beep(80, 0.8, 'sawtooth', 0.11);
       setTimeout(function () { cutscene.classList.remove('shake', 'flash-red'); }, 900);
     }, 9300);
 
-    // прячем строки
+    // 5. ФИНАЛ: сайт открывается сразу под белой вспышкой
     later(function () {
-      lines.forEach(function (l) { l.classList.remove('show'); });
-    }, 10800);
-
-    // 5. ФИНАЛ: БЕЛАЯ ВСПЫШКА + САЙТ + WWOR
-    later(function () {
-      cutscene.classList.add('flash-white');
-      haptic([200]);
-      beep(1400, 0.5, 'square', 0.1);
-      setTimeout(function () {
-        finish(); // открывает сайт + стартует WWoR
-      }, 250);
-    }, 12000);
+      finish(); // открывает сайт + стартует WWoR
+    }, 9600);  
   }
 
   cutscene.addEventListener('click', finish);
