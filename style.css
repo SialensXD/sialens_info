@@ -222,6 +222,12 @@ body::before {
   transition: opacity 0.5s ease;
 }
 
+.entry-screen.hide {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
 .entry-logo {
   font-family: 'VT323', monospace; font-weight: 400;
   font-size: clamp(58px, 14vw, 116px); letter-spacing: 4px;
