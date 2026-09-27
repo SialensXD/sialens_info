@@ -760,7 +760,7 @@ function triggerBloodMode() {
   function farewell() {
     if (shown) return;
     shown = true;
-    showToast('// возвращайся 👋');
+    showToast('// where are you going?);
     clearTimeout(cooldown);
     cooldown = setTimeout(function () { shown = false; }, 60000);
   }
