@@ -3,6 +3,17 @@
    «MANKIND IS DEAD. BLOOD IS FUEL. HELL IS FULL.»
    ============================================================ */
 
+/* ============================================================
+   КАСТОМНЫЙ ШРИФТ — VCR OSD Mono
+   ============================================================ */
+@font-face {
+  font-family: 'VCR OSD Mono';
+  src: url('fonts/vcr.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* АД */
   --void:       #050203;
