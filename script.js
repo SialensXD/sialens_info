@@ -759,7 +759,7 @@ function triggerBloodMode() {
   function farewell() {
     if (shown) return;
     shown = true;
-    showToast('// where are you going?);
+    showToast('// where are you going?');
     clearTimeout(cooldown);
     cooldown = setTimeout(function () { shown = false; }, 60000);
   }
@@ -971,7 +971,7 @@ const INTRO_FILES = [
     // 5. ФИНАЛ: сайт открывается сразу под белой вспышкой
     later(function () {
       finish(false); // открывает сайт + стартует WWoR
-    }, 12000);  
+    }, 12450);  
   }
 
   cutscene.addEventListener('click', function () { finish(true); });
