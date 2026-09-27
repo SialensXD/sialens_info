@@ -1,52 +1,46 @@
-/* ============================================================
-   SIALENS OS — script.js v4.0
-   ULTRAKILL EDITION // War Without Reason
-   ============================================================ */
-
-// ---------- АУДИО ----------
 let audioCtx = null;
 let soundEnabled = true;
 
-// фоновая музыка — War Without Reason (loop, без UI)
-const bgAudio = new Audio();
+const bgAudio = new Audio('audio/track3.mp3');
 bgAudio.preload = 'auto';
 bgAudio.loop = true;
-bgAudio.src = 'audio/track3.mp3';
 bgAudio.volume = 0.85;
 
 function startBackgroundMusic() {
   if (!soundEnabled) return;
-  const pr = bgAudio.play();
-  if (pr && pr.catch) pr.catch(function () {});
+  bgAudio.play().catch(() => {});
 }
+
 function stopBackgroundMusic() {
   try { bgAudio.pause(); } catch (e) {}
 }
 
 function initAudio() {
   if (audioCtx) return;
-  try {
-    const Ctx = window.AudioContext || window.webkitAudioContext;
-    if (Ctx) audioCtx = new Ctx();
-  } catch (e) { console.warn('Audio unavailable'); }
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (Ctx) {
+    try { audioCtx = new Ctx(); } catch (e) {}
+  }
 }
 
-function beep(freq, dur, type, vol) {
-  freq = freq || 800; dur = dur || 0.06;
-  type = type || 'square'; vol = (vol || 0.04) * 3;
+function beep(freq = 800, dur = 0.06, type = 'square', vol = 0.04) {
   if (!soundEnabled || !audioCtx) return;
+  vol *= 3;
   try {
     const o = audioCtx.createOscillator();
     const g = audioCtx.createGain();
-    o.type = type; o.frequency.value = freq;
+    o.type = type;
+    o.frequency.value = freq;
     g.gain.setValueAtTime(vol, audioCtx.currentTime);
     g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
-    o.connect(g); g.connect(audioCtx.destination);
-    o.start(); o.stop(audioCtx.currentTime + dur);
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    o.start();
+    o.stop(audioCtx.currentTime + dur);
   } catch (e) {}
 }
 
-['click', 'keydown', 'touchstart'].forEach(function (ev) {
+['click', 'keydown', 'touchstart'].forEach(ev => {
   window.addEventListener(ev, initAudio, { once: true });
 });
 
@@ -55,25 +49,24 @@ function haptic(pattern) {
   try { navigator.vibrate(pattern || 10); } catch (e) {}
 }
 
-document.querySelectorAll('[data-sound-hover]').forEach(function (el) {
-  el.addEventListener('mouseenter', function () { beep(1200, 0.04, 'square', 0.025); });
+document.querySelectorAll('[data-sound-hover]').forEach(el => {
+  el.addEventListener('mouseenter', () => beep(1200, 0.04, 'square', 0.025));
 });
 
-// ---------- КНОПКА ЗВУКА (управляет и бипами, и музыкой) ----------
 const soundBtn = document.getElementById('sound-toggle');
 if (soundBtn) {
   soundBtn.classList.add('on');
-  soundBtn.addEventListener('click', function () {
+  soundBtn.addEventListener('click', () => {
     soundEnabled = !soundEnabled;
     soundBtn.classList.toggle('on', soundEnabled);
     soundBtn.textContent = soundEnabled ? '◉ Звук' : '○ Звук';
+
     if (soundEnabled) {
       initAudio();
       beep(900, 0.08, 'square', 0.05);
       haptic(12);
-      // возобновляем музыку, если она уже была запущена и на паузе
       if (bgAudio.currentTime > 0 && bgAudio.paused) {
-        bgAudio.play().catch(function () {});
+        bgAudio.play().catch(() => {});
       }
     } else {
       stopBackgroundMusic();
@@ -81,95 +74,108 @@ if (soundBtn) {
   });
 }
 
-// ---------- ТОСТ ----------
 const toastEl = document.getElementById('toast');
 let toastTimer = null;
+
 function showToast(text) {
   if (!toastEl) return;
   toastEl.textContent = text;
   toastEl.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2200);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2200);
 }
 
-// ---------- КОПИРОВАНИЕ ----------
 function fallbackCopy(text) {
   try {
     const ta = document.createElement('textarea');
-    ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-1000px';
-    ta.style.opacity = '0'; document.body.appendChild(ta);
-    ta.focus(); ta.select();
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
     const ok = document.execCommand('copy');
     document.body.removeChild(ta);
     return ok;
-  } catch (e) { return false; }
+  } catch (e) {
+    return false;
+  }
 }
+
 function copyToClipboard(text) {
-  return new Promise(function (resolve) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
+  return new Promise(resolve => {
+    if (navigator.clipboard?.writeText) {
       navigator.clipboard.writeText(text)
-        .then(function () { resolve(true); })
-        .catch(function () { resolve(fallbackCopy(text)); });
-    } else { resolve(fallbackCopy(text)); }
+        .then(() => resolve(true))
+        .catch(() => resolve(fallbackCopy(text)));
+    } else {
+      resolve(fallbackCopy(text));
+    }
   });
 }
 
-document.addEventListener('click', function (e) {
+document.addEventListener('click', e => {
   const el = e.target.closest('#copy-nick, [data-copy]');
-  if (!el) return;
-  if (el.classList.contains('social')) return;
-  if (el.id === 'copy-nick') {
-    e.preventDefault();
-    const nick = el.getAttribute('data-copy') || 'sialens_xd';
-    copyToClipboard(nick).then(function (ok) {
-      showToast(ok ? 'скопировано // @' + nick : 'не получилось :(');
-      haptic([10, 30, 10]);
-    });
-  }
+  if (!el || el.classList.contains('social')) return;
+  if (el.id !== 'copy-nick') return;
+
+  e.preventDefault();
+  const nick = el.getAttribute('data-copy') || 'sialens_xd';
+  copyToClipboard(nick).then(ok => {
+    showToast(ok ? 'скопировано // @' + nick : 'не получилось :(');
+    haptic([10, 30, 10]);
+  });
 });
 
-// ---------- ГЛИТЧ НА ЛОГО ----------
 const glitchEl = document.querySelector('.wallpaper-logo');
 if (glitchEl) {
-  setInterval(function () {
-    if (Math.random() < 0.15) {
-      const dx = (Math.random() - 0.5) * 4;
-      const dy = (Math.random() - 0.5) * 4;
-      glitchEl.style.setProperty('--glitch-x', dx + 'px');
-      glitchEl.style.setProperty('--glitch-y', dy + 'px');
-      setTimeout(function () {
-        glitchEl.style.setProperty('--glitch-x', '0px');
-        glitchEl.style.setProperty('--glitch-y', '0px');
-      }, 80);
-    }
+  setInterval(() => {
+    if (Math.random() > 0.15) return;
+    const dx = (Math.random() - 0.5) * 4;
+    const dy = (Math.random() - 0.5) * 4;
+    glitchEl.style.setProperty('--glitch-x', dx + 'px');
+    glitchEl.style.setProperty('--glitch-y', dy + 'px');
+    setTimeout(() => {
+      glitchEl.style.setProperty('--glitch-x', '0px');
+      glitchEl.style.setProperty('--glitch-y', '0px');
+    }, 80);
   }, 1500);
 }
 
-// ---------- КАСТОМНЫЙ КУРСОР ----------
-if (window.matchMedia && window.matchMedia('(pointer: fine)').matches) {
+if (window.matchMedia?.('(pointer: fine)').matches) {
   document.body.classList.add('has-cursor');
+
   const cur = document.createElement('div');
   cur.className = 'custom-cursor';
   document.body.appendChild(cur);
 
-  let mx = window.innerWidth / 2, my = window.innerHeight / 2;
-  let cx = mx, cy = my;
+  let mx = window.innerWidth / 2;
+  let my = window.innerHeight / 2;
+  let cx = mx;
+  let cy = my;
 
-  document.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; });
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX;
+    my = e.clientY;
+  });
+
   (function anim() {
-    cx += (mx - cx) * 0.35; cy += (my - cy) * 0.35;
-    cur.style.left = cx + 'px'; cur.style.top = cy + 'px';
+    cx += (mx - cx) * 0.35;
+    cy += (my - cy) * 0.35;
+    cur.style.left = cx + 'px';
+    cur.style.top = cy + 'px';
     requestAnimationFrame(anim);
   })();
 
-  document.addEventListener('mouseover', function (e) {
-    if (e.target.closest('a, button, .desktop-icon, .window-header, .window-close, .taskbar-chip, .social, input, .card'))
-      cur.classList.add('hover');
-    else cur.classList.remove('hover');
+  document.addEventListener('mouseover', e => {
+    const hit = e.target.closest(
+      'a, button, .desktop-icon, .window-header, .window-close, .taskbar-chip, .social, input, .card'
+    );
+    cur.classList.toggle('hover', !!hit);
   });
 }
 
-// ---------- BLOOD MODE ----------
 const bloodFlash = document.getElementById('blood-flash');
 let bloodActive = false;
 let bloodEndTimer = null;
@@ -179,36 +185,37 @@ function triggerBloodMode() {
   document.body.classList.toggle('blood-mode', bloodActive);
   if (bloodFlash) bloodFlash.classList.toggle('show', bloodActive);
 
-  if (bloodActive) {
-    beep(120, 0.4, 'sawtooth', 0.08);
-    setTimeout(function () { beep(80, 0.5, 'sawtooth', 0.08); }, 150);
-    haptic([30, 60, 30, 60, 200]);
-    showToast('// так называемая пасхалка //');
-    clearTimeout(bloodEndTimer);
-    bloodEndTimer = setTimeout(function () {
-      bloodActive = false;
-      document.body.classList.remove('blood-mode');
-      if (bloodFlash) bloodFlash.classList.remove('show');
-    }, 6000);
-  } else { haptic(10); }
+  if (!bloodActive) {
+    haptic(10);
+    return;
+  }
+
+  beep(120, 0.4, 'sawtooth', 0.08);
+  setTimeout(() => beep(80, 0.5, 'sawtooth', 0.08), 150);
+  haptic([30, 60, 30, 60, 200]);
+  showToast('// так называемая пасхалка //');
+
+  clearTimeout(bloodEndTimer);
+  bloodEndTimer = setTimeout(() => {
+    bloodActive = false;
+    document.body.classList.remove('blood-mode');
+    if (bloodFlash) bloodFlash.classList.remove('show');
+  }, 6000);
 }
 
-// ============================================================
-// WINDOW MANAGER
-// ============================================================
-(function initWindowManager() {
+(function () {
   const windowsRoot = document.getElementById('windows');
   const taskbarWin = document.getElementById('taskbar-windows');
   if (!windowsRoot) return;
 
   const APPS = {
-    about:     { title: 'обо мне',         tpl: 'tpl-about' },
-    interests: { title: 'интересы',        tpl: 'tpl-interests' },
-    stuff:     { title: 'игры / музыка',   tpl: 'tpl-stuff' },
-    archive:   { title: 'архив',           tpl: 'tpl-archive' },
-    chaos:     { title: 'хаос',            tpl: 'tpl-chaos' },
-    contact:   { title: 'связь',           tpl: 'tpl-contact' },
-    system:    { title: 'о системе',       tpl: 'tpl-system' }
+    about:     { title: 'обо мне',       tpl: 'tpl-about' },
+    interests: { title: 'интересы',      tpl: 'tpl-interests' },
+    stuff:     { title: 'игры / музыка', tpl: 'tpl-stuff' },
+    archive:   { title: 'архив',         tpl: 'tpl-archive' },
+    chaos:     { title: 'хаос',          tpl: 'tpl-chaos' },
+    contact:   { title: 'связь',         tpl: 'tpl-contact' },
+    system:    { title: 'о системе',     tpl: 'tpl-system' }
   };
 
   const openWindows = {};
@@ -220,8 +227,7 @@ function triggerBloodMode() {
   function openApp(appId) {
     if (openWindows[appId]) { focusWindow(appId); return; }
     const cfg = APPS[appId];
-    if (!cfg) return;
-    const tpl = document.getElementById(cfg.tpl);
+    const tpl = cfg && document.getElementById(cfg.tpl);
     if (!tpl) return;
 
     const win = document.createElement('div');
@@ -229,19 +235,18 @@ function triggerBloodMode() {
     win.dataset.app = appId;
 
     if (!isMobile()) {
-      const baseX = 170 + (cascade % 4) * 30;
-      const baseY = 70 + (cascade % 4) * 24;
+      win.style.left = (170 + (cascade % 4) * 30) + 'px';
+      win.style.top  = (70 + (cascade % 4) * 24) + 'px';
       cascade++;
-      win.style.left = baseX + 'px';
-      win.style.top = baseY + 'px';
     }
     win.style.zIndex = ++zTop;
 
     const header = document.createElement('div');
     header.className = 'window-header';
-    header.innerHTML = '<div class="window-dots"><span></span><span></span><span></span></div>' +
-                       '<div class="window-title">' + cfg.title + '</div>' +
-                       '<button class="window-close" aria-label="закрыть">✕</button>';
+    header.innerHTML =
+      '<div class="window-dots"><span></span><span></span><span></span></div>' +
+      '<div class="window-title">' + cfg.title + '</div>' +
+      '<button class="window-close" aria-label="закрыть">✕</button>';
     win.appendChild(header);
 
     const body = document.createElement('div');
@@ -250,25 +255,28 @@ function triggerBloodMode() {
     win.appendChild(body);
 
     windowsRoot.appendChild(win);
-    openWindows[appId] = { el: win, chipEl: null, appId: appId };
+    openWindows[appId] = { el: win, chipEl: null };
 
     if (taskbarWin) {
       const chip = document.createElement('div');
       chip.className = 'taskbar-chip active';
       chip.dataset.app = appId;
-      chip.innerHTML = '<span>' + cfg.title + '</span><button class="taskbar-chip-close" aria-label="закрыть">✕</button>';
+      chip.innerHTML =
+        '<span>' + cfg.title + '</span>' +
+        '<button class="taskbar-chip-close" aria-label="закрыть">✕</button>';
       taskbarWin.appendChild(chip);
       openWindows[appId].chipEl = chip;
-      chip.addEventListener('click', function (e) {
-        if (e.target.closest('.taskbar-chip-close')) { closeApp(appId); return; }
-        focusWindow(appId);
+
+      chip.addEventListener('click', e => {
+        if (e.target.closest('.taskbar-chip-close')) closeApp(appId);
+        else focusWindow(appId);
       });
     }
 
-    header.querySelector('.window-close').addEventListener('click', function () { closeApp(appId); });
+    header.querySelector('.window-close').addEventListener('click', () => closeApp(appId));
 
     if (!isMobile()) initDrag(win, header);
-    win.addEventListener('mousedown', function () { focusWindow(appId); });
+    win.addEventListener('mousedown', () => focusWindow(appId));
 
     beep(700, 0.06, 'square', 0.05);
     haptic(10);
@@ -279,7 +287,7 @@ function triggerBloodMode() {
     if (!w) return;
     w.el.classList.add('closing');
     if (w.chipEl) w.chipEl.remove();
-    setTimeout(function () {
+    setTimeout(() => {
       if (w.el.parentNode) w.el.parentNode.removeChild(w.el);
     }, 240);
     delete openWindows[appId];
@@ -291,7 +299,7 @@ function triggerBloodMode() {
     const w = openWindows[appId];
     if (!w) return;
     w.el.style.zIndex = ++zTop;
-    Object.keys(openWindows).forEach(function (id) {
+    Object.keys(openWindows).forEach(id => {
       const c = openWindows[id].chipEl;
       if (c) c.classList.toggle('active', id === appId);
     });
@@ -300,17 +308,18 @@ function triggerBloodMode() {
   function initDrag(win, handle) {
     let sx = 0, sy = 0, ox = 0, oy = 0, dragging = false;
 
-    handle.addEventListener('mousedown', function (e) {
+    handle.addEventListener('mousedown', e => {
       if (e.target.closest('.window-close')) return;
       dragging = true;
-      sx = e.clientX; sy = e.clientY;
+      sx = e.clientX;
+      sy = e.clientY;
       ox = parseInt(win.style.left, 10) || 0;
       oy = parseInt(win.style.top, 10) || 0;
       document.body.style.userSelect = 'none';
       e.preventDefault();
     });
 
-    document.addEventListener('mousemove', function (e) {
+    document.addEventListener('mousemove', e => {
       if (!dragging) return;
       const nx = ox + (e.clientX - sx);
       const ny = oy + (e.clientY - sy);
@@ -320,28 +329,28 @@ function triggerBloodMode() {
       win.style.top  = Math.max(10, Math.min(ny, maxY)) + 'px';
     });
 
-    document.addEventListener('mouseup', function () {
-      if (dragging) { dragging = false; document.body.style.userSelect = ''; }
+    document.addEventListener('mouseup', () => {
+      if (!dragging) return;
+      dragging = false;
+      document.body.style.userSelect = '';
     });
   }
 
-  document.querySelectorAll('.desktop-icon').forEach(function (icon) {
-    icon.addEventListener('click', function () { openApp(icon.dataset.app); });
-    icon.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openApp(icon.dataset.app); }
+  document.querySelectorAll('.desktop-icon').forEach(icon => {
+    icon.addEventListener('click', () => openApp(icon.dataset.app));
+    icon.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openApp(icon.dataset.app);
+      }
     });
   });
 
   window.openApp = openApp;
-  window.closeAllWindows = function () {
-    Object.keys(openWindows).forEach(function (id) { closeApp(id); });
-  };
+  window.closeAllWindows = () => Object.keys(openWindows).forEach(closeApp);
 })();
 
-// ============================================================
-// ТЕРМИНАЛ
-// ============================================================
-(function initTerminal() {
+(function () {
   const termEl = document.getElementById('terminal');
   const termBody = document.getElementById('term-body');
   const termInput = document.getElementById('term-input');
@@ -358,11 +367,17 @@ function triggerBloodMode() {
     termBody.appendChild(div);
     termBody.scrollTop = termBody.scrollHeight;
   }
-  function printLines(arr, cls) { arr.forEach(function (t) { line(t, cls); }); }
-  function delay(fn, ms) { setTimeout(fn, ms); }
+
+  function printLines(arr, cls) {
+    arr.forEach(t => line(t, cls));
+  }
+
+  function delay(fn, ms) {
+    setTimeout(fn, ms);
+  }
 
   const commands = {
-    help: function () {
+    help() {
       printLines([
         '> команды:',
         '  help      — ну ты понял',
@@ -380,46 +395,60 @@ function triggerBloodMode() {
         '  ...и ещё есть пара, но их сам ищи ;)'
       ]);
     },
-    chaos: function () {
+
+    chaos() {
       line('> ЗАПУСК ПРОТОКОЛА ХАОСА...', 'err');
-      delay(function () { line('> 3...', 'err'); }, 200);
-      delay(function () { line('> 2...', 'err'); }, 500);
-      delay(function () { line('> 1...', 'err'); }, 800);
-      delay(function () {
+      delay(() => line('> 3...', 'err'), 200);
+      delay(() => line('> 2...', 'err'), 500);
+      delay(() => line('> 1...', 'err'), 800);
+      delay(() => {
         line('> хаос активирован, как страшноооо', 'err');
-        if (typeof triggerBloodMode === 'function' && !document.body.classList.contains('blood-mode')) {
-          triggerBloodMode();
-        }
+        if (!document.body.classList.contains('blood-mode')) triggerBloodMode();
       }, 1100);
     },
-    sudo: function () {
-      printLines(['User is not in the sudoers file.', 'This incident has been reported 🩸'], 'err');
+
+    sudo() {
+      printLines([
+        'User is not in the sudoers file.',
+        'This incident has been reported 🩸'
+      ], 'err');
     },
-    sleep: function () {
-      printLines(['> попытка уснуть...', '> ...', '> ошибка: много хочешь', '> иди попей магний', '> это типо метафора(?) на мою бессоницу, я хз'], 'err');
+
+    sleep() {
+      printLines([
+        '> попытка уснуть...',
+        '> ...',
+        '> ошибка: много хочешь',
+        '> иди попей магний',
+        '> это типо метафора(?) на мою бессоницу, я хз'
+      ], 'err');
     },
-    hack: function () {
+
+    hack() {
       line('> взлом пентагона...', '');
-      delay(function () { line('> обход firewall... 12%', ''); }, 300);
-      delay(function () { line('> обход firewall... 47%', ''); }, 700);
-      delay(function () { line('> обход firewall... 91%', ''); }, 1100);
-      delay(function () { line('> 99%...', ''); }, 1500);
-      delay(function () {
+      delay(() => line('> обход firewall... 12%', ''), 300);
+      delay(() => line('> обход firewall... 47%', ''), 700);
+      delay(() => line('> обход firewall... 91%', ''), 1100);
+      delay(() => line('> 99%...', ''), 1500);
+      delay(() => {
         line('> ошибка: куда тебе, иди уроки делай', 'err');
         beep(200, 0.2, 'sawtooth', 0.08);
       }, 1900);
     },
-    coffee: function () {
+
+    coffee() {
       line('> варю кофе...', '');
-      delay(function () { line('> ...', ''); }, 500);
-      delay(function () { line('> ошибка 418: я чайник (что это блять значит????)', 'err'); }, 1000);
+      delay(() => line('> ...', ''), 500);
+      delay(() => line('> ошибка 418: я чайник (что это блять значит????)', 'err'), 1000);
     },
-    matrix: function () {
+
+    matrix() {
       line('> waking up...', '');
-      delay(function () { line('> follow the white rabbit', ''); }, 400);
-      delay(function () { line('> red pill or blue pill?', ''); }, 900);
+      delay(() => line('> follow the white rabbit', ''), 400);
+      delay(() => line('> red pill or blue pill?', ''), 900);
     },
-    ping: function () {
+
+    ping() {
       printLines([
         'PING sialens.ru (пусть домен и другой): 56 data bytes',
         '64 bytes from localhost: time=0.42 ms',
@@ -430,33 +459,40 @@ function triggerBloodMode() {
         '// это фейк инфа кста👀'
       ]);
     },
-    whoami: function () {
+
+    whoami() {
       printLines([
         '> ты — случайный прохожий, который забрёл сюда',
         '> и, видимо, тебе СОВСЕМ нечем заняться раз ты в терминале',
         '> уважаю.'
       ]);
     },
-    ls: function () {
+
+    ls() {
       printLines([
         'голые_фурри.png         insomnia.log       дик_пик.png',
         'memories/          bots/              homework(пусто)'
       ], 'dim');
     },
-    cats: function () {
+
+    cats() {
       printLines([
         '  /\\_/\\   ',
         ' ( o.o )  ',
         '  > ^ <   ',
         '> мяу.'
-      ], '');
+      ]);
     },
-    clear: function () { termBody.innerHTML = ''; }
+
+    clear() {
+      termBody.innerHTML = '';
+    }
   };
 
   function runCommand(raw) {
     const input = raw.trim();
     if (!input) return;
+
     line(PROMPT + ' ' + input, 'cmd');
     const cmd = input.split(/\s+/)[0].toLowerCase();
 
@@ -470,62 +506,80 @@ function triggerBloodMode() {
   }
 
   function openTerm() {
-    termEl.classList.add('open'); termOpen.classList.add('open');
-    setTimeout(function () { termInput.focus(); }, 300);
-    beep(700, 0.06, 'square', 0.05); haptic(10);
+    termEl.classList.add('open');
+    termOpen.classList.add('open');
+    setTimeout(() => termInput.focus(), 300);
+    beep(700, 0.06, 'square', 0.05);
+    haptic(10);
   }
+
   function closeTerm() {
-    termEl.classList.remove('open'); termOpen.classList.remove('open');
+    termEl.classList.remove('open');
+    termOpen.classList.remove('open');
     beep(400, 0.06, 'square', 0.05);
   }
-  function toggleTerm() { termEl.classList.contains('open') ? closeTerm() : openTerm(); }
+
+  function toggleTerm() {
+    termEl.classList.contains('open') ? closeTerm() : openTerm();
+  }
 
   termOpen.addEventListener('click', toggleTerm);
   if (termClose) termClose.addEventListener('click', closeTerm);
-  termInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') { runCommand(termInput.value); termInput.value = ''; }
+
+  termInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      runCommand(termInput.value);
+      termInput.value = '';
+    }
   });
-  document.addEventListener('keydown', function (e) {
+
+  document.addEventListener('keydown', e => {
     if (e.key === '`' || e.key === '~' || e.key === 'ё' || e.key === 'Ё') {
-      const tag = document.activeElement && document.activeElement.tagName;
+      const tag = document.activeElement?.tagName;
       if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-      e.preventDefault(); toggleTerm();
+      e.preventDefault();
+      toggleTerm();
     }
     if (e.key === 'Escape' && termEl.classList.contains('open')) closeTerm();
   });
 })();
 
-// ============================================================
-// ТАСКБАР: часы и бессонница
-// ============================================================
-(function initStatusBar() {
+(function () {
   const clockEl = document.getElementById('taskbar-clock');
   const insEl = document.getElementById('taskbar-insomnia');
   if (!clockEl || !insEl) return;
-  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  const pad = n => (n < 10 ? '0' + n : '' + n);
+
   function tick() {
     const now = new Date();
-    clockEl.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+    clockEl.textContent =
+      pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+
     const h = now.getHours();
-    const isNight = (h >= 23 || h < 6);
-    if (isNight) { insEl.textContent = 'не спит'; insEl.className = 'taskbar-insomnia awake'; }
-    else { insEl.textContent = 'спит'; insEl.className = 'taskbar-insomnia sleep'; }
+    const isNight = h >= 23 || h < 6;
+    if (isNight) {
+      insEl.textContent = 'не спит';
+      insEl.className = 'taskbar-insomnia awake';
+    } else {
+      insEl.textContent = 'спит';
+      insEl.className = 'taskbar-insomnia sleep';
+    }
   }
-  tick(); setInterval(tick, 1000);
+
+  tick();
+  setInterval(tick, 1000);
 })();
 
-// ============================================================
-// CANVAS — плавающие символы
-// ============================================================
-(function initParticles() {
+(function () {
   const canvas = document.getElementById('bg-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  const isMobile = window.matchMedia('(max-width: 768px)').matches
-                || window.matchMedia('(pointer: coarse)').matches;
-
+  const isMobile =
+    window.matchMedia('(max-width: 768px)').matches ||
+    window.matchMedia('(pointer: coarse)').matches;
   const COUNT = isMobile ? 16 : 32;
 
   const SUITS = [
@@ -537,7 +591,8 @@ function triggerBloodMode() {
     { char: '✕', color: '#ff2e3a' }
   ];
 
-  let W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  let W = 0, H = 0;
   let particles = [];
   let rafId = null;
 
@@ -549,13 +604,13 @@ function triggerBloodMode() {
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   }
 
-  function rand(a, b) { return Math.random() * (b - a) + a; }
+  const rand = (a, b) => Math.random() * (b - a) + a;
 
-  function createParticle(initY) {
+  function makeParticle(spawnRandomY) {
     const s = SUITS[Math.floor(Math.random() * SUITS.length)];
     return {
       x: rand(0, W),
-      y: initY ? rand(0, H) : -30,
+      y: spawnRandomY ? rand(0, H) : -30,
       vx: rand(-0.15, 0.15),
       vy: rand(0.08, 0.35),
       size: rand(12, 28),
@@ -569,16 +624,15 @@ function triggerBloodMode() {
     };
   }
 
-  function initParticles() {
+  function fillParticles() {
     particles = [];
-    for (let i = 0; i < COUNT; i++) particles.push(createParticle(true));
+    for (let i = 0; i < COUNT; i++) particles.push(makeParticle(true));
   }
 
   function draw() {
     ctx.clearRect(0, 0, W, H);
 
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
+    for (const p of particles) {
       p.x += p.vx;
       p.y += p.vy;
       p.rot += p.rotSpeed;
@@ -608,16 +662,16 @@ function triggerBloodMode() {
     rafId = requestAnimationFrame(draw);
   }
 
-  window.addEventListener('resize', function () {
+  window.addEventListener('resize', () => {
     resize();
-    initParticles();
+    fillParticles();
   });
 
   resize();
-  initParticles();
+  fillParticles();
   draw();
 
-  document.addEventListener('visibilitychange', function () {
+  document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
     } else if (!rafId) {
@@ -626,21 +680,20 @@ function triggerBloodMode() {
   });
 })();
 
-// ============================================================
-// ЭКРАН ВХОДА → запуск катсцены
-// ============================================================
-(function initEntryScreen() {
+(function () {
   const entry = document.getElementById('entry-screen');
   if (!entry) return;
+
   let entered = false;
+
   function enter() {
-    if (entered) return; entered = true;
+    if (entered) return;
+    entered = true;
     entry.classList.add('hide');
     beep(1200, 0.1, 'square', 0.07);
     haptic([15, 40, 15, 40, 100]);
 
-    // затемнение (0.4s) → появление катсцены (fade-in 0.6s)
-    setTimeout(function () {
+    setTimeout(() => {
       if (typeof window.startCutscene === 'function') {
         window.startCutscene();
       } else {
@@ -649,47 +702,52 @@ function triggerBloodMode() {
       }
     }, 400);
 
-  setTimeout(function () { if (entry.parentNode) entry.parentNode.removeChild(entry); }, 1400);
+    setTimeout(() => {
+      if (entry.parentNode) entry.parentNode.removeChild(entry);
+    }, 1400);
   }
+
   entry.addEventListener('click', enter);
   entry.addEventListener('touchstart', enter, { passive: true });
-  entry.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') enter(); });
+  entry.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') enter();
+  });
   entry.setAttribute('tabindex', '0');
 })();
 
-// ============================================================
-// ПАСХАЛКА — секретные слова
-// ============================================================
-(function initSecretWords() {
+(function () {
   const WORDS = {
-    chaos:     { toast: '// хаос.. хаос.. 👀👀 //',   blood: true },
-    ultrakill: { toast: '// да, он самый //',      blood: true },
-    sialens:   { toast: '// мб что-то по оригинальнее? //', blood: false }
+    chaos:     { toast: '// хаос.. хаос.. 👀👀 //',           blood: true },
+    ultrakill: { toast: '// да, он самый //',                  blood: true },
+    sialens:   { toast: '// мб что-то по оригинальнее? //',    blood: false }
   };
   const MAX = 20;
   let buffer = '';
-  document.addEventListener('keydown', function (e) {
-    const tag = document.activeElement && document.activeElement.tagName;
+
+  document.addEventListener('keydown', e => {
+    const tag = document.activeElement?.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
     if (e.key.length !== 1) return;
+
     buffer = (buffer + e.key.toLowerCase()).slice(-MAX);
+
     for (const word in WORDS) {
-      if (buffer.endsWith(word)) {
-        const c = WORDS[word];
-        showToast(c.toast);
-        if (c.blood && !document.body.classList.contains('blood-mode')) triggerBloodMode();
-        else { beep(1500, 0.15, 'square', 0.08); haptic([15, 40, 15, 40, 100]); }
-        buffer = '';
-        break;
+      if (!buffer.endsWith(word)) continue;
+      const c = WORDS[word];
+      showToast(c.toast);
+      if (c.blood && !document.body.classList.contains('blood-mode')) {
+        triggerBloodMode();
+      } else {
+        beep(1500, 0.15, 'square', 0.08);
+        haptic([15, 40, 15, 40, 100]);
       }
+      buffer = '';
+      break;
     }
   });
 })();
 
-// ============================================================
-// МЕНЮ ПУСК
-// ============================================================
-(function initStartMenu() {
+(function () {
   const startBtn = document.getElementById('start-btn');
   const menu = document.getElementById('start-menu');
   const systemBtn = document.getElementById('start-system');
@@ -705,54 +763,47 @@ function triggerBloodMode() {
     haptic(open ? [10, 30, 10] : 10);
   }
 
-  startBtn.addEventListener('click', function (e) {
+  startBtn.addEventListener('click', e => {
     e.stopPropagation();
     toggleStart();
   });
 
-  document.addEventListener('click', function (e) {
+  document.addEventListener('click', e => {
     if (!menu.classList.contains('open')) return;
     if (e.target.closest('#start-menu') || e.target.closest('#start-btn')) return;
     toggleStart(false);
   });
 
-  menu.querySelectorAll('.start-app').forEach(function (el) {
-    el.addEventListener('click', function () {
+  menu.querySelectorAll('.start-app').forEach(el => {
+    el.addEventListener('click', () => {
       toggleStart(false);
-      if (typeof window.openApp === 'function') window.openApp(el.dataset.app);
+      window.openApp?.(el.dataset.app);
     });
   });
 
-  if (systemBtn) {
-    systemBtn.addEventListener('click', function () {
-      toggleStart(false);
-      if (typeof window.openApp === 'function') window.openApp('system');
-    });
-  }
+  systemBtn?.addEventListener('click', () => {
+    toggleStart(false);
+    window.openApp?.('system');
+  });
 
-  if (shutdownBtn) {
-    shutdownBtn.addEventListener('click', function () {
-      toggleStart(false);
-      if (!overlay) return;
-      document.body.classList.add('shutting-down');
-      beep(300, 0.4, 'sawtooth', 0.1);
-      haptic([50, 100, 50]);
-      setTimeout(function () {
-        document.body.classList.remove('shutting-down');
-        showToast('// хорошая попытка👁️');
-      }, 2500);
-    });
-  }
+  shutdownBtn?.addEventListener('click', () => {
+    toggleStart(false);
+    if (!overlay) return;
+    document.body.classList.add('shutting-down');
+    beep(300, 0.4, 'sawtooth', 0.1);
+    haptic([50, 100, 50]);
+    setTimeout(() => {
+      document.body.classList.remove('shutting-down');
+      showToast('// хорошая попытка👁️');
+    }, 2500);
+  });
 
-  document.addEventListener('keydown', function (e) {
+  document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && menu.classList.contains('open')) toggleStart(false);
   });
 })();
 
-// ============================================================
-// ПРОЩАЛЬНЫЙ ТОСТ
-// ============================================================
-(function initFarewell() {
+(function () {
   let shown = false;
   let cooldown = null;
 
@@ -761,29 +812,26 @@ function triggerBloodMode() {
     shown = true;
     showToast('// where are you going?');
     clearTimeout(cooldown);
-    cooldown = setTimeout(function () { shown = false; }, 60000);
+    cooldown = setTimeout(() => { shown = false; }, 60000);
   }
 
-  document.addEventListener('mouseleave', function (e) {
+  document.addEventListener('mouseleave', e => {
     if (e.clientY <= 0) farewell();
   });
 
-  document.addEventListener('visibilitychange', function () {
+  document.addEventListener('visibilitychange', () => {
     if (document.hidden) farewell();
   });
 })();
 
-// ============================================================
-// ПЛАВНОЕ КАЧАНИЕ ЛОГО (только лого)
-// ============================================================
-(function initLogoMotion() {
+(function () {
   const logo = document.querySelector('.wallpaper-logo');
   if (!logo) return;
 
-  const LOGO_Y_AMP     = 7;
-  const LOGO_ROT_AMP   = 1.5;
-  const LOGO_SCALE_AMP = 0.015;
-  const LOGO_SPEED     = 0.0005;
+  const Y_AMP = 7;
+  const ROT_AMP = 1.5;
+  const SCALE_AMP = 0.015;
+  const SPEED = 0.0005;
 
   let start = null;
   let rafId = null;
@@ -791,20 +839,20 @@ function triggerBloodMode() {
   function tick(ts) {
     if (!start) start = ts;
     const t = ts - start;
-
-    const y = Math.sin(t * LOGO_SPEED * Math.PI * 2) * LOGO_Y_AMP;
-    const rot = Math.sin(t * LOGO_SPEED * Math.PI * 2 + Math.PI * 0.5) * LOGO_ROT_AMP;
-    const scale = 1 + Math.sin(t * LOGO_SPEED * Math.PI * 2 + Math.PI) * LOGO_SCALE_AMP;
+    const y     = Math.sin(t * SPEED * Math.PI * 2) * Y_AMP;
+    const rot   = Math.sin(t * SPEED * Math.PI * 2 + Math.PI * 0.5) * ROT_AMP;
+    const scale = 1 + Math.sin(t * SPEED * Math.PI * 2 + Math.PI) * SCALE_AMP;
 
     if (!logo.dataset.glitching) {
-      logo.style.transform = 'translateY(' + y.toFixed(2) + 'px) rotate(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
+      logo.style.transform =
+        'translateY(' + y.toFixed(2) + 'px) rotate(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
     }
     rafId = requestAnimationFrame(tick);
   }
 
   rafId = requestAnimationFrame(tick);
 
-  document.addEventListener('visibilitychange', function () {
+  document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
     } else if (!rafId) {
@@ -814,117 +862,95 @@ function triggerBloodMode() {
   });
 })();
 
-// ============================================================
-// CUTSCENE — War Without Reason
-// ============================================================
 const INTRO_FILES = [
-  'audio/intro1.mp3', // 1. СИРЕНА (3 сек)
-  'audio/intro2.mp3', // 2. РЁВ ЗЕМЛЕДВИГА (5 сек)
-  'audio/intro3.mp3', // 3. ЗАРЯДКА РЕЛЬСАТРОНА (1 сек)
-  'audio/intro4.mp3'  // 4. ВЗРЫВ
+  'audio/intro1.mp3',
+  'audio/intro2.mp3',
+  'audio/intro3.mp3',
+  'audio/intro4.mp3'
 ];
 
-(function initCutscene() {
+(function () {
   const cutscene = document.getElementById('cutscene-screen');
   if (!cutscene) return;
 
   const lines = cutscene.querySelectorAll('.cutscene-line');
-  const title = cutscene.querySelector('.cutscene-title');
-  const subtitle = cutscene.querySelector('.cutscene-subtitle');
 
   let timers = [];
   let skipped = false;
 
-  const sounds = INTRO_FILES.map(function (src) {
+  const sounds = INTRO_FILES.map(src => {
     const a = new Audio();
     a.preload = 'auto';
     a.src = src;
     return a;
   });
 
-  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
-  function clearAll() {
-    timers.forEach(clearTimeout);
-    timers = [];
-    sounds.forEach(function (a) { try { a.pause(); } catch (e) {} });
+  function later(fn, ms) {
+    timers.push(setTimeout(fn, ms));
   }
 
   function playSound(a, vol, fadeInMs) {
-  if (!soundEnabled) return;
-  try {
-    const targetVol = vol || 1;
-    a.volume = fadeInMs ? 0 : targetVol;
-    a.currentTime = 0;
-    const pr = a.play();
-    if (pr && pr.catch) pr.catch(function () {});
+    if (!soundEnabled) return;
+    try {
+      const targetVol = vol || 1;
+      a.volume = fadeInMs ? 0 : targetVol;
+      a.currentTime = 0;
+      a.play().catch(() => {});
 
-    if (fadeInMs && fadeInMs > 0) {
-      const steps = 30;
-      const stepTime = fadeInMs / steps;
-      const volStep = targetVol / steps;
-      let i = 0;
-      const fade = setInterval(function () {
-        i++;
-        if (i >= steps) {
-          a.volume = targetVol;
-          clearInterval(fade);
-        } else {
-          a.volume = Math.min(targetVol, volStep * i);
-        }
-      }, stepTime);
-    }
-  } catch (e) {}
+      if (fadeInMs && fadeInMs > 0) {
+        const steps = 30;
+        const stepTime = fadeInMs / steps;
+        const volStep = targetVol / steps;
+        let i = 0;
+        const fade = setInterval(() => {
+          i++;
+          if (i >= steps) {
+            a.volume = targetVol;
+            clearInterval(fade);
+          } else {
+            a.volume = Math.min(targetVol, volStep * i);
+          }
+        }, stepTime);
+      }
+    } catch (e) {}
   }
 
   function finish(userSkip) {
     if (skipped) return;
     skipped = true;
+
     timers.forEach(clearTimeout);
     timers = [];
 
     if (userSkip) {
-    // если скипнули — глушим всё
-      sounds.forEach(function (a) { try { a.pause(); } catch (e) {} });
+      sounds.forEach(a => { try { a.pause(); } catch (e) {} });
     } else {
-    // если катсцена закончилась сама — глушим всё кроме взрыва (sounds[3])
-      sounds.forEach(function (a, i) {
+      sounds.forEach((a, i) => {
         if (i < 3) { try { a.pause(); } catch (e) {} }
       });
     }
 
-  cutscene.classList.add('hide');
-  document.body.classList.add('entered');
-  startBackgroundMusic();
+    cutscene.classList.add('hide');
+    document.body.classList.add('entered');
+    startBackgroundMusic();
 
-  setTimeout(function () {
-    if (cutscene.parentNode) cutscene.parentNode.removeChild(cutscene);
-  }, 1200);
+    setTimeout(() => {
+      if (cutscene.parentNode) cutscene.parentNode.removeChild(cutscene);
+    }, 1200);
   }
 
   function play() {
     cutscene.classList.add('active');
-    if (typeof initAudio === 'function') initAudio();
+    initAudio();
 
-    // ============================================================
-    // ТАЙМЛАЙН (все числа в ms — можно крутить)
-    // ============================================================
-    // 0.3s    → intro1 СИРЕНА (играет ~3 сек)
-    // 3.3s    → intro2 РЁВ ЗЕМЛЕДВИГА (играет ~5 сек)
-    // 8.3s    → intro3 ЗАРЯДКА РЕЛЬСАТРОНА (играет ~1 сек)
-    // 9.3s    → intro4 ВЗРЫВ
-    // 12.0s   → БЕЛАЯ ВСПЫШКА + открытие сайта + старт WWoR
-    // ============================================================
-
-    // 1. СИРЕНА
-    later(function () {
+    later(() => {
       playSound(sounds[0], 1, 800);
       haptic(60);
       lines[0].classList.add('show');
       beep(320, 0.18, 'sawtooth', 0.07);
     }, 300);
 
-    // 2. РЁВ ЗЕМЛЕДВИГА
-    later(function () {
+    later(() => {
       playSound(sounds[1], 1, 1000);
       haptic(90);
       lines[0].classList.remove('show');
@@ -932,56 +958,51 @@ const INTRO_FILES = [
       beep(420, 0.18, 'sawtooth', 0.07);
     }, 3300);
 
-    // тексты во время рёва
-    later(function () {
+    later(() => {
       lines[1].classList.remove('show');
       lines[2].classList.add('show');
       beep(520, 0.18, 'sawtooth', 0.07);
     }, 5500);
 
-    later(function () {
+    later(() => {
       lines[2].classList.remove('show');
       lines[3].classList.add('show');
       beep(620, 0.18, 'sawtooth', 0.07);
     }, 7300);
 
-    // 3. ЗАРЯДКА РЕЛЬСАТРОНА
-    later(function () {
+    later(() => {
       playSound(sounds[2], 1);
       haptic(40);
       cutscene.classList.add('shake-small');
-      setTimeout(function () { cutscene.classList.remove('shake-small'); }, 900);
+      setTimeout(() => cutscene.classList.remove('shake-small'), 900);
     }, 8300);
 
-    // 4a. ЗВУК ВЗРЫВА — стартует раньше
-    later(function () {
+    later(() => {
       playSound(sounds[3], 1);
       haptic([100, 50, 200, 50, 300]);
     }, 9300);
 
-    // 4b. ВСПЫШКА + ТРЯСКА — в момент удара
-    later(function () {
+    later(() => {
       cutscene.classList.add('shake', 'flash-red', 'flash-white');
-      lines.forEach(function (l) { l.classList.add('flash'); });
+      lines.forEach(l => l.classList.add('flash'));
       beep(120, 0.6, 'sawtooth', 0.11);
       beep(80, 0.8, 'sawtooth', 0.11);
-      setTimeout(function () { cutscene.classList.remove('shake', 'flash-red'); }, 900);
-    }, 9550); // ← вот это число, поставь сколько нужно
+      setTimeout(() => cutscene.classList.remove('shake', 'flash-red'), 900);
+    }, 9550);
 
-    // 5. ФИНАЛ: сайт открывается сразу под белой вспышкой
-    later(function () {
-      finish(false); // открывает сайт + стартует WWoR
-    }, 12450);  
+    later(() => {
+      finish(false);
+    }, 12450);
   }
 
-  cutscene.addEventListener('click', function () { finish(true); });
-  cutscene.addEventListener('touchstart', function () { finish(true); }, { passive: true });
-  document.addEventListener('keydown', function (e) {
-    if (cutscene.classList.contains('active') && !skipped) {
-      if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
-        e.preventDefault();
-        finish(true);
-      }
+  cutscene.addEventListener('click', () => finish(true));
+  cutscene.addEventListener('touchstart', () => finish(true), { passive: true });
+
+  document.addEventListener('keydown', e => {
+    if (!cutscene.classList.contains('active') || skipped) return;
+    if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      finish(true);
     }
   });
 

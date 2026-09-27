@@ -1,66 +1,28 @@
-/* ============================================================
-   SIALENS OS — ULTRAKILL EDITION
-   «MANKIND IS DEAD. BLOOD IS FUEL. HELL IS FULL.»
-   ============================================================ */
-
-/* ============================================================
-   КАСТОМНЫЙ ШРИФТ — VCR OSD Mono
-   ============================================================ */
 @font-face {
   font-family: 'VCR OSD Mono';
   src: url('fonts/vcr.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
   font-display: swap;
 }
 
 :root {
-  /* АД */
-  --void:       #050203;
-  --void-2:     #0a0505;
-  --void-3:     #000000;
-
-  /* ПАНЕЛИ (металл/бетон) */
-  --panel:      #12080a;
-  --panel-2:    #1a0c0e;
-  --panel-3:    #0d0607;
-  --panel-4:    #2a1216;
-
-  /* КРОВЬ */
-  --blood:      #c1121f;
-  --blood-2:    #ff2e3a;
-  --blood-3:    #8b0000;
-  --blood-deep: #4a0508;
-
-  /* КОСТЬ */
-  --bone:       #e8e4d9;
-  --bone-dim:   #9a9488;
-  --bone-mute:  #5a544a;
-
-  /* V1 CYAN */
-  --cyan:       #00e5ff;
-  --cyan-2:     #6df3ff;
-
-  /* WARNING */
-  --amber:      #ffb000;
-
-  /* Контур / подсветка */
-  --outline:    #000000;
-  --highlight:  rgba(255, 255, 255, 0.08);
-
-  /* Скошенный угол */
-  --chamfer:    10px;
-
-  /* -- карта старых имён (чтобы HTML/JS не трогать) -- */
-  --orange:     var(--blood);
-  --orange-2:   var(--blood-2);
-  --orange-3:   var(--blood-3);
-  --red:        var(--blood-3);
-  --red-2:      var(--blood-2);
-  --yellow:     var(--amber);
-  --yellow-2:   var(--bone);
-  --blue:       var(--cyan);
-  --blue-2:     var(--cyan-2);
+  --void: #050203;
+  --void-2: #0a0505;
+  --void-3: #000;
+  --panel: #12080a;
+  --panel-2: #1a0c0e;
+  --panel-3: #0d0607;
+  --panel-4: #2a1216;
+  --blood: #c1121f;
+  --blood-2: #ff2e3a;
+  --blood-3: #8b0000;
+  --bone: #e8e4d9;
+  --bone-dim: #9a9488;
+  --bone-mute: #5a544a;
+  --cyan: #00e5ff;
+  --cyan-2: #6df3ff;
+  --amber: #ffb000;
+  --outline: #000;
+  --chamfer: 10px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -70,659 +32,659 @@ html { background: var(--void-2); }
 body {
   background: transparent;
   color: var(--bone);
-  font-family: 'VCR OSD Mono', 'VCR OSD Mono', monospace;
-  font-weight: 400;
+  font-family: 'VCR OSD Mono', monospace;
   font-size: 17px;
   line-height: 1.5;
   overflow: hidden;
   height: 100vh;
   height: 100dvh;
   -webkit-tap-highlight-color: transparent;
-  text-rendering: geometricPrecision;
 }
 
-/* ФОН — ад: тёмный градиент + кровавая дымка + сетка */
 body::before {
   content: '';
-  position: fixed; inset: 0;
+  position: fixed;
+  inset: 0;
   background:
-    radial-gradient(ellipse at 50% 100%, rgba(193, 18, 31, 0.28), transparent 60%),
-    radial-gradient(ellipse at 50% 0%,   rgba(0, 229, 255, 0.05), transparent 55%),
-    repeating-linear-gradient(0deg,
-      rgba(255, 255, 255, 0.015) 0px,
-      rgba(255, 255, 255, 0.015) 1px,
-      transparent 1px,
-      transparent 32px),
-    repeating-linear-gradient(90deg,
-      rgba(255, 255, 255, 0.015) 0px,
-      rgba(255, 255, 255, 0.015) 1px,
-      transparent 1px,
-      transparent 32px),
-    linear-gradient(180deg, var(--void) 0%, var(--void-2) 100%);
+    radial-gradient(ellipse at 50% 100%, rgba(193,18,31,.28), transparent 60%),
+    radial-gradient(ellipse at 50% 0%, rgba(0,229,255,.05), transparent 55%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.015) 0 1px, transparent 1px 32px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.015) 0 1px, transparent 1px 32px),
+    linear-gradient(180deg, var(--void), var(--void-2));
   z-index: -2;
   pointer-events: none;
 }
 
-/* СКАНЛАЙНЫ — включаем */
 .scanlines {
-  display: block;
-  position: fixed; inset: 0; pointer-events: none; z-index: 9990;
-  background:
-    repeating-linear-gradient(0deg,
-      rgba(0, 0, 0, 0.28) 0px,
-      rgba(0, 0, 0, 0.28) 1px,
-      transparent 1px,
-      transparent 3px);
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9990;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.28) 0 1px, transparent 1px 3px);
   mix-blend-mode: multiply;
-  opacity: 0.7;
+  opacity: .7;
 }
 
 .vignette {
-  position: fixed; inset: 0; pointer-events: none; z-index: 9989;
-  background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.85) 100%);
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9989;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.85));
 }
 
 #bg-canvas {
-  position: fixed; inset: 0; width: 100%; height: 100%;
-  z-index: -1; pointer-events: none;
-  opacity: 1;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
 }
 
-/* ============================================================
-   ХЕЛПЕР — СКОШЕННЫЙ УГОЛ
-   ============================================================ */
-.chamfer,
-.window,
-.desktop-icon,
-.card,
-.about-card,
-.stuff-col,
-.chaos-box,
-.contact-link,
-.social,
-.music-channel,
-.start-menu,
-.start-app,
-.start-action,
-.taskbar-chip,
-.window-close,
-.player,
-.player-icon,
-.term,
-.term-toggle,
-.system-box,
-.boot-bar,
-.entry-prompt,
-.wallpaper-tag,
-.wallpaper-subtitle {
-  clip-path: polygon(
-    var(--chamfer) 0,
-    100% 0,
-    100% calc(100% - var(--chamfer)),
-    calc(100% - var(--chamfer)) 100%,
-    0 100%,
-    0 var(--chamfer)
-  );
+.window, .desktop-icon, .card, .about-card, .stuff-col, .chaos-box,
+.contact-link, .social, .music-channel, .start-menu, .start-app,
+.start-action, .taskbar-chip, .window-close, .term, .term-toggle,
+.system-box, .boot-bar, .entry-prompt, .wallpaper-tag, .wallpaper-subtitle {
+  clip-path: polygon(var(--chamfer) 0, 100% 0, 100% calc(100% - var(--chamfer)),
+    calc(100% - var(--chamfer)) 100%, 0 100%, 0 var(--chamfer));
 }
 
-/* ============================================================
-   BOOT SCREEN
-   ============================================================ */
 .boot-screen {
-  position: fixed; inset: 0; background: var(--void-3);
-  z-index: 99998; display: flex; align-items: center; justify-content: center;
-  animation: boot-hide 0.5s ease 2s forwards;
+  position: fixed;
+  inset: 0;
+  background: var(--void-3);
+  z-index: 99998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: boot-hide .5s ease 2s forwards;
 }
 @keyframes boot-hide { to { opacity: 0; visibility: hidden; pointer-events: none; } }
 
 .boot-inner { width: min(460px, 85vw); text-align: center; padding: 0 20px; }
 
 .boot-logo {
-  font-family: 'VCR OSD Mono', monospace; font-weight: 400;
-  font-size: clamp(46px, 10vw, 76px); letter-spacing: 4px;
+  font-size: clamp(46px, 10vw, 76px);
+  letter-spacing: 4px;
   color: var(--bone);
-  text-shadow:
-    4px 4px 0 var(--blood-3),
-    0 0 24px rgba(193, 18, 31, 0.9);
+  text-shadow: 4px 4px 0 var(--blood-3), 0 0 24px rgba(193,18,31,.9);
   margin-bottom: 16px;
   text-transform: uppercase;
 }
 .boot-logo .dot { color: var(--blood-2); }
 
 .boot-line {
-  color: var(--blood-2); font-size: 15px; letter-spacing: 3px;
-  margin-bottom: 26px; text-transform: uppercase;
-  font-family: 'VCR OSD Mono', monospace;
-  text-shadow: 0 0 8px rgba(255, 46, 58, 0.7);
+  color: var(--blood-2);
+  font-size: 15px;
+  letter-spacing: 3px;
+  margin-bottom: 26px;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(255,46,58,.7);
 }
 
 .boot-bar {
-  width: 100%; height: 18px; background: var(--panel-3);
-  overflow: hidden; margin-bottom: 16px;
+  width: 100%;
+  height: 18px;
+  background: var(--panel-3);
+  overflow: hidden;
+  margin-bottom: 16px;
   border: 2px solid var(--blood-3);
-  box-shadow: 0 0 12px rgba(193,18,31,0.5) inset;
+  box-shadow: inset 0 0 12px rgba(193,18,31,.5);
 }
 .boot-bar-fill {
   height: 100%;
-  background: repeating-linear-gradient(45deg,
-    var(--blood) 0px, var(--blood) 6px,
-    var(--blood-2) 6px, var(--blood-2) 12px,
-    var(--blood-3) 12px, var(--blood-3) 18px);
   width: 0;
-  animation: boot-fill 1.9s cubic-bezier(0.6, 0, 0.4, 1) forwards;
-  box-shadow: 0 0 10px rgba(255, 46, 58, 0.8);
+  background: repeating-linear-gradient(45deg, var(--blood) 0 6px, var(--blood-2) 6px 12px, var(--blood-3) 12px 18px);
+  animation: boot-fill 1.9s cubic-bezier(.6,0,.4,1) forwards;
+  box-shadow: 0 0 10px rgba(255,46,58,.8);
 }
 @keyframes boot-fill {
-  0% { width: 0%; } 30% { width: 45%; } 60% { width: 62%; } 85% { width: 92%; } 100% { width: 100%; }
+  0% { width: 0; }
+  30% { width: 45%; }
+  60% { width: 62%; }
+  85% { width: 92%; }
+  100% { width: 100%; }
 }
+
 .boot-status {
-  color: var(--bone-mute); font-size: 14px; letter-spacing: 3px;
+  color: var(--bone-mute);
+  font-size: 14px;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  font-family: 'VCR OSD Mono', monospace;
 }
 
-/* ============================================================
-   ENTRY SCREEN
-   ============================================================ */
 .entry-screen {
-  position: fixed; inset: 0; background: var(--void-3);
-  z-index: 99997; display: flex; align-items: center; justify-content: center;
-  text-align: center; padding: 20px; cursor: pointer;
-  opacity: 1;
-  pointer-events: auto;
-  transition: opacity 0.5s ease;
+  position: fixed;
+  inset: 0;
+  background: var(--void-3);
+  z-index: 99997;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  cursor: pointer;
+  transition: opacity .5s ease;
 }
-
-.entry-screen.hide {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
+.entry-screen.hide { opacity: 0; pointer-events: none; transition: opacity .4s ease; }
 
 .entry-logo {
-  font-family: 'VCR OSD Mono', monospace; font-weight: 400;
-  font-size: clamp(58px, 14vw, 116px); letter-spacing: 4px;
+  font-size: clamp(58px, 14vw, 116px);
+  letter-spacing: 4px;
   color: var(--bone);
-  text-shadow:
-    5px 5px 0 var(--blood-3),
-    -1px -1px 0 var(--outline),
-    0 0 40px rgba(193, 18, 31, 0.8);
+  text-shadow: 5px 5px 0 var(--blood-3), -1px -1px 0 var(--outline), 0 0 40px rgba(193,18,31,.8);
   margin-bottom: 18px;
   text-transform: uppercase;
 }
 .entry-logo .dot { color: var(--blood-2); }
 
 .entry-line {
-  color: var(--blood-2); font-size: 17px; letter-spacing: 4px;
-  margin-bottom: 46px; text-transform: uppercase;
-  font-family: 'VCR OSD Mono', monospace;
-  text-shadow: 0 0 10px rgba(255, 46, 58, 0.6);
+  color: var(--blood-2);
+  font-size: 17px;
+  letter-spacing: 4px;
+  margin-bottom: 46px;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(255,46,58,.6);
 }
+
 .entry-prompt {
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: clamp(20px, 2.6vw, 28px); letter-spacing: 3px;
+  font-size: clamp(20px, 2.6vw, 28px);
+  letter-spacing: 3px;
   color: var(--bone);
-  text-transform: uppercase; padding: 18px 30px;
+  text-transform: uppercase;
+  padding: 18px 30px;
   border: 2px solid var(--blood-2);
   background: var(--blood-3);
-  box-shadow:
-    6px 6px 0 var(--outline),
-    0 0 28px rgba(255, 46, 58, 0.65) inset;
+  box-shadow: 6px 6px 0 var(--outline), inset 0 0 28px rgba(255,46,58,.65);
   animation: entry-pulse 1.6s ease-in-out infinite;
   display: inline-block;
 }
 @keyframes entry-pulse {
-  0%, 100% { transform: translate(0, 0); box-shadow: 6px 6px 0 var(--outline), 0 0 28px rgba(255,46,58,0.65) inset; }
-  50%      { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--outline), 0 0 42px rgba(255,46,58,0.95) inset; }
+  0%, 100% { transform: translate(0,0); box-shadow: 6px 6px 0 var(--outline), inset 0 0 28px rgba(255,46,58,.65); }
+  50% { transform: translate(-2px,-2px); box-shadow: 8px 8px 0 var(--outline), inset 0 0 42px rgba(255,46,58,.95); }
 }
+
 .entry-hint {
-  color: var(--bone-mute); font-size: 13px; letter-spacing: 3px;
-  margin-top: 24px; font-family: 'VCR OSD Mono', monospace;
+  color: var(--bone-mute);
+  font-size: 13px;
+  letter-spacing: 3px;
+  margin-top: 24px;
   text-transform: uppercase;
 }
 
-/* ============================================================
-   DESKTOP
-   ============================================================ */
 .desktop {
-  position: fixed; inset: 0;
-  display: flex; flex-direction: column;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   padding-bottom: 60px;
   opacity: 0;
-  transition: opacity 0.6s ease;
+  transition: opacity .6s ease;
 }
 body.entered .desktop { opacity: 1; }
 
-/* WALLPAPER */
 .wallpaper {
-  position: absolute; inset: 0 0 60px 0;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center; padding: 40px 20px 40px 160px;
-  pointer-events: none; z-index: 1;
+  position: absolute;
+  inset: 0 0 60px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px 40px 160px;
+  pointer-events: none;
+  z-index: 1;
 }
+
 .wallpaper-tag {
   color: var(--bone);
-  font-size: 13px; letter-spacing: 5px;
+  font-size: 13px;
+  letter-spacing: 5px;
   margin-bottom: 22px;
-  font-family: 'VCR OSD Mono', monospace;
   text-transform: uppercase;
   background: var(--blood-3);
   padding: 8px 18px;
   border: 2px solid var(--blood-2);
-  box-shadow: 4px 4px 0 var(--outline), 0 0 20px rgba(193,18,31,0.6);
+  box-shadow: 4px 4px 0 var(--outline), 0 0 20px rgba(193,18,31,.6);
 }
 .wallpaper-tag::before { content: '/// '; color: var(--bone-mute); }
-.wallpaper-tag::after  { content: ' ///'; color: var(--bone-mute); }
+.wallpaper-tag::after { content: ' ///'; color: var(--bone-mute); }
 
 .wallpaper-logo {
-  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(64px, 15vw, 200px);
   letter-spacing: clamp(4px, 1vw, 10px);
-  line-height: 0.9;
+  line-height: .9;
   color: var(--bone);
-  position: relative; display: inline-block;
-  text-shadow:
-    6px 6px 0 var(--outline),
-    8px 8px 0 var(--blood-3),
-    -2px -2px 0 var(--outline),
-    0 0 60px rgba(193, 18, 31, 0.65);
+  display: inline-block;
+  text-shadow: 6px 6px 0 var(--outline), 8px 8px 0 var(--blood-3), -2px -2px 0 var(--outline), 0 0 60px rgba(193,18,31,.65);
   text-transform: uppercase;
   transform-origin: center;
 }
-.wallpaper-logo::before,
-.wallpaper-logo::after { display: none; }
 
 .wallpaper-subtitle {
   margin-top: 34px;
-  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(16px, 2vw, 22px);
   color: var(--bone);
-  letter-spacing: 6px; text-transform: uppercase;
+  letter-spacing: 6px;
+  text-transform: uppercase;
   background: var(--blood);
   padding: 10px 24px;
   border: 2px solid var(--blood-2);
-  box-shadow:
-    5px 5px 0 var(--outline),
-    0 0 26px rgba(255, 46, 58, 0.7);
+  box-shadow: 5px 5px 0 var(--outline), 0 0 26px rgba(255,46,58,.7);
   display: inline-block;
 }
 .wallpaper-subtitle::before { content: '◆  '; color: var(--bone); }
-.wallpaper-subtitle::after  { content: '  ◆'; color: var(--bone); }
+.wallpaper-subtitle::after { content: '  ◆'; color: var(--bone); }
 
-.wallpaper-line { margin-top: 16px; color: var(--bone-dim); font-size: 14px; letter-spacing: 2px; }
 .wallpaper-hint {
-  margin-top: 40px; color: var(--bone-mute); font-size: 13px;
+  margin-top: 40px;
+  color: var(--bone-mute);
+  font-size: 13px;
   letter-spacing: 3px;
   text-transform: uppercase;
-  font-family: 'VCR OSD Mono', monospace;
 }
 .wallpaper-hint::before { content: '// '; color: var(--blood-2); }
 
-/* ICONS */
 .desktop-icons {
-  position: absolute; top: 70px; left: 22px; width: 148px;
-  display: flex; flex-direction: column; gap: 10px; z-index: 3;
+  position: absolute;
+  top: 70px;
+  left: 22px;
+  width: 148px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 3;
 }
+
 .desktop-icon {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 8px; padding: 14px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 8px;
   background: linear-gradient(160deg, var(--panel-2), var(--panel));
   border: 2px solid var(--blood-3);
-  box-shadow: 4px 4px 0 var(--outline), 0 0 0 1px rgba(255, 46, 58, 0.15) inset;
+  box-shadow: 4px 4px 0 var(--outline), inset 0 0 0 1px rgba(255,46,58,.15);
   cursor: pointer;
-  transition: all 0.12s ease;
+  transition: all .12s ease;
   user-select: none;
   -webkit-user-select: none;
 }
 .desktop-icon:hover, .desktop-icon:focus-visible {
   background: linear-gradient(160deg, var(--blood-3), var(--panel));
   border-color: var(--blood-2);
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--outline), 0 0 24px rgba(255, 46, 58, 0.55);
+  transform: translate(-2px,-2px);
+  box-shadow: 6px 6px 0 var(--outline), 0 0 24px rgba(255,46,58,.55);
   outline: none;
 }
-.desktop-icon:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--outline);
-}
+.desktop-icon:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--outline); }
+
 .icon-glyph {
-  font-size: 26px; color: var(--bone);
+  font-size: 26px;
+  color: var(--bone);
   line-height: 1;
-  transition: transform 0.2s, color 0.2s;
-  text-shadow: 2px 2px 0 var(--blood-3), 0 0 10px rgba(255,46,58,0.6);
+  transition: transform .2s, color .2s;
+  text-shadow: 2px 2px 0 var(--blood-3), 0 0 10px rgba(255,46,58,.6);
 }
 .desktop-icon:hover .icon-glyph { transform: scale(1.15); color: var(--blood-2); }
+
 .icon-label {
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 13px; letter-spacing: 2px;
-  color: var(--bone); text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--bone);
+  text-transform: uppercase;
   text-align: center;
 }
 
-/* ============================================================
-   WINDOWS
-   ============================================================ */
 .windows { position: absolute; inset: 0; pointer-events: none; z-index: 700; }
+
 .window {
-  position: absolute; pointer-events: auto;
+  position: absolute;
+  pointer-events: auto;
   background: linear-gradient(180deg, var(--panel), var(--panel-3));
   border: 2px solid var(--blood-3);
-  box-shadow:
-    8px 8px 0 var(--outline),
-    0 0 0 1px rgba(255, 46, 58, 0.12) inset,
-    0 0 40px rgba(193, 18, 31, 0.35);
-  display: flex; flex-direction: column;
+  box-shadow: 8px 8px 0 var(--outline), inset 0 0 0 1px rgba(255,46,58,.12), 0 0 40px rgba(193,18,31,.35);
+  display: flex;
+  flex-direction: column;
   width: min(720px, calc(100vw - 200px));
   max-height: calc(100vh - 160px);
-  animation: window-in 0.18s ease;
-  top: 80px; left: 180px;
+  top: 80px;
+  left: 180px;
   overflow: hidden;
   color: var(--bone);
+  animation: window-in .18s ease;
 }
 @keyframes window-in {
-  from { opacity: 0; transform: scale(0.96) translateY(10px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
+  from { opacity: 0; transform: scale(.96) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
 }
-.window.closing {
-  animation: window-out 0.2s ease forwards;
-  pointer-events: none;
-}
-@keyframes window-out {
-  to { opacity: 0; transform: scale(0.97) translateY(6px); }
-}
+.window.closing { animation: window-out .2s ease forwards; pointer-events: none; }
+@keyframes window-out { to { opacity: 0; transform: scale(.97) translateY(6px); } }
 
 .window-header {
-  display: flex; align-items: center;
+  display: flex;
+  align-items: center;
   padding: 10px 12px 10px 16px;
-  background:
-    repeating-linear-gradient(135deg,
-      var(--blood-3) 0px, var(--blood-3) 14px,
-      var(--panel-3) 14px, var(--panel-3) 28px);
+  background: repeating-linear-gradient(135deg, var(--blood-3) 0 14px, var(--panel-3) 14px 28px);
   border-bottom: 2px solid var(--blood-2);
+  box-shadow: inset 0 0 24px rgba(193,18,31,.5);
   cursor: grab;
   user-select: none;
   -webkit-user-select: none;
   flex-shrink: 0;
-  box-shadow: 0 0 24px rgba(193, 18, 31, 0.5) inset;
   position: relative;
 }
 .window-header::after {
   content: '';
   position: absolute;
-  left: 0; right: 0; bottom: -2px; height: 2px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    var(--blood-2) 15%,
-    var(--blood)   50%,
-    var(--blood-2) 85%,
-    transparent 100%);
-  filter: blur(0.5px);
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--blood-2) 15%, var(--blood) 50%, var(--blood-2) 85%, transparent 100%);
+  filter: blur(.5px);
 }
 .window-header:active { cursor: grabbing; }
+
 .window-dots { display: flex; gap: 5px; margin-right: 14px; }
 .window-dots span {
-  width: 12px; height: 12px;
+  width: 12px;
+  height: 12px;
   background: var(--blood-3);
   border: 2px solid var(--outline);
-  box-shadow: 0 0 6px rgba(193,18,31,0.8);
+  box-shadow: 0 0 6px rgba(193,18,31,.8);
 }
 .window-dots span:nth-child(1) { background: var(--blood-2); }
 .window-dots span:nth-child(2) { background: var(--amber); }
 .window-dots span:nth-child(3) { background: var(--cyan); }
+
 .window-title {
   flex: 1;
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 19px; letter-spacing: 3px;
+  font-size: 19px;
+  letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--bone);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  text-shadow: 2px 2px 0 var(--outline), 0 0 10px rgba(255,46,58,0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 2px 2px 0 var(--outline), 0 0 10px rgba(255,46,58,.6);
 }
 .window-title::before { content: '▮ '; color: var(--blood-2); }
+
 .window-close {
   background: var(--panel-3);
   border: 2px solid var(--blood-2);
   color: var(--bone);
-  width: 30px; height: 30px;
-  cursor: pointer;
+  width: 30px;
+  height: 30px;
   font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.12s;
-  padding: 0; flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  transition: all .12s;
   box-shadow: 2px 2px 0 var(--outline);
-  font-family: 'VCR OSD Mono', monospace;
 }
 .window-close:hover, .window-close:active {
   background: var(--blood-2);
   color: var(--void);
-  transform: translate(1px, 1px);
+  transform: translate(1px,1px);
   box-shadow: 1px 1px 0 var(--outline), 0 0 20px var(--blood-2);
 }
 
 .window-body {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
-  background:
-    linear-gradient(180deg, rgba(193,18,31,0.04), transparent 200px),
-    var(--panel);
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: linear-gradient(180deg, rgba(193,18,31,.04), transparent 200px), var(--panel);
   scrollbar-width: thin;
   scrollbar-color: var(--blood) var(--panel-3);
 }
 .window-body::-webkit-scrollbar { width: 10px; }
-.window-body::-webkit-scrollbar-thumb {
-  background: var(--blood);
-  border: 2px solid var(--outline);
-}
+.window-body::-webkit-scrollbar-thumb { background: var(--blood); border: 2px solid var(--outline); }
 .window-body::-webkit-scrollbar-track { background: var(--panel-3); }
 
 .app-body { padding: 26px 28px; color: var(--bone); }
 
 .app-tag {
   display: inline-block;
-  color: var(--bone); font-size: 13px; letter-spacing: 3px;
+  color: var(--bone);
+  font-size: 13px;
+  letter-spacing: 3px;
   margin-bottom: 22px;
   background: var(--blood-3);
   padding: 5px 14px;
   border: 2px solid var(--blood-2);
-  box-shadow: 3px 3px 0 var(--outline), 0 0 16px rgba(193,18,31,0.6);
-  font-family: 'VCR OSD Mono', monospace;
+  box-shadow: 3px 3px 0 var(--outline), 0 0 16px rgba(193,18,31,.6);
   text-transform: uppercase;
 }
 
-/* ============================================================
-   TASKBAR
-   ============================================================ */
 .taskbar {
-  position: absolute; bottom: 0; left: 0; right: 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: 60px;
-  display: flex; align-items: center;
-  gap: 14px; padding: 0 18px;
-  background: linear-gradient(180deg, var(--panel-3) 0%, var(--void) 100%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 18px;
+  background: linear-gradient(180deg, var(--panel-3), var(--void));
   border-top: 2px solid var(--blood-3);
-  box-shadow:
-    0 -1px 0 rgba(255, 46, 58, 0.35) inset,
-    0 -6px 24px rgba(193, 18, 31, 0.35);
+  box-shadow: inset 0 -1px 0 rgba(255,46,58,.35), 0 -6px 24px rgba(193,18,31,.35);
   z-index: 900;
 }
+
 .taskbar-logo {
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 22px; letter-spacing: 3px;
-  color: var(--bone); flex-shrink: 0;
+  font-size: 22px;
+  letter-spacing: 3px;
+  color: var(--bone);
+  flex-shrink: 0;
   padding-right: 16px;
   border-right: 2px solid var(--blood-3);
-  text-shadow: 2px 2px 0 var(--outline), 0 0 12px rgba(255,46,58,0.7);
+  text-shadow: 2px 2px 0 var(--outline), 0 0 12px rgba(255,46,58,.7);
   text-transform: uppercase;
 }
 .taskbar-logo .dot { color: var(--blood-2); }
 
 .taskbar-windows {
-  flex: 1; display: flex; gap: 8px;
-  overflow-x: auto; scrollbar-width: none; min-width: 0;
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  min-width: 0;
 }
 .taskbar-windows::-webkit-scrollbar { display: none; }
+
 .taskbar-chip {
-  display: inline-flex; align-items: center; gap: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 6px 14px;
   background: var(--panel-2);
   border: 2px solid var(--blood-3);
   color: var(--bone);
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
-  cursor: pointer; white-space: nowrap;
-  transition: all 0.12s;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
   flex-shrink: 0;
+  transition: all .12s;
   box-shadow: 2px 2px 0 var(--outline);
 }
 .taskbar-chip:hover {
   background: var(--blood-3);
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0 var(--outline), 0 0 12px rgba(255,46,58,0.55);
+  transform: translate(-1px,-1px);
+  box-shadow: 3px 3px 0 var(--outline), 0 0 12px rgba(255,46,58,.55);
 }
 .taskbar-chip.active {
   background: var(--blood);
   border-color: var(--blood-2);
-  box-shadow: 2px 2px 0 var(--outline), 0 0 16px rgba(255,46,58,0.7);
+  box-shadow: 2px 2px 0 var(--outline), 0 0 16px rgba(255,46,58,.7);
 }
 .taskbar-chip-close {
-  background: transparent; border: none; color: inherit;
-  font-size: 13px; cursor: pointer; opacity: 0.75; padding: 0 0 0 4px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  opacity: .75;
+  padding: 0 0 0 4px;
   font-family: inherit;
 }
 .taskbar-chip-close:hover { opacity: 1; color: var(--blood-2); }
 
 .taskbar-right {
-  display: flex; align-items: center; gap: 12px;
-  flex-shrink: 0; padding-left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  padding-left: 16px;
   border-left: 2px solid var(--blood-3);
 }
+
 #sound-toggle {
   background: var(--panel-2);
   border: 2px solid var(--blood-3);
   color: var(--bone);
-  font-family: 'VCR OSD Mono', monospace;
+  font-family: inherit;
   font-size: 13px;
-  padding: 5px 10px; cursor: pointer; letter-spacing: 2px;
-  transition: all 0.12s;
-  box-shadow: 2px 2px 0 var(--outline);
+  padding: 5px 10px;
+  letter-spacing: 2px;
   text-transform: uppercase;
+  cursor: pointer;
+  transition: all .12s;
+  box-shadow: 2px 2px 0 var(--outline);
 }
 #sound-toggle:hover, #sound-toggle.on {
   background: var(--blood);
   border-color: var(--blood-2);
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0 var(--outline), 0 0 12px rgba(255,46,58,0.6);
+  transform: translate(-1px,-1px);
+  box-shadow: 3px 3px 0 var(--outline), 0 0 12px rgba(255,46,58,.6);
 }
+
 .taskbar-clock {
   color: var(--cyan);
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 19px; letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(0, 229, 255, 0.8), 1px 1px 0 var(--outline);
+  font-size: 19px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0,229,255,.8), 1px 1px 0 var(--outline);
 }
+
 .taskbar-insomnia {
-  font-size: 13px; letter-spacing: 2px;
+  font-size: 13px;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  font-family: 'VCR OSD Mono', monospace;
   color: var(--bone-dim);
 }
-.taskbar-insomnia::before { content: '☾ '; opacity: 0.8; }
+.taskbar-insomnia::before { content: '☾ '; opacity: .8; }
 .taskbar-insomnia.awake { color: var(--blood-2); text-shadow: 0 0 10px rgba(255,46,58,1); }
-.taskbar-insomnia.sleep { color: #6dff9e; text-shadow: 0 0 8px rgba(109,255,158,0.7); }
+.taskbar-insomnia.sleep { color: #6dff9e; text-shadow: 0 0 8px rgba(109,255,158,.7); }
 
-/* ============================================================
-   APP CONTENT
-   ============================================================ */
 .about-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px; align-items: start; }
 .about-text p { margin-bottom: 16px; color: var(--bone-dim); font-size: 16px; line-height: 1.7; }
-.about-text strong { color: var(--blood-2); font-weight: 400; text-shadow: 0 0 8px rgba(255,46,58,0.5); }
+.about-text strong { color: var(--blood-2); font-weight: 400; text-shadow: 0 0 8px rgba(255,46,58,.5); }
 .about-text em {
-  color: var(--bone); font-style: normal;
-  background: rgba(193, 18, 31, 0.2);
+  color: var(--bone);
+  font-style: normal;
+  background: rgba(193,18,31,.2);
   padding: 1px 8px;
   border-bottom: 2px solid var(--blood-2);
 }
+
 .about-card {
-  border: 2px solid var(--blood-3); background: linear-gradient(180deg, var(--panel-2), var(--panel));
-  padding: 22px; display: grid; gap: 10px;
-  box-shadow: 4px 4px 0 var(--outline), 0 0 0 1px rgba(255,46,58,0.15) inset;
+  border: 2px solid var(--blood-3);
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  padding: 22px;
+  display: grid;
+  gap: 10px;
+  box-shadow: 4px 4px 0 var(--outline), inset 0 0 0 1px rgba(255,46,58,.15);
 }
 .stat {
-  display: flex; justify-content: space-between;
-  border-bottom: 2px dashed var(--panel-4);
-  padding-bottom: 8px; font-size: 14px;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  border-bottom: 2px dashed var(--panel-4);
+  padding-bottom: 8px;
+  font-size: 14px;
 }
 .stat:last-child { border: none; padding-bottom: 0; }
-.stat span {
-  color: var(--bone-mute); letter-spacing: 2px;
-  text-transform: uppercase; font-size: 12px;
-  font-family: 'VCR OSD Mono', monospace;
-}
-.stat b {
-  color: var(--bone); font-family: 'VCR OSD Mono', monospace;
-  font-weight: 400; font-size: 22px; letter-spacing: 2px;
-  text-shadow: 1px 1px 0 var(--outline), 0 0 12px rgba(255,46,58,0.6);
-}
+.stat span { color: var(--bone-mute); letter-spacing: 2px; text-transform: uppercase; font-size: 12px; }
+.stat b { color: var(--bone); font-weight: 400; font-size: 22px; letter-spacing: 2px; text-shadow: 1px 1px 0 var(--outline), 0 0 12px rgba(255,46,58,.6); }
 
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
 .card {
-  border: 2px solid var(--blood-3); background: linear-gradient(160deg, var(--panel-2), var(--panel));
+  border: 2px solid var(--blood-3);
+  background: linear-gradient(160deg, var(--panel-2), var(--panel));
   padding: 22px 20px;
-  transition: all 0.15s ease;
-  position: relative; overflow: hidden;
-  box-shadow: 4px 4px 0 var(--outline), 0 0 0 1px rgba(255,46,58,0.12) inset;
+  position: relative;
+  overflow: hidden;
+  transition: all .15s ease;
+  box-shadow: 4px 4px 0 var(--outline), inset 0 0 0 1px rgba(255,46,58,.12);
 }
 .card::before {
   content: '';
-  position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
   background: linear-gradient(90deg, var(--blood-2), var(--blood), transparent);
 }
 .card:hover {
-  transform: translate(-2px, -2px);
+  transform: translate(-2px,-2px);
   border-color: var(--blood-2);
-  box-shadow: 6px 6px 0 var(--outline), 0 0 28px rgba(255,46,58,0.55);
+  box-shadow: 6px 6px 0 var(--outline), 0 0 28px rgba(255,46,58,.55);
 }
-.card-icon {
-  font-size: 28px; color: var(--blood-2); margin-bottom: 12px;
-  display: inline-block;
-  text-shadow: 2px 2px 0 var(--outline), 0 0 14px rgba(255,46,58,0.8);
-}
-.card h3 {
-  font-family: 'VCR OSD Mono', monospace;
-  letter-spacing: 3px; font-size: 22px; margin-bottom: 8px;
-  color: var(--bone);
-  text-transform: uppercase;
-  text-shadow: 2px 2px 0 var(--outline);
-}
+.card-icon { font-size: 28px; color: var(--blood-2); margin-bottom: 12px; display: inline-block; text-shadow: 2px 2px 0 var(--outline), 0 0 14px rgba(255,46,58,.8); }
+.card h3 { letter-spacing: 3px; font-size: 22px; margin-bottom: 8px; color: var(--bone); text-transform: uppercase; text-shadow: 2px 2px 0 var(--outline); }
 .card p { color: var(--bone-dim); font-size: 15px; line-height: 1.6; }
 
 .stuff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .stuff-col {
-  border: 2px solid var(--blood-3); background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 2px solid var(--blood-3);
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
   padding: 22px;
-  box-shadow: 4px 4px 0 var(--outline), 0 0 0 1px rgba(255,46,58,0.12) inset;
+  box-shadow: 4px 4px 0 var(--outline), inset 0 0 0 1px rgba(255,46,58,.12);
 }
 .stuff-title {
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 20px; letter-spacing: 3px; text-transform: uppercase;
-  margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+  font-size: 20px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: var(--bone);
   padding-bottom: 10px;
   border-bottom: 2px solid var(--blood-3);
   text-shadow: 2px 2px 0 var(--outline);
 }
-.stuff-title .ico { color: var(--blood-2); text-shadow: 0 0 10px rgba(255,46,58,0.7); }
+.stuff-title .ico { color: var(--blood-2); text-shadow: 0 0 10px rgba(255,46,58,.7); }
+
 .stuff-list { list-style: none; display: grid; gap: 12px; }
 .stuff-list li {
-  display: grid; grid-template-columns: 120px 1fr; gap: 14px;
-  padding-bottom: 10px; border-bottom: 2px dashed var(--panel-4);
-  font-size: 15px; align-items: baseline;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px dashed var(--panel-4);
+  font-size: 15px;
+  align-items: baseline;
 }
 .stuff-list li:last-child { border-bottom: none; padding-bottom: 0; }
+
 .tagline {
-  color: var(--bone); font-family: 'VCR OSD Mono', monospace;
-  letter-spacing: 2px; text-transform: uppercase; font-size: 12px;
+  color: var(--bone);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 12px;
   background: var(--blood-3);
   padding: 3px 10px;
   border: 2px solid var(--blood-2);
@@ -730,638 +692,425 @@ body.entered .desktop { opacity: 1; }
 }
 .val { color: var(--bone-dim); }
 
-/* ARCHIVE */
+.music-channel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  margin-top: 14px;
+  background: var(--panel-3);
+  border: 2px solid var(--blood-3);
+  box-shadow: 3px 3px 0 var(--outline);
+  text-decoration: none;
+  color: var(--bone);
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all .15s;
+}
+.music-channel:hover {
+  background: var(--blood);
+  border-color: var(--blood-2);
+  transform: translate(-2px,-2px);
+  box-shadow: 5px 5px 0 var(--outline), 0 0 22px rgba(255,46,58,.75);
+}
+.music-channel-icon { color: var(--blood-2); font-size: 22px; text-shadow: 1px 1px 0 var(--outline), 0 0 10px rgba(255,46,58,.75); }
+.music-channel:hover .music-channel-icon { color: var(--bone); text-shadow: 1px 1px 0 var(--outline); }
+.music-channel-arrow { margin-left: auto; color: var(--blood-2); font-size: 18px; }
+.music-channel:hover .music-channel-arrow { color: var(--bone); }
+
 .archive-intro { color: var(--bone-dim); margin-bottom: 24px; font-size: 16px; }
-.archive-list { list-style: none; display: grid; gap: 0; }
+.archive-list { list-style: none; }
 .archive-item {
-  display: grid; grid-template-columns: 100px 1fr; gap: 18px;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 18px;
   padding: 14px 0;
   border-bottom: 2px dashed var(--panel-4);
   align-items: baseline;
-  transition: all 0.18s;
+  transition: all .18s;
 }
 .archive-item:hover { padding-left: 8px; border-bottom-color: var(--blood-2); }
-.archive-year {
-  font-family: 'VCR OSD Mono', monospace;
-  color: var(--blood-2); letter-spacing: 3px; font-size: 22px;
-  text-shadow: 1px 1px 0 var(--outline), 0 0 12px rgba(255,46,58,0.6);
-}
+.archive-year { color: var(--blood-2); letter-spacing: 3px; font-size: 22px; text-shadow: 1px 1px 0 var(--outline), 0 0 12px rgba(255,46,58,.6); }
 .archive-event { color: var(--bone-dim); font-size: 15px; }
-.archive-current .archive-year { color: var(--bone); text-shadow: 1px 1px 0 var(--outline), 0 0 14px rgba(255,46,58,0.9); }
+.archive-current .archive-year { color: var(--bone); text-shadow: 1px 1px 0 var(--outline), 0 0 14px rgba(255,46,58,.9); }
 .archive-current .archive-event { color: var(--bone); }
 .archive-current::after {
   content: '◆ LIVE';
-  font-size: 12px; color: var(--bone);
+  font-size: 12px;
+  color: var(--bone);
   background: var(--blood);
   padding: 3px 10px;
   border: 2px solid var(--blood-2);
-  letter-spacing: 2px; margin-left: 8px;
-  font-family: 'VCR OSD Mono', monospace;
-  animation: blink 1.5s steps(2) infinite;
+  letter-spacing: 2px;
+  margin-left: 8px;
   display: inline-block;
-  box-shadow: 0 0 16px rgba(255,46,58,0.85);
+  animation: blink 1.5s steps(2) infinite;
+  box-shadow: 0 0 16px rgba(255,46,58,.85);
 }
-@keyframes blink { 50% { opacity: 0.4; } }
+@keyframes blink { 50% { opacity: .4; } }
 
 .chaos-box {
   border: 2px solid var(--blood-2);
   border-left: 8px solid var(--blood-2);
   padding: 20px 24px;
-  background: linear-gradient(90deg, rgba(193,18,31,0.14), var(--panel-2));
-  box-shadow: 4px 4px 0 var(--outline), 0 0 30px rgba(193,18,31,0.4) inset;
+  background: linear-gradient(90deg, rgba(193,18,31,.14), var(--panel-2));
+  box-shadow: 4px 4px 0 var(--outline), inset 0 0 30px rgba(193,18,31,.4);
 }
-.chaos-line {
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: clamp(20px, 2.4vw, 26px); color: var(--bone);
-  margin-bottom: 18px; letter-spacing: 1.5px;
-  text-shadow: 2px 2px 0 var(--outline), 0 0 14px rgba(255,46,58,0.7);
-}
+.chaos-line { font-size: clamp(20px, 2.4vw, 26px); color: var(--bone); margin-bottom: 18px; letter-spacing: 1.5px; text-shadow: 2px 2px 0 var(--outline), 0 0 14px rgba(255,46,58,.7); }
 .chaos-box p { margin-bottom: 12px; color: var(--bone-dim); font-size: 16px; }
+
 .dim { color: var(--bone-mute); }
 .small { font-size: 14px; }
-.blink { color: var(--blood-2); animation: blink 1.2s steps(2) infinite; text-shadow: 0 0 10px rgba(255,46,58,0.9); }
+.blink { color: var(--blood-2); animation: blink 1.2s steps(2) infinite; text-shadow: 0 0 10px rgba(255,46,58,.9); }
 
 .contact-box { text-align: center; padding: 20px 0; }
 .contact-box p { color: var(--bone-dim); margin-bottom: 14px; font-size: 16px; }
-.contact-box strong { color: var(--blood-2); text-shadow: 0 0 8px rgba(255,46,58,0.6); }
+.contact-box strong { color: var(--blood-2); text-shadow: 0 0 8px rgba(255,46,58,.6); }
 
 .contact-link {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: clamp(32px, 5vw, 52px); color: var(--bone);
-  text-decoration: none; letter-spacing: 3px; padding: 12px 26px;
-  transition: all 0.15s; cursor: pointer; margin: 10px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(32px, 5vw, 52px);
+  color: var(--bone);
+  text-decoration: none;
+  letter-spacing: 3px;
+  padding: 12px 26px;
+  margin: 10px 0;
+  cursor: pointer;
   background: var(--blood);
   border: 2px solid var(--blood-2);
-  box-shadow: 5px 5px 0 var(--outline), 0 0 30px rgba(255,46,58,0.75);
+  box-shadow: 5px 5px 0 var(--outline), 0 0 30px rgba(255,46,58,.75);
+  transition: all .15s;
 }
 .contact-link .at { color: var(--bone-mute); }
-.contact-link .arrow { color: var(--bone-mute); transition: transform 0.2s; display: inline-block; }
-.contact-link:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 7px 7px 0 var(--outline), 0 0 50px rgba(255,46,58,1);
-}
+.contact-link .arrow { color: var(--bone-mute); transition: transform .2s; display: inline-block; }
+.contact-link:hover { transform: translate(-2px,-2px); box-shadow: 7px 7px 0 var(--outline), 0 0 50px rgba(255,46,58,1); }
 .contact-link:hover .arrow { transform: translateX(8px); color: var(--bone); }
 
 .socials { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 22px; }
 .social {
-  display: inline-flex; align-items: center; gap: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   padding: 12px 20px;
   border: 2px solid var(--blood-3);
   background: var(--panel-2);
-  color: var(--bone); text-decoration: none;
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 15px; letter-spacing: 2px; text-transform: uppercase;
-  transition: all 0.15s ease;
-  box-shadow: 4px 4px 0 var(--outline), 0 0 0 1px rgba(255,46,58,0.12) inset;
+  color: var(--bone);
+  text-decoration: none;
+  font-size: 15px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all .15s ease;
+  box-shadow: 4px 4px 0 var(--outline), inset 0 0 0 1px rgba(255,46,58,.12);
 }
-.social-icon { font-size: 18px; transition: transform 0.2s; }
+.social-icon { font-size: 18px; transition: transform .2s; }
 .social:hover, .social:active {
-  transform: translate(-2px, -2px);
+  transform: translate(-2px,-2px);
   background: var(--blood);
   border-color: var(--blood-2);
-  box-shadow: 6px 6px 0 var(--outline), 0 0 24px rgba(255,46,58,0.7);
+  box-shadow: 6px 6px 0 var(--outline), 0 0 24px rgba(255,46,58,.7);
 }
 .social:hover .social-icon { transform: scale(1.2); }
-.social-tiktok:hover { background: var(--cyan); color: var(--void); border-color: var(--cyan-2); }
-.social-telegram:hover { background: var(--cyan); color: var(--void); border-color: var(--cyan-2); }
+.social-tiktok:hover, .social-telegram:hover { background: var(--cyan); color: var(--void); border-color: var(--cyan-2); }
 
-/* ============================================================
-   TERMINAL
-   ============================================================ */
+.system-box {
+  border: 2px solid var(--blood-3);
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  padding: 28px 26px;
+  box-shadow: 4px 4px 0 var(--outline), inset 0 0 0 1px rgba(255,46,58,.15);
+}
+.system-logo { font-size: 40px; letter-spacing: 4px; color: var(--bone); text-transform: uppercase; text-shadow: 3px 3px 0 var(--blood-3), 0 0 20px rgba(255,46,58,.7); margin-bottom: 6px; }
+.system-version { color: var(--bone-mute); font-size: 14px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 2px dashed var(--panel-4); }
+.system-rows { display: grid; gap: 12px; }
+.system-row { display: grid; grid-template-columns: 130px 1fr; gap: 16px; font-size: 15px; align-items: baseline; }
+.system-key { color: var(--bone-mute); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; }
+.system-val { color: var(--bone); }
+.system-val a { color: var(--blood-2); text-decoration: none; border-bottom: 2px dashed var(--blood-2); transition: all .15s; text-shadow: 0 0 8px rgba(255,46,58,.6); }
+.system-val a:hover { color: var(--cyan); border-bottom-color: var(--cyan); text-shadow: 0 0 10px rgba(0,229,255,.8); }
+.system-thanks { margin-top: 24px; padding-top: 18px; border-top: 2px dashed var(--panel-4); color: var(--bone-mute); font-size: 14px; letter-spacing: 2px; text-align: center; }
+
 .term-toggle {
-  position: fixed; bottom: 76px; right: 22px;
-  z-index: 520; width: 58px; height: 58px;
+  position: fixed;
+  bottom: 76px;
+  right: 22px;
+  z-index: 520;
+  width: 58px;
+  height: 58px;
   background: var(--blood);
-  border: 2px solid var(--blood-2); color: var(--bone);
-  font-family: 'VCR OSD Mono', monospace; font-size: 26px;
-  cursor: pointer; letter-spacing: 1px;
-  box-shadow: 4px 4px 0 var(--outline), 0 0 24px rgba(255,46,58,0.7);
-  transition: all 0.12s;
+  border: 2px solid var(--blood-2);
+  color: var(--bone);
+  font-family: inherit;
+  font-size: 26px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all .12s;
+  box-shadow: 4px 4px 0 var(--outline), 0 0 24px rgba(255,46,58,.7);
 }
-.term-toggle:hover, .term-toggle:active {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--outline), 0 0 40px rgba(255,46,58,1);
-}
-.term-toggle.open { background: var(--cyan); color: var(--void); border-color: var(--cyan-2); box-shadow: 4px 4px 0 var(--outline), 0 0 24px rgba(0,229,255,0.85); }
+.term-toggle:hover, .term-toggle:active { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--outline), 0 0 40px rgba(255,46,58,1); }
+.term-toggle.open { background: var(--cyan); color: var(--void); border-color: var(--cyan-2); box-shadow: 4px 4px 0 var(--outline), 0 0 24px rgba(0,229,255,.85); }
 
 .term {
-  position: fixed; bottom: 148px; right: 22px;
+  position: fixed;
+  bottom: 148px;
+  right: 22px;
   width: min(480px, calc(100vw - 44px));
   max-height: min(440px, 55vh);
   background: var(--void-3);
   border: 2px solid var(--blood-3);
-  box-shadow: 8px 8px 0 var(--outline), 0 0 40px rgba(193,18,31,0.5);
+  box-shadow: 8px 8px 0 var(--outline), 0 0 40px rgba(193,18,31,.5);
   z-index: 519;
-  display: flex; flex-direction: column;
-  font-family: 'VCR OSD Mono', monospace; font-size: 18px;
-  opacity: 0; transform: translateY(20px) scale(0.96);
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+  opacity: 0;
+  transform: translateY(20px) scale(.96);
   pointer-events: none;
-  transition: opacity 0.25s, transform 0.25s ease;
+  transition: opacity .25s, transform .25s ease;
   overflow: hidden;
 }
 .term.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
 .term-header {
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 14px;
   background: var(--blood-3);
   color: var(--bone);
   border-bottom: 2px solid var(--blood-2);
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 16px; letter-spacing: 2px; text-transform: uppercase;
-  box-shadow: 0 0 18px rgba(255,46,58,0.55) inset;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 18px rgba(255,46,58,.55);
 }
 .term-close {
-  background: var(--panel-3); border: 2px solid var(--blood-2); color: var(--bone);
-  font-size: 14px; cursor: pointer; padding: 2px 8px;
+  background: var(--panel-3);
+  border: 2px solid var(--blood-2);
+  color: var(--bone);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 2px 8px;
+  cursor: pointer;
   box-shadow: 2px 2px 0 var(--outline);
-  font-family: 'VCR OSD Mono', monospace;
 }
-.term-close:hover {
-  background: var(--blood-2);
-  color: var(--void);
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--outline);
-}
+.term-close:hover { background: var(--blood-2); color: var(--void); transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--outline); }
+
 .term-body {
-  flex: 1; overflow-y: auto; padding: 14px 16px;
-  color: #ff8a8a; line-height: 1.35; min-height: 120px;
-  scrollbar-width: thin; scrollbar-color: var(--blood) var(--panel-3);
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  color: #ff8a8a;
+  line-height: 1.35;
+  min-height: 120px;
   background: var(--void-3);
-  text-shadow: 0 0 6px rgba(255,46,58,0.35);
+  text-shadow: 0 0 6px rgba(255,46,58,.35);
+  scrollbar-width: thin;
+  scrollbar-color: var(--blood) var(--panel-3);
 }
 .term-body::-webkit-scrollbar { width: 8px; }
 .term-body::-webkit-scrollbar-thumb { background: var(--blood); border: 2px solid var(--outline); }
 .term-body::-webkit-scrollbar-track { background: var(--panel-3); }
+
 .term-line { white-space: pre-wrap; word-break: break-word; margin-bottom: 2px; }
-.term-line.err { color: var(--blood-2); text-shadow: 0 0 8px rgba(255,46,58,0.9); }
-.term-line.ok { color: #8cff9e; text-shadow: 0 0 8px rgba(140,255,158,0.7); }
-.term-line.cmd { color: var(--cyan); text-shadow: 0 0 8px rgba(0,229,255,0.7); }
-.term-input-line {
-  display: flex; align-items: center; gap: 8px;
-  padding: 10px 14px;
-  border-top: 2px solid var(--blood-3);
-  background: var(--panel-3);
-}
-.term-prompt { color: var(--blood-2); font-size: 18px; white-space: nowrap; text-shadow: 0 0 8px rgba(255,46,58,0.7); }
-#term-input {
-  flex: 1; background: transparent; border: none; outline: none;
-  color: var(--bone); font-family: inherit; font-size: 18px;
-  caret-color: var(--blood-2);
-}
+.term-line.err { color: var(--blood-2); text-shadow: 0 0 8px rgba(255,46,58,.9); }
+.term-line.cmd { color: var(--cyan); text-shadow: 0 0 8px rgba(0,229,255,.7); }
 
-/* ============================================================
-   PLAYER
-   ============================================================ */
-.player {
-  position: fixed; bottom: 76px; left: 22px;
-  z-index: 520; display: flex; align-items: center; gap: 10px;
-  padding: 8px 12px;
-  background: linear-gradient(180deg, var(--panel-2), var(--panel));
-  border: 2px solid var(--blood-3);
-  box-shadow: 4px 4px 0 var(--outline), 0 0 24px rgba(193,18,31,0.5);
-  font-family: 'VCR OSD Mono', monospace;
-  opacity: 0; transform: translateY(20px);
-  animation: player-in 0.6s ease 2.6s forwards;
-  max-width: calc(100vw - 44px);
-}
-@keyframes player-in { to { opacity: 1; transform: translateY(0); } }
-.player-info { display: flex; flex-direction: column; gap: 2px; line-height: 1.15; }
-.player-title {
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 17px; letter-spacing: 2px; color: var(--bone);
-  max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  text-shadow: 1px 1px 0 var(--outline), 0 0 10px rgba(255,46,58,0.7);
-}
-.player-status {
-  font-size: 12px; letter-spacing: 2px; color: var(--bone-mute);
-  text-transform: uppercase; white-space: nowrap;
-  font-family: 'VCR OSD Mono', monospace;
-}
-.player-controls { display: flex; align-items: center; gap: 5px; }
-.player-btn {
-  width: 38px; height: 38px; background: var(--blood);
-  border: 2px solid var(--blood-2); color: var(--bone);
-  font-size: 16px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.12s; padding: 0; line-height: 1; flex-shrink: 0;
-  box-shadow: 2px 2px 0 var(--outline), 0 0 12px rgba(255,46,58,0.55);
-  font-family: 'VCR OSD Mono', monospace;
-}
-.player-btn.small {
-  width: 30px; height: 30px; font-size: 13px;
-  background: var(--panel-2); border-color: var(--blood-3);
-  box-shadow: 2px 2px 0 var(--outline);
-}
-.player-btn:hover, .player-btn:active {
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--outline), 0 0 20px rgba(255,46,58,0.9);
-}
-.player-btn.playing { background: var(--cyan); color: var(--void); border-color: var(--cyan-2); box-shadow: 2px 2px 0 var(--outline), 0 0 20px rgba(0,229,255,0.85); }
-.player-vol {
-  -webkit-appearance: none; appearance: none;
-  width: 70px; height: 8px;
-  background: var(--panel-3); outline: none; cursor: pointer; flex-shrink: 0;
-  border: 2px solid var(--blood-3);
-}
-.player-vol::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 14px; height: 22px;
-  background: var(--blood-2); border: 2px solid var(--outline); cursor: pointer;
-  box-shadow: 1px 1px 0 var(--outline), 0 0 10px rgba(255,46,58,0.85);
-}
-.player-vol::-moz-range-thumb {
-  width: 14px; height: 22px; background: var(--blood-2);
-  border: 2px solid var(--outline); cursor: pointer;
-  box-shadow: 0 0 10px rgba(255,46,58,0.85);
-}
+.term-input-line { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-top: 2px solid var(--blood-3); background: var(--panel-3); }
+.term-prompt { color: var(--blood-2); font-size: 18px; white-space: nowrap; text-shadow: 0 0 8px rgba(255,46,58,.7); }
+#term-input { flex: 1; background: transparent; border: none; outline: none; color: var(--bone); font-family: inherit; font-size: 18px; caret-color: var(--blood-2); }
 
-/* ============================================================
-   КАСТОМНЫЙ КУРСОР — прицел V1
-   ============================================================ */
 @media (pointer: fine) {
-  body.has-cursor, body.has-cursor a, body.has-cursor button,
-  body.has-cursor *, body.has-cursor .window-header { cursor: none !important; }
+  body.has-cursor, body.has-cursor a, body.has-cursor button, body.has-cursor *, body.has-cursor .window-header { cursor: none !important; }
 }
+
 .custom-cursor {
-  position: fixed; width: 22px; height: 22px;
-  transform: translate(-50%, -50%);
-  pointer-events: none; z-index: 99999;
-  transition: width 0.12s, height 0.12s;
-  will-change: left, top; display: none;
-  filter: drop-shadow(0 0 6px rgba(255, 46, 58, 0.9));
+  position: fixed;
+  width: 22px;
+  height: 22px;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+  z-index: 99999;
+  transition: width .12s, height .12s;
+  will-change: left, top;
+  display: none;
+  filter: drop-shadow(0 0 6px rgba(255,46,58,.9));
 }
 body.has-cursor .custom-cursor { display: block; }
-.custom-cursor::before,
-.custom-cursor::after {
-  content: ''; position: absolute;
-  background: var(--blood-2);
-  box-shadow: 2px 2px 0 var(--outline);
-}
-.custom-cursor::before {
-  left: 50%; top: 0; bottom: 0; width: 4px;
-  transform: translateX(-50%);
-}
-.custom-cursor::after {
-  top: 50%; left: 0; right: 0; height: 4px;
-  transform: translateY(-50%);
-}
+.custom-cursor::before, .custom-cursor::after { content: ''; position: absolute; background: var(--blood-2); box-shadow: 2px 2px 0 var(--outline); }
+.custom-cursor::before { left: 50%; top: 0; bottom: 0; width: 4px; transform: translateX(-50%); }
+.custom-cursor::after { top: 50%; left: 0; right: 0; height: 4px; transform: translateY(-50%); }
 .custom-cursor.hover { width: 40px; height: 40px; }
-.custom-cursor.hover::before, .custom-cursor.hover::after {
-  background: var(--cyan);
-  box-shadow: 2px 2px 0 var(--outline), 0 0 12px rgba(0, 229, 255, 0.9);
-}
+.custom-cursor.hover::before, .custom-cursor.hover::after { background: var(--cyan); box-shadow: 2px 2px 0 var(--outline), 0 0 12px rgba(0,229,255,.9); }
 
-/* ============================================================
-   BLOOD MODE
-   ============================================================ */
 body.blood-mode::after {
-  content: ''; position: fixed; inset: 0;
-  pointer-events: none; z-index: 9988;
-  background:
-    repeating-linear-gradient(45deg,
-      rgba(255, 46, 58, 0.22) 0px,
-      rgba(255, 46, 58, 0.22) 22px,
-      transparent 22px,
-      transparent 44px),
-    radial-gradient(ellipse at center, transparent 20%, rgba(193, 18, 31, 0.75) 100%);
-  animation: blood-pulse 0.8s ease-in-out infinite;
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9988;
+  background: repeating-linear-gradient(45deg, rgba(255,46,58,.22) 0 22px, transparent 22px 44px),
+              radial-gradient(ellipse at center, transparent 20%, rgba(193,18,31,.75) 100%);
+  animation: blood-pulse .8s ease-in-out infinite;
 }
 @keyframes blood-pulse {
-  0%, 100% { opacity: 0.6; } 50% { opacity: 1; }
+  0%, 100% { opacity: .6; }
+  50% { opacity: 1; }
 }
-body.blood-mode #bg-canvas { opacity: 1; }
 
 .blood-flash {
-  position: fixed; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: clamp(34px, 7vw, 88px); letter-spacing: 6px;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(34px, 7vw, 88px);
+  letter-spacing: 6px;
   color: var(--bone);
-  text-shadow:
-    5px 5px 0 var(--blood-3),
-    -2px -2px 0 var(--outline),
-    2px -2px 0 var(--outline),
-    -2px 2px 0 var(--outline),
-    0 0 60px rgba(255,46,58,1);
-  z-index: 9999; opacity: 0; pointer-events: none;
-  transition: opacity 0.4s; text-align: center; padding: 0 20px;
+  text-shadow: 5px 5px 0 var(--blood-3), -2px -2px 0 var(--outline), 2px -2px 0 var(--outline), -2px 2px 0 var(--outline), 0 0 60px rgba(255,46,58,1);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s;
+  text-align: center;
+  padding: 0 20px;
   text-transform: uppercase;
 }
 .blood-flash.show { opacity: 1; }
 
-/* TOAST */
 .toast {
-  position: fixed; bottom: 88px; left: 50%;
+  position: fixed;
+  bottom: 88px;
+  left: 50%;
   transform: translate(-50%, 20px);
   background: var(--blood);
   border: 2px solid var(--blood-2);
   padding: 12px 26px;
   color: var(--bone);
-  font-family: 'VCR OSD Mono', monospace;
-  letter-spacing: 3px; font-size: 18px; text-transform: uppercase;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.3s, transform 0.3s;
+  letter-spacing: 3px;
+  font-size: 18px;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s, transform .3s;
   z-index: 10000;
-  box-shadow: 5px 5px 0 var(--outline), 0 0 26px rgba(255,46,58,0.75);
-  white-space: nowrap; max-width: calc(100vw - 40px);
+  box-shadow: 5px 5px 0 var(--outline), 0 0 26px rgba(255,46,58,.75);
+  white-space: nowrap;
+  max-width: calc(100vw - 40px);
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-/* SELECTION */
 ::selection { background: var(--blood); color: var(--bone); }
 ::-moz-selection { background: var(--blood); color: var(--bone); }
 
-/* SCROLLBAR GLOBAL */
 ::-webkit-scrollbar { width: 12px; height: 12px; }
 ::-webkit-scrollbar-track { background: var(--panel-3); }
-::-webkit-scrollbar-thumb {
-  background: var(--blood);
-  border: 2px solid var(--outline);
-}
+::-webkit-scrollbar-thumb { background: var(--blood); border: 2px solid var(--outline); }
 ::-webkit-scrollbar-thumb:hover { background: var(--blood-2); }
 
-/* ============================================================
-   МОБИЛКА
-   ============================================================ */
-@media (max-width: 900px) {
-  .window { width: calc(100vw - 32px); left: 16px !important; top: 70px; max-height: calc(100vh - 140px); }
-  .stuff-grid { grid-template-columns: 1fr; gap: 20px; }
-  .about-grid { grid-template-columns: 1fr; gap: 24px; }
-}
-
-@media (max-width: 768px) {
-  .wallpaper { padding: 200px 16px 110px; }
-  .wallpaper-logo {
-    font-size: clamp(58px, 18vw, 120px);
-    text-shadow: 4px 4px 0 var(--outline), 6px 6px 0 var(--blood-3), 0 0 40px rgba(193,18,31,0.75);
-  }
-  .wallpaper-subtitle { font-size: 15px; letter-spacing: 4px; padding: 8px 18px; }
-  .wallpaper-line { font-size: 13px; }
-  .wallpaper-hint { display: none; }
-
-  .desktop-icons {
-    top: 14px; left: 12px; right: 12px; bottom: auto;
-    width: auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    padding: 0;
-    overflow: visible;
-  }
-  .desktop-icon { min-width: 0; padding: 12px 6px; gap: 6px; }
-  .icon-glyph { font-size: 22px; }
-  .icon-label { font-size: 11px; letter-spacing: 1px; }
-
-  .window {
-    left: 10px !important; right: 10px;
-    top: 58px !important;
-    width: auto;
-    max-height: calc(100vh - 200px);
-    box-shadow: 6px 6px 0 var(--outline), 0 0 26px rgba(193,18,31,0.6);
-  }
-  .window-title { font-size: 17px; }
-  .app-body { padding: 20px 18px; }
-
-  .taskbar { height: 56px; padding: 0 12px; gap: 8px; }
-  .taskbar-logo { font-size: 17px; padding-right: 10px; }
-  .taskbar-clock { font-size: 16px; }
-  .taskbar-insomnia { display: none; }
-  #sound-toggle { font-size: 12px; padding: 4px 8px; }
-  .taskbar-chip { font-size: 12px; padding: 5px 9px; }
-
-  .player {
-    position: fixed; bottom: 68px; left: 12px; right: auto;
-    width: calc(100vw - 80px);
-    max-width: none;
-    padding: 6px 8px; gap: 6px;
-    display: flex; align-items: center;
-    box-sizing: border-box;
-    box-shadow: 3px 3px 0 var(--outline), 0 0 18px rgba(193,18,31,0.5);
-  }
-  .player-info { flex: 1 1 0; min-width: 0; overflow: hidden; }
-  .player-title { font-size: 14px; letter-spacing: 1px; }
-  .player-status { font-size: 11px; }
-  .player-controls { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-  .player-btn { width: 30px; height: 30px; font-size: 13px; flex-shrink: 0; padding: 0; }
-  .player-btn.small { display: flex; width: 26px; height: 26px; font-size: 11px; padding: 0; }
-  .player-vol { display: none; }
-
-  .term-toggle { bottom: 68px; right: 12px; width: 50px; height: 50px; font-size: 22px; z-index: 530; }
-  .term { bottom: 128px; right: 12px; left: 12px; width: auto; max-height: 45vh; font-size: 16px; }
-
-  .toast { bottom: 80px; font-size: 14px; padding: 10px 16px; box-shadow: 4px 4px 0 var(--outline); }
-}
-
-@media (max-width: 380px) {
-  .icon-label { font-size: 10px; }
-  .player-title { font-size: 13px; }
-}
-
-/* ============================================================
-   START BUTTON
-   ============================================================ */
 .taskbar-start {
   background: var(--blood);
   border: 2px solid var(--blood-2);
   color: var(--bone);
-  width: 44px; height: 38px;
-  cursor: pointer; font-size: 20px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 2px 2px 0 var(--outline), 0 0 16px rgba(255,46,58,0.65);
-  font-family: 'VCR OSD Mono', monospace;
-  transition: all 0.12s;
-  flex-shrink: 0; padding: 0;
-  text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+  width: 44px;
+  height: 38px;
+  font-family: inherit;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  text-shadow: 1px 1px 0 rgba(0,0,0,.4);
+  transition: all .12s;
+  box-shadow: 2px 2px 0 var(--outline), 0 0 16px rgba(255,46,58,.65);
 }
-.taskbar-start:hover, .taskbar-start:active {
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--outline), 0 0 24px rgba(255,46,58,0.95);
-}
-.taskbar-start.open { background: var(--cyan); color: var(--void); border-color: var(--cyan-2); box-shadow: 2px 2px 0 var(--outline), 0 0 20px rgba(0,229,255,0.85); }
+.taskbar-start:hover, .taskbar-start:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--outline), 0 0 24px rgba(255,46,58,.95); }
+.taskbar-start.open { background: var(--cyan); color: var(--void); border-color: var(--cyan-2); box-shadow: 2px 2px 0 var(--outline), 0 0 20px rgba(0,229,255,.85); }
 
-/* ============================================================
-   START MENU
-   ============================================================ */
 .start-menu {
   position: fixed;
-  bottom: 72px; left: 18px;
+  bottom: 72px;
+  left: 18px;
   width: 340px;
   background: linear-gradient(180deg, var(--panel-2), var(--panel-3));
   border: 2px solid var(--blood-3);
-  box-shadow: 8px 8px 0 var(--outline), 0 0 0 1px rgba(255,46,58,0.18) inset, 0 0 40px rgba(193,18,31,0.5);
+  box-shadow: 8px 8px 0 var(--outline), inset 0 0 0 1px rgba(255,46,58,.18), 0 0 40px rgba(193,18,31,.5);
   z-index: 950;
-  display: flex; flex-direction: column;
-  opacity: 0; transform: translateY(15px);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(15px);
   pointer-events: none;
-  transition: opacity 0.2s, transform 0.2s;
+  transition: opacity .2s, transform .2s;
 }
-.start-menu.open {
-  opacity: 1; transform: translateY(0); pointer-events: auto;
-}
+.start-menu.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
 .start-header {
   padding: 16px 18px;
-  background:
-    repeating-linear-gradient(135deg,
-      var(--blood-3) 0px, var(--blood-3) 12px,
-      var(--panel-3) 12px, var(--panel-3) 24px);
+  background: repeating-linear-gradient(135deg, var(--blood-3) 0 12px, var(--panel-3) 12px 24px);
   border-bottom: 2px solid var(--blood-2);
-  box-shadow: 0 0 20px rgba(255,46,58,0.55) inset;
+  box-shadow: inset 0 0 20px rgba(255,46,58,.55);
 }
-.start-user {
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 22px; letter-spacing: 3px; color: var(--bone);
-  text-transform: uppercase;
-  text-shadow: 2px 2px 0 var(--outline), 0 0 12px rgba(255,46,58,0.7);
-}
-.start-tag {
-  font-size: 13px; color: var(--bone-dim);
-  letter-spacing: 3px;
-  margin-top: 2px; text-transform: uppercase;
-  font-family: 'VCR OSD Mono', monospace;
-}
+.start-user { font-size: 22px; letter-spacing: 3px; color: var(--bone); text-transform: uppercase; text-shadow: 2px 2px 0 var(--outline), 0 0 12px rgba(255,46,58,.7); }
+.start-tag { font-size: 13px; color: var(--bone-dim); letter-spacing: 3px; margin-top: 2px; text-transform: uppercase; }
 
-.start-apps {
-  padding: 10px;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
-}
+.start-apps { padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .start-app {
-  display: flex; align-items: center; gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 10px 12px;
   background: var(--panel-2);
   border: 2px solid var(--blood-3);
   box-shadow: 2px 2px 0 var(--outline);
-  cursor: pointer; transition: all 0.12s;
   color: var(--bone);
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 15px; text-transform: uppercase; letter-spacing: 2px;
+  cursor: pointer;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all .12s;
 }
 .start-app:hover, .start-app:active {
   background: var(--blood);
   border-color: var(--blood-2);
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0 var(--outline), 0 0 16px rgba(255,46,58,0.65);
+  transform: translate(-1px,-1px);
+  box-shadow: 3px 3px 0 var(--outline), 0 0 16px rgba(255,46,58,.65);
 }
-.start-app-icon {
-  color: var(--blood-2); font-size: 18px;
-  text-shadow: 1px 1px 0 var(--outline), 0 0 8px rgba(255,46,58,0.7);
-}
+.start-app-icon { color: var(--blood-2); font-size: 18px; text-shadow: 1px 1px 0 var(--outline), 0 0 8px rgba(255,46,58,.7); }
 .start-app:hover .start-app-icon { color: var(--bone); text-shadow: 1px 1px 0 var(--outline); }
 
-.start-footer {
-  border-top: 2px solid var(--blood-3);
-  padding: 8px; display: flex; gap: 6px;
-}
+.start-footer { border-top: 2px solid var(--blood-3); padding: 8px; display: flex; gap: 6px; }
 .start-action {
-  flex: 1; display: flex; align-items: center; justify-content: center;
-  gap: 6px; padding: 10px 12px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
   background: var(--panel-2);
   border: 2px solid var(--blood-3);
   box-shadow: 2px 2px 0 var(--outline);
-  color: var(--bone); cursor: pointer;
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
-  transition: all 0.12s;
+  color: var(--bone);
+  font-family: inherit;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .12s;
 }
 .start-action:hover, .start-action:active {
   background: var(--blood);
   border-color: var(--blood-2);
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0 var(--outline), 0 0 14px rgba(255,46,58,0.7);
+  transform: translate(-1px,-1px);
+  box-shadow: 3px 3px 0 var(--outline), 0 0 14px rgba(255,46,58,.7);
 }
 .start-action.shutdown:hover { background: var(--blood-2); color: var(--void); }
 
-/* ============================================================
-   SYSTEM TEMPLATE
-   ============================================================ */
-.system-box {
-  border: 2px solid var(--blood-3);
-  background: linear-gradient(180deg, var(--panel-2), var(--panel));
-  padding: 28px 26px;
-  box-shadow: 4px 4px 0 var(--outline), 0 0 0 1px rgba(255,46,58,0.15) inset;
-}
-.system-logo {
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 40px; letter-spacing: 4px;
-  color: var(--bone); text-transform: uppercase;
-  text-shadow: 3px 3px 0 var(--blood-3), 0 0 20px rgba(255,46,58,0.7);
-  margin-bottom: 6px;
-}
-.system-version {
-  color: var(--bone-mute); font-size: 14px;
-  letter-spacing: 3px; text-transform: uppercase;
-  font-family: 'VCR OSD Mono', monospace;
-  margin-bottom: 24px; padding-bottom: 18px;
-  border-bottom: 2px dashed var(--panel-4);
-}
-.system-rows { display: grid; gap: 12px; }
-.system-row {
-  display: grid; grid-template-columns: 130px 1fr;
-  gap: 16px; font-size: 15px; align-items: baseline;
-}
-.system-key {
-  color: var(--bone-mute); font-size: 13px;
-  letter-spacing: 2px; text-transform: uppercase;
-  font-family: 'VCR OSD Mono', monospace;
-}
-.system-val { color: var(--bone); }
-.system-val a {
-  color: var(--blood-2); text-decoration: none;
-  border-bottom: 2px dashed var(--blood-2);
-  transition: all 0.15s;
-  text-shadow: 0 0 8px rgba(255,46,58,0.6);
-}
-.system-val a:hover { color: var(--cyan); border-bottom-color: var(--cyan); text-shadow: 0 0 10px rgba(0,229,255,0.8); }
-.system-thanks {
-  margin-top: 24px; padding-top: 18px;
-  border-top: 2px dashed var(--panel-4);
-  color: var(--bone-mute); font-size: 14px;
-  letter-spacing: 2px; text-align: center;
-  font-family: 'VCR OSD Mono', monospace;
-}
-
-/* ============================================================
-   MUSIC CHANNEL LINK
-   ============================================================ */
-.music-channel {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 18px; margin-top: 14px;
-  background: var(--panel-3);
-  border: 2px solid var(--blood-3);
-  box-shadow: 3px 3px 0 var(--outline);
-  text-decoration: none; color: var(--bone);
-  font-family: 'VCR OSD Mono', monospace;
-  font-size: 16px; letter-spacing: 2px; text-transform: uppercase;
-  transition: all 0.15s;
-}
-.music-channel:hover {
-  background: var(--blood);
-  border-color: var(--blood-2);
-  transform: translate(-2px, -2px);
-  box-shadow: 5px 5px 0 var(--outline), 0 0 22px rgba(255,46,58,0.75);
-}
-.music-channel-icon {
-  color: var(--blood-2); font-size: 22px;
-  text-shadow: 1px 1px 0 var(--outline), 0 0 10px rgba(255,46,58,0.75);
-}
-.music-channel:hover .music-channel-icon { color: var(--bone); text-shadow: 1px 1px 0 var(--outline); }
-.music-channel-arrow {
-  margin-left: auto; color: var(--blood-2); font-size: 18px;
-}
-.music-channel:hover .music-channel-arrow { color: var(--bone); }
-
-/* ============================================================
-   SHUTDOWN OVERLAY
-   ============================================================ */
-.shutdown-overlay {
-  position: fixed; inset: 0;
-  background: #000;
-  z-index: 999998;
-  opacity: 0; pointer-events: none;
-}
-body.shutting-down .shutdown-overlay {
-  animation: shutdown-anim 2.4s ease forwards;
-}
+.shutdown-overlay { position: fixed; inset: 0; background: #000; z-index: 999998; opacity: 0; pointer-events: none; }
+body.shutting-down .shutdown-overlay { animation: shutdown-anim 2.4s ease forwards; }
 @keyframes shutdown-anim {
   0% { opacity: 0; }
   25% { opacity: 1; }
@@ -1369,125 +1118,42 @@ body.shutting-down .shutdown-overlay {
   100% { opacity: 0; }
 }
 
-/* ============================================================
-   МОБИЛКА — старт-меню
-   ============================================================ */
-@media (max-width: 768px) {
-  .taskbar-start { width: 40px; height: 34px; font-size: 18px; }
-  .start-menu {
-    left: 8px; right: 8px;
-    width: auto; bottom: 66px;
-    max-height: calc(100vh - 140px);
-    overflow-y: auto;
-  }
-  .start-apps { grid-template-columns: 1fr 1fr; gap: 5px; padding: 8px; }
-  .start-app { padding: 9px 10px; font-size: 14px; gap: 8px; }
-  .start-app-icon { font-size: 16px; }
-  .start-action { padding: 9px 10px; font-size: 12px; }
-
-  .system-logo { font-size: 28px; letter-spacing: 3px; }
-  .system-row { grid-template-columns: 110px 1fr; gap: 12px; font-size: 14px; }
-}
-
-/* ============================================================
-   СВОРАЧИВАНИЕ ПЛЕЕРА
-   ============================================================ */
-.player.hidden { display: none !important; }
-
-.player-icon {
-  position: fixed;
-  bottom: 76px; left: 22px;
-  z-index: 520;
-  width: 56px; height: 56px;
-  background: var(--blood);
-  border: 2px solid var(--blood-2);
-  color: var(--bone);
-  font-size: 28px;
-  font-family: 'VCR OSD Mono', monospace;
-  cursor: pointer;
-  display: none;
-  align-items: center; justify-content: center;
-  box-shadow: 4px 4px 0 var(--outline), 0 0 24px rgba(255,46,58,0.7);
-  transition: all 0.12s;
-  padding: 0; line-height: 1;
-}
-.player-icon.show { display: flex; }
-.player-icon:hover, .player-icon:active {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--outline), 0 0 40px rgba(255,46,58,1);
-}
-.player-icon.playing {
-  background: var(--cyan);
-  color: var(--void);
-  border-color: var(--cyan-2);
-  animation: player-pulse 1.5s ease-in-out infinite;
-}
-.player-icon.playing::after {
-  content: '';
-  position: absolute;
-  top: -4px; right: -4px;
-  width: 14px; height: 14px;
-  background: var(--blood-2);
-  border: 2px solid var(--outline);
-  border-radius: 50%;
-  animation: blink 1.2s steps(2) infinite;
-  box-shadow: 0 0 12px rgba(255,46,58,1);
-}
-@keyframes player-pulse {
-  0%, 100% { box-shadow: 4px 4px 0 var(--outline), 0 0 24px rgba(0,229,255,0.6); }
-  50%      { box-shadow: 4px 4px 0 var(--outline), 0 0 42px rgba(0,229,255,1); }
-}
-
-@media (max-width: 768px) {
-  .player-icon {
-    bottom: 68px; left: 12px;
-    width: 48px; height: 48px;
-    font-size: 24px;
-  }
-}
-
-/* ============================================================
-   CUTSCENE — War Without Reason
-   ============================================================ */
 .cutscene-screen {
-  position: fixed; inset: 0;
+  position: fixed;
+  inset: 0;
   background: #000;
   z-index: 99996;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.6s ease;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .6s ease;
   overflow: hidden;
 }
 .cutscene-screen.active { opacity: 1; pointer-events: auto; }
-.cutscene-screen.hide { opacity: 0; pointer-events: none; transition: opacity 0.8s ease; }
+.cutscene-screen.hide { opacity: 0; pointer-events: none; transition: opacity .8s ease; }
 
-/* фоновый красный пульс */
 .cutscene-screen::before {
   content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center, transparent 30%, rgba(193,18,31,0.35) 100%);
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(193,18,31,.35) 100%);
   opacity: 0;
-  transition: opacity 0.5s;
+  transition: opacity .5s;
   pointer-events: none;
 }
 .cutscene-screen.active::before { opacity: 1; animation: cutscene-bg-pulse 1.3s ease-in-out infinite; }
 @keyframes cutscene-bg-pulse {
-  0%, 100% { opacity: 0.4; }
-  50%      { opacity: 0.75; }
+  0%, 100% { opacity: .4; }
+  50% { opacity: .75; }
 }
 
-.cutscene-content {
-  text-align: center;
-  padding: 20px;
-  position: relative;
-  z-index: 2;
-  transition: transform 0.15s;
-}
+.cutscene-content { text-align: center; padding: 20px; position: relative; z-index: 2; transition: transform .15s; }
 
 .cutscene-line {
-  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(22px, 3.2vw, 36px);
   letter-spacing: 5px;
   color: var(--blood-2);
@@ -1495,69 +1161,49 @@ body.shutting-down .shutdown-overlay {
   margin-bottom: 18px;
   opacity: 0;
   transform: translateY(12px);
-  transition: opacity 0.45s ease, transform 0.45s ease, color 0.15s, text-shadow 0.15s;
-  text-shadow: 0 0 24px rgba(255, 46, 58, 0.85);
+  transition: opacity .45s ease, transform .45s ease, color .15s, text-shadow .15s;
+  text-shadow: 0 0 24px rgba(255,46,58,.85);
 }
-.cutscene-line.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-.cutscene-line.flash {
-  color: var(--bone);
-  text-shadow:
-    0 0 30px rgba(255, 46, 58, 1),
-    0 0 60px rgba(255, 46, 58, 0.9),
-    0 0 90px rgba(255, 46, 58, 0.6);
-}
+.cutscene-line.show { opacity: 1; transform: translateY(0); }
+.cutscene-line.flash { color: var(--bone); text-shadow: 0 0 30px rgba(255,46,58,1), 0 0 60px rgba(255,46,58,.9), 0 0 90px rgba(255,46,58,.6); }
 
 .cutscene-title {
-  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(80px, 16vw, 200px);
   letter-spacing: 10px;
-  line-height: 0.9;
+  line-height: .9;
   color: var(--bone);
   text-transform: uppercase;
   opacity: 0;
-  transform: scale(0.7);
-  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-  text-shadow:
-    6px 6px 0 var(--outline),
-    9px 9px 0 var(--blood-3),
-    -2px -2px 0 var(--outline),
-    0 0 80px rgba(193, 18, 31, 0.95);
+  transform: scale(.7);
+  transition: opacity .5s ease, transform .5s cubic-bezier(.2,.8,.2,1);
+  text-shadow: 6px 6px 0 var(--outline), 9px 9px 0 var(--blood-3), -2px -2px 0 var(--outline), 0 0 80px rgba(193,18,31,.95);
   margin: 26px 0;
 }
 .cutscene-title.show { opacity: 1; transform: scale(1); }
-.cutscene-title.glitch {
-  animation: cutscene-glitch 0.09s steps(2) 8;
-}
+.cutscene-title.glitch { animation: cutscene-glitch .09s steps(2) 8; }
 @keyframes cutscene-glitch {
-  0%, 100% { transform: scale(1) translate(0, 0); }
-  25%      { transform: scale(1) translate(-7px, 4px); }
-  50%      { transform: scale(1) translate(6px, -5px); }
-  75%      { transform: scale(1) translate(-4px, -6px); }
+  0%, 100% { transform: scale(1) translate(0,0); }
+  25% { transform: scale(1) translate(-7px, 4px); }
+  50% { transform: scale(1) translate(6px, -5px); }
+  75% { transform: scale(1) translate(-4px, -6px); }
 }
 
 .cutscene-subtitle {
-  font-family: 'VCR OSD Mono', monospace;
   font-size: clamp(20px, 2.6vw, 30px);
   letter-spacing: 10px;
   color: var(--blood-2);
   text-transform: uppercase;
   opacity: 0;
   transform: translateY(18px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-  text-shadow: 0 0 26px rgba(255, 46, 58, 0.95);
+  transition: opacity .6s ease, transform .6s ease;
+  text-shadow: 0 0 26px rgba(255,46,58,.95);
   margin-top: 10px;
 }
 .cutscene-subtitle.show { opacity: 1; transform: translateY(0); }
 
-/* тряска контента */
-.cutscene-screen.shake .cutscene-content {
-  animation: cutscene-shake 0.65s ease;
-}
+.cutscene-screen.shake .cutscene-content { animation: cutscene-shake .65s ease; }
 @keyframes cutscene-shake {
-  0%, 100% { transform: translate(0, 0); }
+  0%, 100% { transform: translate(0,0); }
   10% { transform: translate(-10px, 5px); }
   20% { transform: translate(8px, -7px); }
   30% { transform: translate(-6px, -9px); }
@@ -1569,26 +1215,51 @@ body.shutting-down .shutdown-overlay {
   90% { transform: translate(-5px, -5px); }
 }
 
-/* красная вспышка */
 .cutscene-screen.flash-red::after {
   content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(circle at center, rgba(255, 46, 58, 0.85), rgba(193, 18, 31, 0.3) 40%, transparent 75%);
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,46,58,.85), rgba(193,18,31,.3) 40%, transparent 75%);
   pointer-events: none;
   z-index: 3;
-  animation: cutscene-flash 0.5s ease 2;
+  animation: cutscene-flash .5s ease 2;
 }
 @keyframes cutscene-flash {
   0%, 100% { opacity: 0; }
-  50%      { opacity: 1; }
+  50% { opacity: 1; }
+}
+
+.cutscene-screen.flash-white::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  pointer-events: none;
+  z-index: 5;
+  animation: cutscene-white-flash 3.2s ease forwards;
+}
+@keyframes cutscene-white-flash {
+  0% { opacity: 0; }
+  3% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.cutscene-screen.shake-small .cutscene-content { animation: cutscene-shake-small .9s ease; }
+@keyframes cutscene-shake-small {
+  0%, 100% { transform: translate(0,0); }
+  20% { transform: translate(-2px, 1px); }
+  40% { transform: translate(2px, -1px); }
+  60% { transform: translate(-1px, -2px); }
+  80% { transform: translate(1px, 1px); }
 }
 
 .cutscene-skip {
   position: absolute;
   bottom: 32px;
-  left: 0; right: 0;
+  left: 0;
+  right: 0;
   text-align: center;
-  font-family: 'VCR OSD Mono', monospace;
   font-size: 15px;
   letter-spacing: 4px;
   color: var(--bone-mute);
@@ -1597,40 +1268,72 @@ body.shutting-down .shutdown-overlay {
   animation: cutscene-skip-blink 2s ease-in-out infinite;
 }
 @keyframes cutscene-skip-blink {
-  0%, 100% { opacity: 0.25; }
-  50%      { opacity: 0.7; }
+  0%, 100% { opacity: .25; }
+  50% { opacity: .7; }
+}
+
+@media (max-width: 900px) {
+  .window { width: calc(100vw - 32px); left: 16px !important; top: 70px; max-height: calc(100vh - 140px); }
+  .stuff-grid { grid-template-columns: 1fr; gap: 20px; }
+  .about-grid { grid-template-columns: 1fr; gap: 24px; }
 }
 
 @media (max-width: 768px) {
+  .wallpaper { padding: 200px 16px 110px; }
+  .wallpaper-logo {
+    font-size: clamp(58px, 18vw, 120px);
+    text-shadow: 4px 4px 0 var(--outline), 6px 6px 0 var(--blood-3), 0 0 40px rgba(193,18,31,.75);
+  }
+  .wallpaper-subtitle { font-size: 15px; letter-spacing: 4px; padding: 8px 18px; }
+  .wallpaper-hint { display: none; }
+
+  .desktop-icons {
+    top: 14px; left: 12px; right: 12px; bottom: auto; width: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .desktop-icon { min-width: 0; padding: 12px 6px; gap: 6px; }
+  .icon-glyph { font-size: 22px; }
+  .icon-label { font-size: 11px; letter-spacing: 1px; }
+
+  .window {
+    left: 10px !important; right: 10px; top: 58px !important;
+    width: auto;
+    max-height: calc(100vh - 200px);
+    box-shadow: 6px 6px 0 var(--outline), 0 0 26px rgba(193,18,31,.6);
+  }
+  .window-title { font-size: 17px; }
+  .app-body { padding: 20px 18px; }
+
+  .taskbar { height: 56px; padding: 0 12px; gap: 8px; }
+  .taskbar-logo { font-size: 17px; padding-right: 10px; }
+  .taskbar-clock { font-size: 16px; }
+  .taskbar-insomnia { display: none; }
+  #sound-toggle { font-size: 12px; padding: 4px 8px; }
+  .taskbar-chip { font-size: 12px; padding: 5px 9px; }
+
+  .term-toggle { bottom: 68px; right: 12px; width: 50px; height: 50px; font-size: 22px; z-index: 530; }
+  .term { bottom: 128px; right: 12px; left: 12px; width: auto; max-height: 45vh; font-size: 16px; }
+
+  .toast { bottom: 80px; font-size: 14px; padding: 10px 16px; box-shadow: 4px 4px 0 var(--outline); }
+
+  .taskbar-start { width: 40px; height: 34px; font-size: 18px; }
+  .start-menu { left: 8px; right: 8px; width: auto; bottom: 66px; max-height: calc(100vh - 140px); overflow-y: auto; }
+  .start-apps { grid-template-columns: 1fr 1fr; gap: 5px; padding: 8px; }
+  .start-app { padding: 9px 10px; font-size: 14px; gap: 8px; }
+  .start-app-icon { font-size: 16px; }
+  .start-action { padding: 9px 10px; font-size: 12px; }
+
+  .system-logo { font-size: 28px; letter-spacing: 3px; }
+  .system-row { grid-template-columns: 110px 1fr; gap: 12px; font-size: 14px; }
+
   .cutscene-line { font-size: clamp(18px, 5vw, 24px); letter-spacing: 3px; margin-bottom: 14px; }
   .cutscene-title { font-size: clamp(60px, 20vw, 120px); letter-spacing: 6px; margin: 20px 0; }
   .cutscene-subtitle { font-size: clamp(16px, 4vw, 22px); letter-spacing: 6px; }
   .cutscene-skip { font-size: 12px; bottom: 24px; }
 }
 
-.cutscene-screen.flash-white::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: #fff;
-  pointer-events: none;
-  z-index: 5;
-  animation: cutscene-white-flash 3.2s ease forwards;
-}
-@keyframes cutscene-white-flash {
-  0%   { opacity: 0; }
-  3%   { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-/* лёгкая тряска для зарядки (короткая) */
-.cutscene-screen.shake-small .cutscene-content {
-  animation: cutscene-shake-small 0.9s ease;
-}
-@keyframes cutscene-shake-small {
-  0%, 100% { transform: translate(0, 0); }
-  20% { transform: translate(-2px, 1px); }
-  40% { transform: translate(2px, -1px); }
-  60% { transform: translate(-1px, -2px); }
-  80% { transform: translate(1px, 1px); }
+@media (max-width: 380px) {
+  .icon-label { font-size: 10px; }
 }

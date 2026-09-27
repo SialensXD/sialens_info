@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0a0505">
 <title>SIALENS INFO // chaos = order :p</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="style.css">
 </head>
@@ -15,7 +14,6 @@
 <div class="scanlines"></div>
 <div class="vignette"></div>
 
-<!-- BOOT -->
 <div class="boot-screen">
   <div class="boot-inner">
     <div class="boot-logo">SIALENS<span class="dot">.ZN</span></div>
@@ -25,7 +23,6 @@
   </div>
 </div>
 
-<!-- ENTRY -->
 <div class="entry-screen" id="entry-screen">
   <div class="entry-inner">
     <div class="entry-logo">sialens<span class="dot">OS</span></div>
@@ -35,7 +32,6 @@
   </div>
 </div>
 
-<!-- CUTSCENE -->
 <div class="cutscene-screen" id="cutscene-screen">
   <div class="cutscene-content">
     <div class="cutscene-line" data-line="1">// URGENT INTERCEPTION</div>
@@ -47,8 +43,7 @@
   </div>
   <div class="cutscene-skip">[ нажми чтобы пропустить ]</div>
 </div>
-  
-<!-- DESKTOP -->
+
 <div class="desktop" id="desktop">
 
   <div class="wallpaper">
@@ -87,7 +82,7 @@
 
   <div class="windows" id="windows"></div>
 
-    <div class="taskbar">
+  <div class="taskbar">
     <button class="taskbar-start" id="start-btn" aria-label="меню">⊞</button>
     <div class="taskbar-logo">SIALENS OS<span class="dot">.</span></div>
     <div class="taskbar-windows" id="taskbar-windows"></div>
@@ -98,7 +93,6 @@
     </div>
   </div>
 
-    <!-- START MENU -->
   <div class="start-menu" id="start-menu">
     <div class="start-header">
       <div class="start-user">SIALENS OS</div>
@@ -120,7 +114,6 @@
 
 </div>
 
-<!-- APP TEMPLATES -->
 <template id="tpl-about">
   <div class="app-body">
     <div class="app-tag">// раздел 01</div>
@@ -180,11 +173,11 @@
           <li><span class="tagline">рогалики</span><span class="val">Dead Cells, Meowgenics, TBoI, Balatro, Slay the Spire</span></li>
         </ul>
       </div>
-              <a class="music-channel" href="https://t.me/sialens_music" target="_blank" rel="noopener">
-          <span class="music-channel-icon">♫</span>
-          <span>мой плейлист(?)</span>
-          <span class="music-channel-arrow">→</span>
-        </a>
+      <a class="music-channel" href="https://t.me/sialens_music" target="_blank" rel="noopener">
+        <span class="music-channel-icon">♫</span>
+        <span>мой плейлист(?)</span>
+        <span class="music-channel-arrow">→</span>
+      </a>
     </div>
   </div>
 </template>
@@ -256,22 +249,6 @@
   </div>
 </template>
 
-<!-- TERMINAL -->
-<button id="term-toggle" class="term-toggle" aria-label="терминал">>_</button>
-<div class="term" id="terminal">
-  <div class="term-header">
-    <span>TERMINAL_V2</span>
-    <button class="term-close" id="term-close">✕</button>
-  </div>
-  <div class="term-body" id="term-body">
-    <div class="term-line dim">// терминал загружен. напиши 'help'.</div>
-  </div>
-  <div class="term-input-line">
-    <span class="term-prompt">тупой_ишак228:</span>
-    <input type="text" id="term-input" autocomplete="off" spellcheck="false">
-  </div>
-</div>
-
 <template id="tpl-system">
   <div class="app-body">
     <div class="app-tag">// O системе</div>
@@ -306,6 +283,22 @@
     </div>
   </div>
 </template>
+
+<div class="term" id="terminal">
+  <div class="term-header">
+    <span>TERMINAL_V2</span>
+    <button class="term-close" id="term-close">✕</button>
+  </div>
+  <div class="term-body" id="term-body">
+    <div class="term-line dim">// терминал загружен. напиши 'help'.</div>
+  </div>
+  <div class="term-input-line">
+    <span class="term-prompt">тупой_ишак228:</span>
+    <input type="text" id="term-input" autocomplete="off" spellcheck="false">
+  </div>
+</div>
+
+<button id="term-toggle" class="term-toggle" aria-label="терминал">>_</button>
 
 <div class="toast" id="toast"></div>
 <div class="blood-flash" id="blood-flash">У МЕНЯ ПОРВАН ТУЗ!!!!!</div>
