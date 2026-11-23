@@ -3,9 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0a0505">
-<title>SIALENS INFO // chaos = order :p</title>
+<meta name="theme-color" content="#030312">
+<meta name="description" content="SIALENS // galactic interface. May the Force be with you.">
+<meta property="og:title" content="SIALENS // GALACTIC OS">
+<meta property="og:description" content="May the Force be with you.">
+<meta property="og:type" content="website">
+<title>SIALENS // GALACTIC OS</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23ffd700'>✦</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,65 +23,53 @@
 
 <div class="boot-screen">
   <div class="boot-inner">
-    <div class="boot-logo">SIALENS<span class="dot">.ZN</span></div>
-    <div class="boot-line">// initializing chaos.ZN protocol</div>
+    <div class="boot-logo">SIALENS<span class="dot">.GAL</span></div>
+    <div class="boot-line">// a long time ago in a galaxy far, far away...</div>
     <div class="boot-bar"><div class="boot-bar-fill"></div></div>
-    <div class="boot-status">loading&nbsp;<span class="blink">_</span></div>
+    <div class="boot-status">loading hyperdrive&nbsp;<span class="blink">_</span></div>
   </div>
 </div>
 
 <div class="entry-screen" id="entry-screen">
   <div class="entry-inner">
     <div class="entry-logo">sialens<span class="dot">OS</span></div>
-    <div class="entry-line">/// the system is ready</div>
+    <div class="entry-line">/// may the force be with you</div>
     <div class="entry-prompt">[ tap to enter ]</div>
-    <div class="entry-hint">*launching the "C.H.E.C.K." protocol*</div>
+    <div class="entry-hint">*launching the "R.E.B.E.L." protocol*</div>
   </div>
-</div>
-
-<div class="cutscene-screen" id="cutscene-screen">
-  <div class="cutscene-content">
-    <div class="cutscene-line" data-line="1">// URGENT INTERCEPTION</div>
-    <div class="cutscene-line" data-line="2">// USER NOT FOUND IN DATABASE</div>
-    <div class="cutscene-line" data-line="3">// IN THAT CASE...</div>
-    <div class="cutscene-line" data-line="4">// YOU ARE NOT WELCOME HERE</div>
-    <div class="cutscene-title">SIALENS</div>
-    <div class="cutscene-subtitle">The database is corrupted!</div>
-  </div>
-  <div class="cutscene-skip">[ нажми чтобы пропустить ]</div>
 </div>
 
 <div class="desktop" id="desktop">
 
   <div class="wallpaper">
-    <div class="wallpaper-tag">/// User Found!</div>
-    <div class="wallpaper-logo glitch" data-text="SIALENS">SIALENS</div>
-    <div class="wallpaper-subtitle">the security system is disabled</div>
-    <div class="wallpaper-hint">// для особо тупых: нажми на любую иконку</div>
+    <div class="wallpaper-tag">/// user identified</div>
+    <div class="wallpaper-logo" data-text="SIALENS">SIALENS</div>
+    <div class="wallpaper-subtitle">the force is strong with this one</div>
+    <div class="wallpaper-hint">// tap any icon, young padawan</div>
   </div>
 
   <div class="desktop-icons" id="desktop-icons">
-    <div class="desktop-icon" data-app="about" tabindex="0">
-      <div class="icon-glyph">⬢</div>
+    <div class="desktop-icon" data-app="about" tabindex="0" role="button">
+      <div class="icon-glyph">◉</div>
       <div class="icon-label">обо мне</div>
     </div>
-    <div class="desktop-icon" data-app="interests" tabindex="0">
+    <div class="desktop-icon" data-app="interests" tabindex="0" role="button">
       <div class="icon-glyph">✦</div>
       <div class="icon-label">интересы</div>
     </div>
-    <div class="desktop-icon" data-app="stuff" tabindex="0">
-      <div class="icon-glyph">▶</div>
+    <div class="desktop-icon" data-app="stuff" tabindex="0" role="button">
+      <div class="icon-glyph">♪</div>
       <div class="icon-label">игры / музыка</div>
     </div>
-    <div class="desktop-icon" data-app="archive" tabindex="0">
+    <div class="desktop-icon" data-app="archive" tabindex="0" role="button">
       <div class="icon-glyph">▤</div>
       <div class="icon-label">архив</div>
     </div>
-    <div class="desktop-icon" data-app="chaos" tabindex="0">
-      <div class="icon-glyph">☯</div>
+    <div class="desktop-icon" data-app="chaos" tabindex="0" role="button">
+      <div class="icon-glyph">⚡</div>
       <div class="icon-label">хаос</div>
     </div>
-    <div class="desktop-icon" data-app="contact" tabindex="0">
+    <div class="desktop-icon" data-app="contact" tabindex="0" role="button">
       <div class="icon-glyph">✉</div>
       <div class="icon-label">связь</div>
     </div>
@@ -96,15 +91,15 @@
   <div class="start-menu" id="start-menu">
     <div class="start-header">
       <div class="start-user">SIALENS OS</div>
-      <div class="start-tag">// версия 1.7 · 2025</div>
+      <div class="start-tag">// версия 1.8 · galactic edition</div>
     </div>
     <div class="start-apps">
-      <div class="start-app" data-app="about"><span class="start-app-icon">⬢</span><span>обо мне</span></div>
-      <div class="start-app" data-app="interests"><span class="start-app-icon">✦</span><span>интересы</span></div>
-      <div class="start-app" data-app="stuff"><span class="start-app-icon">▶</span><span>игры / музыка</span></div>
-      <div class="start-app" data-app="archive"><span class="start-app-icon">▤</span><span>архив</span></div>
-      <div class="start-app" data-app="chaos"><span class="start-app-icon">☯</span><span>хаос</span></div>
-      <div class="start-app" data-app="contact"><span class="start-app-icon">✉</span><span>связь</span></div>
+      <div class="start-app" data-app="about" role="button" tabindex="0"><span class="start-app-icon">◉</span><span>обо мне</span></div>
+      <div class="start-app" data-app="interests" role="button" tabindex="0"><span class="start-app-icon">✦</span><span>интересы</span></div>
+      <div class="start-app" data-app="stuff" role="button" tabindex="0"><span class="start-app-icon">♪</span><span>игры / музыка</span></div>
+      <div class="start-app" data-app="archive" role="button" tabindex="0"><span class="start-app-icon">▤</span><span>архив</span></div>
+      <div class="start-app" data-app="chaos" role="button" tabindex="0"><span class="start-app-icon">⚡</span><span>хаос</span></div>
+      <div class="start-app" data-app="contact" role="button" tabindex="0"><span class="start-app-icon">✉</span><span>связь</span></div>
     </div>
     <div class="start-footer">
       <button class="start-action" id="start-system"><span>ⓘ</span> О системе</button>
@@ -188,26 +183,11 @@
     <p class="archive-intro">Список того, что было раньше. Ну, наверное.</p>
 
     <ul class="archive-list">
-      <li class="archive-item">
-        <span class="archive-year">2023</span>
-        <span class="archive-event">я родился</span>
-      </li>
-      <li class="archive-item">
-        <span class="archive-year">2023</span>
-        <span class="archive-event">хз</span>
-      </li>
-      <li class="archive-item">
-        <span class="archive-year">2024</span>
-        <span class="archive-event">че писать</span>
-      </li>
-      <li class="archive-item">
-        <span class="archive-year">2024</span>
-        <span class="archive-event">ну бля нахуя я это сделал</span>
-      </li>
-      <li class="archive-item archive-current">
-        <span class="archive-year">1488</span>
-        <span class="archive-event">посхалочко, смехуятина</span>
-      </li>
+      <li class="archive-item"><span class="archive-year">2023</span><span class="archive-event">я родился</span></li>
+      <li class="archive-item"><span class="archive-year">2023</span><span class="archive-event">хз</span></li>
+      <li class="archive-item"><span class="archive-year">2024</span><span class="archive-event">че писать</span></li>
+      <li class="archive-item"><span class="archive-year">2024</span><span class="archive-event">ну бля нахуя я это сделал</span></li>
+      <li class="archive-item archive-current"><span class="archive-year">1488</span><span class="archive-event">посхалочко, смехуятина</span></li>
     </ul>
   </div>
 </template>
@@ -220,7 +200,7 @@
       <p>Если кратко: не могу назвать в край эмоушинал, но и не биполярщик, просто обычный чел. Как факт часто делаю необдуманные вещи и принимаю решения на горячую голову, только потом думаю. Но, правды ради, иногда получается круто😎</p>
       <p>По вечерам иногда читаю, иногда гуляю, иногда смотрю аниме — но редко. Экзистенциальный кризис — мой постоянный спутник💘</p>
       <p class="dim">// эмоциональный фон: <span class="blink">пустите мне дробь в ебло</span></p>
-      <p class="dim small">// кста, если ты с пк — набери chaos на клаве, будет типа крутая пасхалка</p>
+      <p class="dim small">// кста, если ты с пк — набери chaos или sith на клаве, будет типа крутая пасхалка</p>
     </div>
   </div>
 </template>
@@ -240,7 +220,7 @@
           <span class="social-icon">🎶</span>
           <span class="social-name">TikTok</span>
         </a>
-        <a class="social social-telegram" href="https://link.deezer.com/s/34zkitwVjeilacjiOjC9I" target="_blank" rel="noopener" data-sound-hover>
+        <a class="social social-telegram" href="https://t.me/sialens_xd" target="_blank" rel="noopener" data-sound-hover>
           <span class="social-icon">✈</span>
           <span class="social-name">Telegram</span>
         </a>
@@ -254,7 +234,7 @@
     <div class="app-tag">// O системе</div>
     <div class="system-box">
       <div class="system-logo">sialensOS</div>
-      <div class="system-version">версия 1.7 · сборка 2026</div>
+      <div class="system-version">версия 1.8 · galactic edition · сборка 2026</div>
 
       <div class="system-rows">
         <div class="system-row">
@@ -271,26 +251,26 @@
         </div>
         <div class="system-row">
           <span class="system-key">вдохновлено</span>
-          <span class="system-val">Ultrakill, мои галюны</span>
+          <span class="system-val">Ultrakill, Star Wars, мои галюны</span>
         </div>
         <div class="system-row">
           <span class="system-key">ласт апдейт</span>
-          <span class="system-val">21.09.2026</span>
+          <span class="system-val">24.11.2026</span>
         </div>
       </div>
 
-      <p class="system-thanks">// спасибо, что зашёл ;) </p>
+      <p class="system-thanks">// спасибо, что зашёл ;) may the force be with you</p>
     </div>
   </div>
 </template>
 
 <div class="term" id="terminal">
   <div class="term-header">
-    <span>TERMINAL_V2</span>
+    <span>TERMINAL_V3</span>
     <button class="term-close" id="term-close">✕</button>
   </div>
   <div class="term-body" id="term-body">
-    <div class="term-line dim">// терминал загружен. напиши 'help'.</div>
+    <div class="term-line dim">// galactic terminal ready. type 'help'.</div>
   </div>
   <div class="term-input-line">
     <span class="term-prompt">тупой_ишак228:</span>
@@ -301,13 +281,11 @@
 <button id="term-toggle" class="term-toggle" aria-label="терминал">>_</button>
 
 <div class="toast" id="toast"></div>
-<div class="blood-flash" id="blood-flash">У МЕНЯ ПОРВАН ТУЗ!!!!!</div>
+<div class="blood-flash" id="blood-flash">UNLIMITED POWER!!!</div>
 
 <div class="shutdown-overlay" id="shutdown-overlay"></div>
 
-<script>
-  document.documentElement.classList.add('has-js');
-</script>
+<script>document.documentElement.classList.add('has-js');</script>
 <script src="script.js"></script>
 </body>
 </html>
